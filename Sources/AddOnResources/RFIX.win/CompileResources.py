@@ -32,8 +32,8 @@ def CompileOneFixResourceFile (resConvPath, grcFilePath, imageResourcesFolder, n
 	])
 	return result == 0
 
-def CompileLocalizedResources (resConvPath, resourcesPath, resourceObjectsPath):
-	locResourcesFolder = os.path.join (resourcesPath, 'RINT');
+def CompileLocalizedResources (languageCode, resConvPath, resourcesPath, resourceObjectsPath):
+	locResourcesFolder = os.path.join (resourcesPath, 'R' + languageCode);
 	for fileName in os.listdir (locResourcesFolder):
 		extension = os.path.splitext (fileName)[1]
 		if extension != '.grc':
@@ -89,7 +89,7 @@ def Main (argv):
 	resourcesPath = os.path.dirname (currentDir)
 	resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
-	if not CompileLocalizedResources (resConvPath, resourcesPath, resourceObjectsPath):
+	if not CompileLocalizedResources (languageCode, resConvPath, resourcesPath, resourceObjectsPath):
 		return 1
 
 	if not CompileFixResources (resConvPath, resourcesPath, resourceObjectsPath):
