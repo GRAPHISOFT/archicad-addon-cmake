@@ -89,15 +89,12 @@ def Main (argv):
 	resourcesPath = os.path.dirname (currentDir)
 	resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
-	# Compile localized resources
 	if not CompileLocalizedResources (resConvPath, resourcesPath, resourceObjectsPath):
 		return 1
 
-	# Compile fix resources
 	if not CompileFixResources (resConvPath, resourcesPath, resourceObjectsPath):
 		return 1
 
-	# Compile native resources
 	if not CompileNativeResources (devKitPath, resourcesPath, resourceObjectsPath, resultResourceFilePath):
 		return 1
 
