@@ -55,6 +55,7 @@ def CompileFixResources (resConvPath, resourcesPath, resourceObjectsPath):
 		grcFilePath = os.path.join (fixResourcesFolder, fileName)
 		nativeResourceFilePath = os.path.join (resourceObjectsPath, fileName + '.rc2')
 		if not CompileOneFixResourceFile (resConvPath, grcFilePath, imageResourcesFolder, nativeResourceFilePath):
+			print ('Failed to compile resource: ' + fileName)
 			return False
 	return True
 
@@ -67,7 +68,10 @@ def CompileNativeResources (devKitPath, resourcesPath, resourceObjectsPath, resu
 		'/fo', resultResourceFilePath,
 		os.path.join (resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
 	])
-	return result == 0
+	if result != 0:
+		print ('Failed to compile native resource')
+		return False
+	return True
 
 def Main (argv):
 	if len (argv) != 5:
@@ -95,7 +99,6 @@ def Main (argv):
 
 	# Compile native resources
 	if not CompileNativeResources (devKitPath, resourcesPath, resourceObjectsPath, resultResourceFilePath):
-		print ('Failed to compile native resource')
 		return 1
 
 	return 0
