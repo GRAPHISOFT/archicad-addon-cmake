@@ -55,12 +55,14 @@ if (WIN32)
 		${AddOnResourcesFolder}/RINT/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.win/*.rc2
+		${AddOnResourcesFolder}/RFIX.win/*.py
 	)
 else ()
 	file (GLOB AddOnResourceFiles
 		${AddOnResourcesFolder}/RINT/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.mac/*.plist
+		${AddOnResourcesFolder}/RFIX.mac/*.pl
 	)
 endif ()
 
@@ -85,7 +87,7 @@ if (WIN32)
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "${API_DEVKIT_DIR}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 else ()
