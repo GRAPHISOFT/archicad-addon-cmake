@@ -12,8 +12,8 @@ This repository contains a CMake template for Archicad Add-On Development. You c
 
 ## Usage
 
-- Download the CMake Template from here: https://github.com/GRAPHISOFT/archicad-addon-cmake/archive/master.zip
-- Download the Archicad Add-On Development Kit from here: http://archicadapi.graphisoft.com
+- [Download the CMake Template from here](https://github.com/GRAPHISOFT/archicad-addon-cmake/archive/master.zip).
+- [Download the Archicad Add-On Development Kit from here](http://archicadapi.graphisoft.com).
 - Generate the IDE project with CMake:
   - Use a directory named "Build" as target so gitignore will ignore these files.
   - Set the API_DEVKIT_DIR variable to the installed development kit directory (e.g. "C:\Program Files\GRAPHISOFT\API Development Kit 24.3009"). You can set it as an environment variable or you can pass it to CMake like in the examples below.
