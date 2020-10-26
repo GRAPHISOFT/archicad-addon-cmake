@@ -60,6 +60,8 @@ This template is tested with the Archicad versions below. It doesn't contain any
 - Archicad 23
 - Archicad 24
 
-## Limitations
+## Possible Improvements
 
+- Multilanguage support (now it supports only INT localization).
+- Use Python for resource compilation on both platforms.
 - The generated XCode source structure could be improved.
