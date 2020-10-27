@@ -74,12 +74,6 @@ add_custom_target (
 	SOURCES ${AddOnResourceFiles} ${AddOnImageFiles}
 )
 
-if (WIN32)
-	set (ResConvPath ${API_DEVKIT_DIR}/Support/Tools/Win/ResConv.exe)
-else ()
-	set (ResConvPath ${API_DEVKIT_DIR}/Support/Tools/OSX/ResConv)
-endif ()
-
 get_filename_component (AddOnResourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnResourcesFolder}" ABSOLUTE)
 if (WIN32)
 	add_custom_command (
