@@ -2,7 +2,10 @@
 #include "ACAPinc.h"
 
 #include "DGModule.hpp"
-#include "ResourceIDs.hpp"
+
+#define ID_ADDON_INFO			32000
+#define ID_ADDON_MENU			32500
+#define ID_ADDON_DIALOG			32600
 
 class ExampleDialog :	public DG::ModalDialog,
 						public DG::PanelObserver,

@@ -1,22 +1,20 @@
-﻿#include "ResourceIDs.hpp"
-
-'STR#' ID_ADDON_INFO "Add-on Name and Description" {
+﻿'STR#' 32000 "Add-on Name and Description" {
 /* [  1] */		"Example AddOn"
 /* [  2] */		"Description..."
 }
 
-'STR#' ID_ADDON_MENU "Strings for the Menu" {
+'STR#' 32500 "Strings for the Menu" {
 /* [   ] */ "Example AddOn Menu"
 /* [  1] */		"Example AddOn Command... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
 }
 
-'GDLG'  ID_ADDON_DIALOG  Modal     40   40  345  88  "Example Dialog" {
+'GDLG'  32600  Modal     40   40  345  88  "Example Dialog" {
 /* [  1] */ Button				  245   55   90   23	LargePlain  "OK"
 /* [  2] */ Button				  145   55   90   23	LargePlain  "Cancel"
 /* [  3] */ Separator			   10   43  325    2
 }
 
-'DLGH'  ID_ADDON_DIALOG  DLG_Example {
+'DLGH'  32600  DLG_Example {
 1	""		Button_0
 2	""		Button_1
 3	""		Separator_0

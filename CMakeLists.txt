@@ -83,7 +83,7 @@ if (WIN32)
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 else ()
