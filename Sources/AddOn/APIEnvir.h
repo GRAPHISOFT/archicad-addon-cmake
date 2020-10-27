@@ -1,4 +1,4 @@
-﻿#ifndef	_APIENVIR_H_
+#ifndef	_APIENVIR_H_
 #define	_APIENVIR_H_
 
 #if defined (_MSC_VER)

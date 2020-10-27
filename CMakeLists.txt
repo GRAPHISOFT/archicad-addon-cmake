@@ -41,10 +41,11 @@ add_definitions (-DACExtension)
 project (ArchicadAddOn)
 
 set (AddOnName ArchicadAddOn)
+set (AddOnSourcesFolder Sources/AddOn)
+set (AddOnResourcesFolder Sources/AddOnResources)
 
 # AddOnResources
 
-set (AddOnResourcesFolder Sources/AddOnResources)
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 
 file (GLOB AddOnImageFiles
@@ -74,6 +75,7 @@ add_custom_target (
 	SOURCES ${AddOnResourceFiles} ${AddOnImageFiles}
 )
 
+get_filename_component (AddOnSourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnSourcesFolder}" ABSOLUTE)
 get_filename_component (AddOnResourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnResourcesFolder}" ABSOLUTE)
 if (WIN32)
 	add_custom_command (
@@ -81,7 +83,7 @@ if (WIN32)
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 else ()
@@ -98,8 +100,6 @@ else ()
 endif ()
 
 # AddOn
-
-set (AddOnSourcesFolder Sources/AddOn)
 
 file (GLOB AddOnHeaderFiles
 	${AddOnSourcesFolder}/*.h

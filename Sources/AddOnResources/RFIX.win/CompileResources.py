@@ -59,12 +59,14 @@ def CompileFixResources (resConvPath, resourcesPath, resourceObjectsPath):
 			return False
 	return True
 
-def CompileNativeResources (devKitPath, resourcesPath, resourceObjectsPath, resultResourceFilePath):
+def CompileNativeResources (devKitPath, sourcesPath, resourcesPath, resourceObjectsPath, resultResourceFilePath):
+	print (sourcesPath)
 	result = subprocess.call ([
 		'rc',
 		'/i', os.path.join (devKitPath, 'Support', 'Inc'),
 		'/i', os.path.join (devKitPath, 'Support', 'Modules', 'DGLib'),
 		'/i', resourceObjectsPath,
+		'/i', sourcesPath,
 		'/fo', resultResourceFilePath,
 		os.path.join (resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
 	])
@@ -74,8 +76,8 @@ def CompileNativeResources (devKitPath, resourcesPath, resourceObjectsPath, resu
 	return True
 
 def Main (argv):
-	if len (argv) != 5:
-		print ('Usage: CompileResources.py <languageCode> <devKitPath> <resourceObjectsPath> <resultResourceFilePath>')
+	if len (argv) != 6:
+		print ('Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourceObjectsPath> <resultResourceFilePath>')
 		return 1
 
 	currentDir = os.path.dirname (os.path.abspath (__file__))
@@ -83,8 +85,9 @@ def Main (argv):
 
 	languageCode = argv[1]
 	devKitPath = os.path.abspath (argv[2])
-	resourceObjectsPath = os.path.abspath (argv[3])
-	resultResourceFilePath = os.path.abspath (argv[4])
+	sourcesPath = os.path.abspath (argv[3])
+	resourceObjectsPath = os.path.abspath (argv[4])
+	resultResourceFilePath = os.path.abspath (argv[5])
 
 	resourcesPath = os.path.dirname (currentDir)
 	resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
@@ -95,7 +98,7 @@ def Main (argv):
 	if not CompileFixResources (resConvPath, resourcesPath, resourceObjectsPath):
 		return 1
 
-	if not CompileNativeResources (devKitPath, resourcesPath, resourceObjectsPath, resultResourceFilePath):
+	if not CompileNativeResources (devKitPath, sourcesPath, resourcesPath, resourceObjectsPath, resultResourceFilePath):
 		return 1
 
 	return 0

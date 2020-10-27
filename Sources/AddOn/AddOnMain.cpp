@@ -1,10 +1,8 @@
-﻿#include "APIEnvir.h"
+#include "APIEnvir.h"
 #include "ACAPinc.h"
 
 #include "DGModule.hpp"
-
-#define ID_ADDON_INFO		32000
-#define ID_ADDON_MENU		32500
+#include "ResourceIDs.hpp"
 
 class ExampleDialog :	public DG::ModalDialog,
 						public DG::PanelObserver,
@@ -14,7 +12,7 @@ class ExampleDialog :	public DG::ModalDialog,
 public:
 	enum DialogResourceIds
 	{
-		ExampleDialogResourceId = 32600,
+		ExampleDialogResourceId = ID_ADDON_DIALOG,
 		OKButtonId = 1,
 		CancelButtonId = 2
 	};
