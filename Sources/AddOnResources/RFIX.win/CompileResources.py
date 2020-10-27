@@ -14,17 +14,16 @@ class ResourceCompiler:
 		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode);
 		grcFiles = self.CollectGrcFilesFromFolder (locResourcesFolder)
 		for grcFilePath in grcFiles:
-			if not self.CompileLocalizedResourceFile (grcFilePath):
+			if not self.CompileResourceFile (grcFilePath):
 				print ('Failed to compile resource: ' + fileName)
 				return False
 		return True
 
 	def CompileFixResources (self):
 		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX');
-		imageResourcesFolder = os.path.join (fixResourcesFolder, 'Images')
 		grcFiles = self.CollectGrcFilesFromFolder (fixResourcesFolder)
 		for grcFilePath in grcFiles:
-			if not self.CompileFixResourceFile (grcFilePath, imageResourcesFolder):
+			if not self.CompileResourceFile (grcFilePath):
 				print ('Failed to compile resource: ' + fileName)
 				return False
 		return True
@@ -43,22 +42,10 @@ class WinResourceCompiler (ResourceCompiler):
 		super ().__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
-	def CompileLocalizedResourceFile (self, grcFilePath):
+	def CompileResourceFile (self, grcFilePath):
 		grcFileName = os.path.split (grcFilePath)[1]
 		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
-		result = subprocess.call ([
-			self.resConvPath,
-			'-m', 'r',						# resource compile mode
-			'-T', 'W',						# windows target
-			'-q', 'utf8', '1252',			# code page conversion
-			'-i', grcFilePath,				# input path
-			'-o', nativeResourceFilePath	# output path
-		])
-		return result == 0
-
-	def CompileFixResourceFile (self, grcFilePath, imageResourcesFolder):
-		grcFileName = os.path.split (grcFilePath)[1]
-		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
+		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images');
 		result = subprocess.call ([
 			self.resConvPath,
 			'-m', 'r',						# resource compile mode
