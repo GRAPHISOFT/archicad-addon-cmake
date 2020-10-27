@@ -13,10 +13,8 @@ class ResourceCompiler:
 	def CompileLocalizedResources (self):
 		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode);
 		grcFiles = self.CollectGrcFilesFromFolder (locResourcesFolder)
-		for grcFile in grcFiles:
-			fileName = os.path.split (grcFile)[1]
-			nativeResourceFilePath = os.path.join (self.resourceObjectsPath, fileName + '.rc2')
-			if not self.CompileLocalizedResourceFile (grcFile, nativeResourceFilePath):
+		for grcFilePath in grcFiles:
+			if not self.CompileLocalizedResourceFile (grcFilePath):
 				print ('Failed to compile resource: ' + fileName)
 				return False
 		return True
@@ -25,10 +23,8 @@ class ResourceCompiler:
 		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX');
 		imageResourcesFolder = os.path.join (fixResourcesFolder, 'Images')
 		grcFiles = self.CollectGrcFilesFromFolder (fixResourcesFolder)
-		for grcFile in grcFiles:
-			fileName = os.path.split (grcFile)[1]
-			nativeResourceFilePath = os.path.join (self.resourceObjectsPath, fileName + '.rc2')
-			if not self.CompileFixResourceFile (grcFile, imageResourcesFolder, nativeResourceFilePath):
+		for grcFilePath in grcFiles:
+			if not self.CompileFixResourceFile (grcFilePath, imageResourcesFolder):
 				print ('Failed to compile resource: ' + fileName)
 				return False
 		return True
@@ -47,7 +43,9 @@ class WinResourceCompiler (ResourceCompiler):
 		super ().__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
-	def CompileLocalizedResourceFile (self, grcFilePath, nativeResourceFilePath):
+	def CompileLocalizedResourceFile (self, grcFilePath):
+		grcFileName = os.path.split (grcFilePath)[1]
+		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
 		result = subprocess.call ([
 			self.resConvPath,
 			'-m', 'r',						# resource compile mode
@@ -58,7 +56,9 @@ class WinResourceCompiler (ResourceCompiler):
 		])
 		return result == 0
 
-	def CompileFixResourceFile (self, grcFilePath, imageResourcesFolder, nativeResourceFilePath):
+	def CompileFixResourceFile (self, grcFilePath, imageResourcesFolder):
+		grcFileName = os.path.split (grcFilePath)[1]
+		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
 		result = subprocess.call ([
 			self.resConvPath,
 			'-m', 'r',						# resource compile mode
