@@ -5,30 +5,24 @@ import subprocess
 def CompileOneLocalizedResourceFile (resConvPath, grcFilePath, nativeResourceFilePath):
 	result = subprocess.call ([
 		resConvPath,
-		'-m',
-		'r',
-		'-D', 'WINDOWS',
-		'-T',
-		'W',
-		'-q', 'utf8', '1252',
-		'-i', grcFilePath,
-		'-o', nativeResourceFilePath
+		'-m', 'r',						# resource compile mode
+		'-T', 'W',						# windows target
+		'-q', 'utf8', '1252',			# code page conversion
+		'-i', grcFilePath,				# input path
+		'-o', nativeResourceFilePath	# output path
 	])
 	return result == 0
 
 def CompileOneFixResourceFile (resConvPath, grcFilePath, imageResourcesFolder, nativeResourceFilePath):
 	result = subprocess.call ([
 		resConvPath,
-		'-m',
-		'r',
-		'-D', 'WINDOWS',
-		'-T',
-		'W',
-		'-w', '2',
-		'-p', imageResourcesFolder,
-		'-q', 'utf8', '1252',
-		'-i', grcFilePath,
-		'-o', nativeResourceFilePath
+		'-m', 'r',						# resource compile mode
+		'-T', 'W',						# windows target
+		'-q', 'utf8', '1252',			# code page conversion
+		'-w', '2',						# HiDPI image size list
+		'-p', imageResourcesFolder,		# search path
+		'-i', grcFilePath,				# input path
+		'-o', nativeResourceFilePath	# output path
 	])
 	return result == 0
 
@@ -65,8 +59,8 @@ def CompileNativeResources (devKitPath, sourcesPath, resourcesPath, resourceObje
 		'rc',
 		'/i', os.path.join (devKitPath, 'Support', 'Inc'),
 		'/i', os.path.join (devKitPath, 'Support', 'Modules', 'DGLib'),
-		'/i', resourceObjectsPath,
 		'/i', sourcesPath,
+		'/i', resourceObjectsPath,
 		'/fo', resultResourceFilePath,
 		os.path.join (resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
 	])
