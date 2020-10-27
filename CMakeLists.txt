@@ -41,11 +41,10 @@ add_definitions (-DACExtension)
 project (ArchicadAddOn)
 
 set (AddOnName ArchicadAddOn)
-set (AddOnSourcesFolder Sources/AddOn)
-set (AddOnResourcesFolder Sources/AddOnResources)
 
 # AddOnResources
 
+set (AddOnResourcesFolder Sources/AddOnResources)
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 
 file (GLOB AddOnImageFiles
@@ -75,7 +74,6 @@ add_custom_target (
 	SOURCES ${AddOnResourceFiles} ${AddOnImageFiles}
 )
 
-get_filename_component (AddOnSourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnSourcesFolder}" ABSOLUTE)
 get_filename_component (AddOnResourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnResourcesFolder}" ABSOLUTE)
 if (WIN32)
 	add_custom_command (
@@ -100,6 +98,8 @@ else ()
 endif ()
 
 # AddOn
+
+set (AddOnSourcesFolder Sources/AddOn)
 
 file (GLOB AddOnHeaderFiles
 	${AddOnSourcesFolder}/*.h
