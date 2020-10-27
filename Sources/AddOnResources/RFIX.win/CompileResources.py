@@ -3,12 +3,6 @@ import sys
 import subprocess
 import platform
 
-def IsWindows ():
-	return platform.system () == 'Windows'
-
-def IsMacOS ():
-	return platform.system () == 'Darwin'
-
 class ResourceCompiler:
 	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
 		self.devKitPath = devKitPath
@@ -71,7 +65,7 @@ class WinResourceCompiler (ResourceCompiler):
 			'-T', 'W',						# windows target
 			'-q', 'utf8', '1252',			# code page conversion
 			'-w', '2',						# HiDPI image size list
-			'-p', imageResourcesFolder,		# search path
+			'-p', imageResourcesFolder,		# image search path
 			'-i', grcFilePath,				# input path
 			'-o', nativeResourceFilePath	# output path
 		])
@@ -93,7 +87,7 @@ class WinResourceCompiler (ResourceCompiler):
 
 def Main (argv):
 	if len (argv) != 6:
-		print ('Usage: CompileResources.py <languageCode> <devKitPath> <resourcesPath> <resourceObjectsPath> <resultResourceFilePath>')
+		print ('Usage: CompileResources.py <languageCode> <devKitPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>')
 		return 1
 
 	currentDir = os.path.dirname (os.path.abspath (__file__))
@@ -106,7 +100,8 @@ def Main (argv):
 	resultResourcePath = os.path.abspath (argv[5])
 
 	resourceCompiler = None
-	if IsWindows ():
+	system = platform.system ()
+	if system == 'Windows':
 		resourceCompiler = WinResourceCompiler (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
 
 	if resourceCompiler == None:
