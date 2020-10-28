@@ -91,7 +91,7 @@ else ()
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AddOnName}.bundle/Contents/Resources"
 		COMMAND ${CMAKE_COMMAND} -E copy "${API_DEVKIT_DIR}/Support/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AddOnName}.bundle/Contents/PkgInfo"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
