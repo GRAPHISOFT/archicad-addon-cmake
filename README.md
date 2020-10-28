@@ -5,10 +5,7 @@ This repository contains a CMake template for Archicad Add-On Development. You c
 ## Prerequisites
 
 - [CMake](https://cmake.org) (3.16 minimum version is needed).
-- On Windows:
-  - [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.5+).
-- On MacOS:
-  - [Perl](https://www.perl.org) for resource compilation.
+- [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
 
 ## Usage
 
@@ -64,5 +61,4 @@ This template is tested with the Archicad versions below. It doesn't contain any
 ## Possible Improvements
 
 - Multilanguage support (now it supports only INT localization).
-- Use Python for resource compilation on both platforms.
 - The generated XCode source structure could be improved.

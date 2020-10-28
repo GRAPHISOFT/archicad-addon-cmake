@@ -1,9 +1,11 @@
 import os
 import sys
-import subprocess
 import platform
+import subprocess
+import shutil
+import codecs
 
-class ResourceCompiler:
+class ResourceCompiler (object):
 	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
 		self.devKitPath = devKitPath
 		self.languageCode = languageCode
@@ -39,7 +41,7 @@ class ResourceCompiler:
 
 class WinResourceCompiler (ResourceCompiler):
 	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
-		super ().__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
 	def CompileResourceFile (self, grcFilePath):
@@ -72,6 +74,47 @@ class WinResourceCompiler (ResourceCompiler):
 			return False
 		return True
 
+class MacResourceCompiler (ResourceCompiler):
+	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
+		super (MacResourceCompiler, self).__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'OSX', 'ResConv')
+
+	def CompileResourceFile (self, grcFilePath):
+		grcFileName = os.path.split (grcFilePath)[1]
+		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.ro')
+		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images');
+		result = subprocess.call ([
+			self.resConvPath,
+			'-m', 'r',						# resource compile mode
+			'-T', 'M',						# windows target
+			'-q', 'utf8', 'utf16',			# code page conversion
+			'-w', '2',						# HiDPI image size list
+			'-p', imageResourcesFolder,		# image search path
+			'-i', grcFilePath,				# input path
+			'-o', nativeResourceFilePath	# output path
+		])
+		return result == 0
+
+	def CompileNativeResource (self, resultResourcePath):
+		resultLocalizedResourcePath = os.path.join (resultResourcePath, 'English.lproj')
+		if not os.path.exists (resultLocalizedResourcePath):
+			os.makedirs (resultLocalizedResourcePath)
+		resultLocalizableStringsPath = os.path.join (resultLocalizedResourcePath, 'Localizable.strings')
+		resultLocalizableStringsFile = codecs.open (resultLocalizableStringsPath, 'w', 'utf-16')
+		for fileName in os.listdir (self.resourceObjectsPath):
+			filePath = os.path.join (self.resourceObjectsPath, fileName)
+			extension = os.path.splitext (fileName)[1]
+			if extension == '.tif':
+				shutil.copy (filePath, resultResourcePath)
+			elif extension == '.rsrd':
+				shutil.copy (filePath, resultLocalizedResourcePath)
+			elif extension == '.strings':
+				stringsFile = codecs.open (filePath, 'r', 'utf-16')
+				resultLocalizableStringsFile.write (stringsFile.read ())
+				stringsFile.close ()
+		resultLocalizableStringsFile.close ()
+		return True
+
 def Main (argv):
 	if len (argv) != 6:
 		print ('Usage: CompileResources.py <languageCode> <devKitPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>')
@@ -90,6 +133,8 @@ def Main (argv):
 	system = platform.system ()
 	if system == 'Windows':
 		resourceCompiler = WinResourceCompiler (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+	elif system == 'Darwin':
+		resourceCompiler = MacResourceCompiler (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
 
 	if resourceCompiler == None:
 		print ('Platform is not supported')

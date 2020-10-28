@@ -54,15 +54,16 @@ if (WIN32)
 	file (GLOB AddOnResourceFiles
 		${AddOnResourcesFolder}/RINT/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
+		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.win/*.rc2
-		${AddOnResourcesFolder}/RFIX.win/*.py
+		${AddOnResourcesFolder}/Tools/*.py
 	)
 else ()
 	file (GLOB AddOnResourceFiles
 		${AddOnResourcesFolder}/RINT/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.mac/*.plist
-		${AddOnResourcesFolder}/RFIX.mac/*.pl
+		${AddOnResourcesFolder}/Tools/*.py
 	)
 endif ()
 
@@ -81,7 +82,7 @@ if (WIN32)
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/RFIX.Win/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 else ()
@@ -90,8 +91,7 @@ else ()
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND cd "${ResourceObjectsDir}"
-		COMMAND /usr/bin/perl "${AddOnResourcesFolderAbsolute}/RFIX.mac/compileGRCs.pl" "${API_DEVKIT_DIR}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AddOnName}.bundle/Contents/Resources"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
 		COMMAND ${CMAKE_COMMAND} -E copy "${API_DEVKIT_DIR}/Support/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AddOnName}.bundle/Contents/PkgInfo"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
