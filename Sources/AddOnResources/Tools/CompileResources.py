@@ -17,7 +17,7 @@ class ResourceCompiler (object):
 		grcFiles = self.CollectGrcFilesFromFolder (locResourcesFolder)
 		for grcFilePath in grcFiles:
 			if not self.CompileResourceFile (grcFilePath):
-				print ('Failed to compile resource: ' + fileName)
+				print ('Failed to compile resource: ' + grcFilePath)
 				return False
 		return True
 
@@ -26,7 +26,7 @@ class ResourceCompiler (object):
 		grcFiles = self.CollectGrcFilesFromFolder (fixResourcesFolder)
 		for grcFilePath in grcFiles:
 			if not self.CompileResourceFile (grcFilePath):
-				print ('Failed to compile resource: ' + fileName)
+				print ('Failed to compile resource: ' + grcFilePath)
 				return False
 		return True
 
