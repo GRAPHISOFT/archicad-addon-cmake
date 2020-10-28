@@ -17,11 +17,11 @@ function (SetCompilerOptions target)
 endfunction ()
 
 function (AddGSModule target folder module)
-	target_include_directories (${target} PUBLIC "${API_DEVKIT_DIR}/Support/Modules/${folder}")
+	target_include_directories (${target} PUBLIC "${AC_API_DEVKIT_DIR}/Support/Modules/${folder}")
 	if (WIN32)
-		target_link_libraries (${target} "${API_DEVKIT_DIR}/Support/Modules/${folder}/Win/${module}Imp.lib")
+		target_link_libraries (${target} "${AC_API_DEVKIT_DIR}/Support/Modules/${folder}/Win/${module}Imp.lib")
 	else ()
-		target_link_libraries (${target} "${API_DEVKIT_DIR}/Support/Frameworks/${module}.framework")
+		target_link_libraries (${target} "${AC_API_DEVKIT_DIR}/Support/Frameworks/${module}.framework")
 	endif ()
 endfunction ()
 
@@ -29,7 +29,9 @@ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (CMAKE_SUPPRESS_REGENERATION 1)
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
-set (API_DEVKIT_DIR $ENV{API_DEVKIT_DIR} CACHE PATH "API DevKit Directory.")
+set (AC_API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
+set (AC_ADDON_NAME "ArchicadAddOn" CACHE STRING "Add-On name.")
+set (AC_ADDON_LANGUAGE "INT" CACHE STRING "Add-On language code.")
 
 if (WIN32)
 	add_definitions (-DUNICODE -D_UNICODE)
@@ -39,8 +41,6 @@ endif ()
 add_definitions (-DACExtension)
 
 project (ArchicadAddOn)
-
-set (AddOnName ArchicadAddOn)
 
 # AddOnResources
 
@@ -52,7 +52,7 @@ file (GLOB AddOnImageFiles
 )
 if (WIN32)
 	file (GLOB AddOnResourceFiles
-		${AddOnResourcesFolder}/RINT/*.grc
+		${AddOnResourcesFolder}/R${AC_ADDON_LANGUAGE}/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.win/*.rc2
@@ -60,7 +60,7 @@ if (WIN32)
 	)
 else ()
 	file (GLOB AddOnResourceFiles
-		${AddOnResourcesFolder}/RINT/*.grc
+		${AddOnResourcesFolder}/R${AC_ADDON_LANGUAGE}/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.mac/*.plist
 		${AddOnResourcesFolder}/Tools/*.py
@@ -82,7 +82,7 @@ if (WIN32)
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AddOnName}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AC_ADDON_NAME}.res"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 else ()
@@ -91,8 +91,8 @@ else ()
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "INT" "${API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AddOnName}.bundle/Contents/Resources"
-		COMMAND ${CMAKE_COMMAND} -E copy "${API_DEVKIT_DIR}/Support/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AddOnName}.bundle/Contents/PkgInfo"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/Resources"
+		COMMAND ${CMAKE_COMMAND} -E copy "${AC_API_DEVKIT_DIR}/Support/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/PkgInfo"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 endif ()
@@ -121,7 +121,7 @@ else ()
 	add_library (AddOn MODULE ${AddOnFiles})
 endif ()
 
-set_target_properties (AddOn PROPERTIES OUTPUT_NAME ${AddOnName})
+set_target_properties (AddOn PROPERTIES OUTPUT_NAME ${AC_ADDON_NAME})
 if (WIN32)
 	set_target_properties (AddOn PROPERTIES SUFFIX ".apx")
 else ()
@@ -131,25 +131,25 @@ else ()
 endif ()
 
 if (WIN32)
-	target_link_options (AddOn PUBLIC "${ResourceObjectsDir}/${AddOnName}.res")
+	target_link_options (AddOn PUBLIC "${ResourceObjectsDir}/${AC_ADDON_NAME}.res")
 	target_link_options (AddOn PUBLIC /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2)
 endif ()
 
 target_include_directories (AddOn PUBLIC
 	${AddOnSourcesFolder}
-	${API_DEVKIT_DIR}/Support/Inc
+	${AC_API_DEVKIT_DIR}/Support/Inc
 )
 
 if (WIN32)
 	target_link_libraries (AddOn
-		"$<$<CONFIG:Debug>:${API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STATD.lib>"
-		"$<$<CONFIG:Release>:${API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STAT.lib>"
-		"$<$<CONFIG:RelWithDebInfo>:${API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STAT.lib>"
+		"$<$<CONFIG:Debug>:${AC_API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STATD.lib>"
+		"$<$<CONFIG:Release>:${AC_API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STAT.lib>"
+		"$<$<CONFIG:RelWithDebInfo>:${AC_API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STAT.lib>"
 	)
 else ()
 	FIND_LIBRARY (CocoaFramework Cocoa)
 	target_link_libraries (AddOn
-		"${API_DEVKIT_DIR}/Support/Lib/Mactel/libACAP_STAT.a"
+		"${AC_API_DEVKIT_DIR}/Support/Lib/Mactel/libACAP_STAT.a"
 		${CocoaFramework}
 	)
 endif ()
