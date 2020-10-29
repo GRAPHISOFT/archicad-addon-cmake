@@ -8,10 +8,10 @@
 /* [  1] */		"Example AddOn Command... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
 }
 
-'GDLG'  32600  Modal     40   40  345  88  "Example Dialog" {
-/* [  1] */ Button				  245   55   90   23	LargePlain  "OK"
-/* [  2] */ Button				  145   55   90   23	LargePlain  "Cancel"
-/* [  3] */ Separator			   10   43  325    2
+'GDLG'  32600  Modal | grow   40   40  345  128  "Example Dialog" {
+/* [  1] */ Button				  245   95   90   23	LargePlain  "OK"
+/* [  2] */ Button				  145   95   90   23	LargePlain  "Cancel"
+/* [  3] */ Separator			   10   83  325    2
 }
 
 'DLGH'  32600  DLG_Example {
