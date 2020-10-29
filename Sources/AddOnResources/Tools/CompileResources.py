@@ -86,7 +86,7 @@ class MacResourceCompiler (ResourceCompiler):
 		result = subprocess.call ([
 			self.resConvPath,
 			'-m', 'r',						# resource compile mode
-			'-T', 'M',						# windows target
+			'-T', 'M',						# macos target
 			'-q', 'utf8', 'utf16',			# code page conversion
 			'-w', '2',						# HiDPI image size list
 			'-p', imageResourcesFolder,		# image search path
