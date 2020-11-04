@@ -4,7 +4,6 @@
 }
 
 'STR#' 32500 "Strings for the Menu" {
-/* [   ] */ "Example AddOn Menu"
 /* [  1] */		"Example AddOn Command... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
 }
 

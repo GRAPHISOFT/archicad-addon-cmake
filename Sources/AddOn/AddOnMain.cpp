@@ -88,7 +88,7 @@ GSErrCode __ACENV_CALL MenuCommandHandler (const API_MenuParams *menuParams)
 
 GSErrCode __ACDLL_CALL RegisterInterface (void)
 {
-	return ACAPI_Register_Menu (ID_ADDON_MENU, 0, MenuCode_UserDef, MenuFlag_Default);
+	return ACAPI_Register_Menu (ID_ADDON_MENU, 0, MenuCode_Tools, MenuFlag_Default);
 }
 
 GSErrCode __ACENV_CALL Initialize (void)

@@ -7,7 +7,7 @@ This repository contains a CMake template for Archicad Add-On Development. You c
 - [CMake](https://cmake.org) (3.16 minimum version is needed).
 - [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
 
-## Usage
+## Build
 
 - [Download this CMake Template from here](https://github.com/GRAPHISOFT/archicad-addon-cmake/archive/master.zip).
 - [Download the Archicad Add-On Development Kit from here](http://archicadapi.graphisoft.com).
@@ -17,7 +17,7 @@ This repository contains a CMake template for Archicad Add-On Development. You c
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
 - To release your Add-On you have to modify the MDID in the "AddOnResources/RFIX/AddOnFix.grc" file.
 
-## Usage Examples
+## Build Examples
 
 ### Visual Studio (Windows)
 
@@ -46,6 +46,10 @@ cd ..
 - Install the "CMake Tools" extension for Visual Studio Code.
 - Set the "AC_API_DEVKIT_DIR" environment variable to the installed Development Kit folder.
 - Open the root folder in Visual Studio Code, configure and build the solution.
+
+## Use in Archicad
+
+To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu.
 
 ## Modifications
 
