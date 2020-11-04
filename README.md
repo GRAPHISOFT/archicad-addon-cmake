@@ -61,5 +61,5 @@ This template is tested with the Archicad versions below. It doesn't contain any
 
 ## Possible Improvements
 
-- Multilanguage support (now it supports only INT localization).
+- Multilanguage support (provide example for another localized version).
 - The generated XCode source structure could be improved.
