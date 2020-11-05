@@ -11,6 +11,14 @@ class ResourceCompiler (object):
 		self.languageCode = languageCode
 		self.resourcesPath = resourcesPath
 		self.resourceObjectsPath = resourceObjectsPath
+		self.resConvPath = None
+		
+	def IsValid (self):
+		if self.resConvPath == None:
+			return False
+		if not os.path.exists (self.resConvPath):
+			return False
+		return True
 
 	def CompileLocalizedResources (self):
 		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode);
@@ -138,6 +146,10 @@ def Main (argv):
 
 	if resourceCompiler == None:
 		print ('Platform is not supported')
+		return 1
+
+	if not resourceCompiler.IsValid ():
+		print ('Invalid resource compiler')
 		return 1
 
 	if not resourceCompiler.CompileLocalizedResources ():
