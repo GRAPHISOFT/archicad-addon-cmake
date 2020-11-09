@@ -13,7 +13,7 @@ This repository contains a CMake template for Archicad Add-On Development. You c
 - [Download the Archicad Add-On Development Kit from here](http://archicadapi.graphisoft.com).
 - Generate the IDE project with CMake, and set the following variables:
   - `AC_API_DEVKIT_DIR`: The root folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
-  - `AC_ADDON_NAME`: (optional) The name of the result binary Add-On file (default is "ArchicadAddOn").
+  - `AC_ADDON_NAME`: (optional) The name of the result binary Add-On file (default is "ExampleAddOn").
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
 - To release your Add-On you have to modify the MDID in the "AddOnResources/RFIX/AddOnFix.grc" file.
 
