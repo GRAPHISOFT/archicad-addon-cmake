@@ -61,15 +61,7 @@ private:
 	DG::Separator	separator;
 };
 
-API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
-{
-	RSGetIndString (&envir->addOnInfo.name, ID_ADDON_INFO, 1, ACAPI_GetOwnResModule ());
-	RSGetIndString (&envir->addOnInfo.description, ID_ADDON_INFO, 2, ACAPI_GetOwnResModule ());
-
-	return APIAddon_Normal;
-}
-
-GSErrCode __ACENV_CALL MenuCommandHandler (const API_MenuParams *menuParams)
+static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 {
 	switch (menuParams->menuItemRef.menuResID) {
 		case ID_ADDON_MENU:
@@ -84,6 +76,14 @@ GSErrCode __ACENV_CALL MenuCommandHandler (const API_MenuParams *menuParams)
 			break;
 	}
 	return NoError;
+}
+
+API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
+{
+	RSGetIndString (&envir->addOnInfo.name, ID_ADDON_INFO, 1, ACAPI_GetOwnResModule ());
+	RSGetIndString (&envir->addOnInfo.description, ID_ADDON_INFO, 2, ACAPI_GetOwnResModule ());
+
+	return APIAddon_Normal;
 }
 
 GSErrCode __ACDLL_CALL RegisterInterface (void)
