@@ -17,8 +17,6 @@ This repository contains a CMake template for Archicad Add-On Development. You c
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
 - To release your Add-On you have to modify the MDID in the "AddOnResources/RFIX/AddOnFix.grc" file.
 
-## Build Examples
-
 ### Visual Studio (Windows)
 
 Run these commands from the command line.
@@ -47,6 +45,12 @@ cd ..
 - Set the "AC_API_DEVKIT_DIR" environment variable to the installed Development Kit folder.
 - Open the root folder in Visual Studio Code, configure and build the solution.
 
+## Archicad Compatibility
+
+This template is tested with the Archicad versions below. It doesn't contain any version dependent code so in theory it should work with other Archicad versions as well.
+- Archicad 23
+- Archicad 24
+
 ## Use in Archicad
 
 To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu.
@@ -56,12 +60,6 @@ To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On
 If you use the same source structure as the template, you probably won't have to modify anything in the project generation process.
 
 One exception is the module dependency list. The template uses only the minimum required number of Archicad modules. If you want to add more modules, you have to modify the module list at the end of the `CMakeLists.txt` file.
-
-## Compatibility
-
-This template is tested with the Archicad versions below. It doesn't contain any version dependent code so in theory it should work with other Archicad versions as well.
-- Archicad 23
-- Archicad 24
 
 ## Possible Improvements
 
