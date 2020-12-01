@@ -3,9 +3,12 @@
 
 #include "DGModule.hpp"
 
-#define ID_ADDON_INFO		32000
-#define ID_ADDON_MENU		32500
-#define ID_ADDON_DIALOG		32600
+static const GSResID AddOnInfoID			= 32000;
+	static const Int32 AddOnNameID			= 1;
+	static const Int32 AddOnDescriptionID	= 2;
+
+static const short AddOnMenuID				= 32500;
+	static const Int32 AddOnCommandID		= 1;
 
 class ExampleDialog :	public DG::ModalDialog,
 						public DG::PanelObserver,
@@ -15,7 +18,7 @@ class ExampleDialog :	public DG::ModalDialog,
 public:
 	enum DialogResourceIds
 	{
-		ExampleDialogResourceId = ID_ADDON_DIALOG,
+		ExampleDialogResourceId = 32600,
 		OKButtonId = 1,
 		CancelButtonId = 2,
 		SeparatorId = 3
@@ -64,9 +67,9 @@ private:
 static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 {
 	switch (menuParams->menuItemRef.menuResID) {
-		case ID_ADDON_MENU:
+		case AddOnMenuID:
 			switch (menuParams->menuItemRef.itemIndex) {
-				case 1:
+				case AddOnCommandID:
 					{
 						ExampleDialog dialog;
 						dialog.Invoke ();
@@ -80,20 +83,20 @@ static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 
 API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
 {
-	RSGetIndString (&envir->addOnInfo.name, ID_ADDON_INFO, 1, ACAPI_GetOwnResModule ());
-	RSGetIndString (&envir->addOnInfo.description, ID_ADDON_INFO, 2, ACAPI_GetOwnResModule ());
+	RSGetIndString (&envir->addOnInfo.name, AddOnInfoID, 1, ACAPI_GetOwnResModule ());
+	RSGetIndString (&envir->addOnInfo.description, AddOnInfoID, 2, ACAPI_GetOwnResModule ());
 
 	return APIAddon_Normal;
 }
 
 GSErrCode __ACDLL_CALL RegisterInterface (void)
 {
-	return ACAPI_Register_Menu (ID_ADDON_MENU, 0, MenuCode_Tools, MenuFlag_Default);
+	return ACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
 }
 
 GSErrCode __ACENV_CALL Initialize (void)
 {
-	return ACAPI_Install_MenuHandler (ID_ADDON_MENU, MenuCommandHandler);
+	return ACAPI_Install_MenuHandler (AddOnMenuID, MenuCommandHandler);
 }
 
 GSErrCode __ACENV_CALL FreeData (void)
