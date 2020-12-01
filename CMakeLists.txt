@@ -40,7 +40,7 @@ else ()
 endif ()
 add_definitions (-DACExtension)
 
-project (ArchicadAddOn)
+project (${AC_ADDON_NAME})
 
 # AddOnResources
 
