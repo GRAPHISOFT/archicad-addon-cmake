@@ -59,7 +59,7 @@ To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On
 
 If you use the same source structure as the template, you probably won't have to modify anything in the project generation process.
 
-One exception is the module dependency list. The template uses only the minimum required number of Archicad modules. If you want to add more modules, you have to modify the module list at the end of the `CMakeLists.txt` file.
+One exception is the module dependency list. The template uses only the minimum required number of Archicad modules. If you want to add more modules, you have to modify the `CMakeModules.txt` file.
 
 ## Possible Improvements
 
