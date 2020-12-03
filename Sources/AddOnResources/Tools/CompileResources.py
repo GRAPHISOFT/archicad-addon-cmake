@@ -6,9 +6,10 @@ import shutil
 import codecs
 
 class ResourceCompiler (object):
-	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
+	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
 		self.devKitPath = devKitPath
 		self.languageCode = languageCode
+		self.sourcesPath = sourcesPath
 		self.resourcesPath = resourcesPath
 		self.resourceObjectsPath = resourceObjectsPath
 		self.resConvPath = None
@@ -48,8 +49,8 @@ class ResourceCompiler (object):
 		return result
 
 class WinResourceCompiler (ResourceCompiler):
-	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
-		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
+		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
 	def CompileResourceFile (self, grcFilePath):
@@ -66,13 +67,16 @@ class WinResourceCompiler (ResourceCompiler):
 			'-i', grcFilePath,				# input path
 			'-o', nativeResourceFilePath	# output path
 		])
-		return result == 0
+		if result != 0:
+			return False
+		return True
 
 	def CompileNativeResource (self, resultResourcePath):
 		result = subprocess.call ([
 			'rc',
 			'/i', os.path.join (self.devKitPath, 'Support', 'Inc'),
 			'/i', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
+			'/i', self.sourcesPath,
 			'/i', self.resourceObjectsPath,
 			'/fo', resultResourcePath,
 			os.path.join (self.resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
@@ -83,12 +87,25 @@ class WinResourceCompiler (ResourceCompiler):
 		return True
 
 class MacResourceCompiler (ResourceCompiler):
-	def __init__ (self, devKitPath, languageCode, resourcesPath, resourceObjectsPath):
-		super (MacResourceCompiler, self).__init__ (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
+		super (MacResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'OSX', 'ResConv')
 
 	def CompileResourceFile (self, grcFilePath):
 		grcFileName = os.path.split (grcFilePath)[1]
+		precompiledGrcFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.i')
+		result = subprocess.call ([
+			'clang',
+			'-x', 'c++',
+			'-E',
+			'-P',
+			'-Dmacintosh',
+			'-I', self.sourcesPath,
+			'-o', precompiledGrcFilePath,
+			grcFilePath,
+		])
+		if result != 0:
+			return False
 		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.ro')
 		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images');
 		result = subprocess.call ([
@@ -98,10 +115,12 @@ class MacResourceCompiler (ResourceCompiler):
 			'-q', 'utf8', 'utf16',			# code page conversion
 			'-w', '2',						# HiDPI image size list
 			'-p', imageResourcesFolder,		# image search path
-			'-i', grcFilePath,				# input path
+			'-i', precompiledGrcFilePath,	# input path
 			'-o', nativeResourceFilePath	# output path
 		])
-		return result == 0
+		if result != 0:
+			return False
+		return True
 
 	def CompileNativeResource (self, resultResourcePath):
 		resultLocalizedResourcePath = os.path.join (resultResourcePath, 'English.lproj')
@@ -124,8 +143,8 @@ class MacResourceCompiler (ResourceCompiler):
 		return True
 
 def Main (argv):
-	if len (argv) != 6:
-		print ('Usage: CompileResources.py <languageCode> <devKitPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>')
+	if len (argv) != 7:
+		print ('Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>')
 		return 1
 
 	currentDir = os.path.dirname (os.path.abspath (__file__))
@@ -133,16 +152,17 @@ def Main (argv):
 
 	languageCode = argv[1]
 	devKitPath = os.path.abspath (argv[2])
-	resourcesPath = os.path.abspath (argv[3])
-	resourceObjectsPath = os.path.abspath (argv[4])
-	resultResourcePath = os.path.abspath (argv[5])
+	sourcesPath = os.path.abspath (argv[3])
+	resourcesPath = os.path.abspath (argv[4])
+	resourceObjectsPath = os.path.abspath (argv[5])
+	resultResourcePath = os.path.abspath (argv[6])
 
 	resourceCompiler = None
 	system = platform.system ()
 	if system == 'Windows':
-		resourceCompiler = WinResourceCompiler (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+		resourceCompiler = WinResourceCompiler (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 	elif system == 'Darwin':
-		resourceCompiler = MacResourceCompiler (devKitPath, languageCode, resourcesPath, resourceObjectsPath)
+		resourceCompiler = MacResourceCompiler (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 
 	if resourceCompiler == None:
 		print ('Platform is not supported')

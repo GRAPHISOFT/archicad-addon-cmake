@@ -42,9 +42,11 @@ add_definitions (-DACExtension)
 
 project (${AC_ADDON_NAME})
 
+set (AddOnSourcesFolder Sources/AddOn)
+set (AddOnResourcesFolder Sources/AddOnResources)
+
 # AddOnResources
 
-set (AddOnResourcesFolder Sources/AddOnResources)
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 
 file (GLOB AddOnImageFiles
@@ -75,6 +77,7 @@ add_custom_target (
 	SOURCES ${AddOnResourceFiles} ${AddOnImageFiles}
 )
 
+get_filename_component (AddOnSourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnSourcesFolder}" ABSOLUTE)
 get_filename_component (AddOnResourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnResourcesFolder}" ABSOLUTE)
 if (WIN32)
 	add_custom_command (
@@ -82,7 +85,7 @@ if (WIN32)
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AC_ADDON_NAME}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AC_ADDON_NAME}.res"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 else ()
@@ -91,15 +94,13 @@ else ()
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/Resources"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/Resources"
 		COMMAND ${CMAKE_COMMAND} -E copy "${AC_API_DEVKIT_DIR}/Support/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/PkgInfo"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 endif ()
 
 # AddOn
-
-set (AddOnSourcesFolder Sources/AddOn)
 
 file (GLOB AddOnHeaderFiles
 	${AddOnSourcesFolder}/*.h

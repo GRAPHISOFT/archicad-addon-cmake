@@ -1,13 +1,14 @@
 #include "APIEnvir.h"
 #include "ACAPinc.h"
 
+#include "ResourceIds.hpp"
 #include "DGModule.hpp"
 
-static const GSResID AddOnInfoID			= 32000;
+static const GSResID AddOnInfoID			= ID_ADDON_INFO;
 	static const Int32 AddOnNameID			= 1;
 	static const Int32 AddOnDescriptionID	= 2;
 
-static const short AddOnMenuID				= 32500;
+static const short AddOnMenuID				= ID_ADDON_MENU;
 	static const Int32 AddOnCommandID		= 1;
 
 class ExampleDialog :	public DG::ModalDialog,
@@ -18,7 +19,7 @@ class ExampleDialog :	public DG::ModalDialog,
 public:
 	enum DialogResourceIds
 	{
-		ExampleDialogResourceId = 32600,
+		ExampleDialogResourceId = ID_ADDON_DLG,
 		OKButtonId = 1,
 		CancelButtonId = 2,
 		SeparatorId = 3
@@ -83,8 +84,8 @@ static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 
 API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
 {
-	RSGetIndString (&envir->addOnInfo.name, AddOnInfoID, 1, ACAPI_GetOwnResModule ());
-	RSGetIndString (&envir->addOnInfo.description, AddOnInfoID, 2, ACAPI_GetOwnResModule ());
+	RSGetIndString (&envir->addOnInfo.name, AddOnInfoID, AddOnNameID, ACAPI_GetOwnResModule ());
+	RSGetIndString (&envir->addOnInfo.description, AddOnInfoID, AddOnDescriptionID, ACAPI_GetOwnResModule ());
 
 	return APIAddon_Normal;
 }
