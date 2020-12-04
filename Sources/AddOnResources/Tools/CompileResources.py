@@ -22,7 +22,7 @@ class ResourceCompiler (object):
 		return True
 
 	def CompileLocalizedResources (self):
-		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode);
+		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode)
 		grcFiles = self.CollectGrcFilesFromFolder (locResourcesFolder)
 		for grcFilePath in grcFiles:
 			if not self.CompileResourceFile (grcFilePath):
@@ -31,7 +31,7 @@ class ResourceCompiler (object):
 		return True
 
 	def CompileFixResources (self):
-		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX');
+		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX')
 		grcFiles = self.CollectGrcFilesFromFolder (fixResourcesFolder)
 		for grcFilePath in grcFiles:
 			if not self.CompileResourceFile (grcFilePath):
@@ -56,7 +56,7 @@ class WinResourceCompiler (ResourceCompiler):
 	def CompileResourceFile (self, grcFilePath):
 		grcFileName = os.path.split (grcFilePath)[1]
 		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
-		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images');
+		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
 		result = subprocess.call ([
 			self.resConvPath,
 			'-m', 'r',						# resource compile mode
@@ -107,7 +107,7 @@ class MacResourceCompiler (ResourceCompiler):
 		if result != 0:
 			return False
 		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.ro')
-		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images');
+		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
 		result = subprocess.call ([
 			self.resConvPath,
 			'-m', 'r',						# resource compile mode
