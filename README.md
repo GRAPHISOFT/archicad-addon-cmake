@@ -53,7 +53,11 @@ This template is tested with the Archicad versions below. It doesn't contain any
 
 ## Use in Archicad
 
-To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu.
+To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu. Please note that the example Add-On works only in the demo version of Archicad. 
+
+You can start Archicad in demo mode with the following command line commands:
+- Windows: `Archicad.exe -DEMO`
+- MacOS: `"ARCHICAD 24.app/Contents/MacOS/ARCHICAD" -DEMO`
 
 ## Modifications
 
