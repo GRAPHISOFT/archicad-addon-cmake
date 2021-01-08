@@ -63,7 +63,7 @@ You can start Archicad in demo mode with the following command line commands:
 
 If you use the same source structure as the template, you probably won't have to modify anything in the project generation process.
 
-One exception is the module dependency list. The template uses only the minimum required number of Archicad modules. If you want to add more modules, you have to modify the `CMakeModules.txt` file.
+One exception is the module dependency list. The template uses only the minimum required number of Archicad modules. You can add more modules at the end of the `CMakeLists.txt` file.
 
 ## Possible Improvements
 
