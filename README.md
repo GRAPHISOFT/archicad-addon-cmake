@@ -47,9 +47,7 @@ cd ..
 
 ## Archicad Compatibility
 
-This template is tested with the Archicad versions below. It doesn't contain any version dependent code so in theory it should work with other Archicad versions as well.
-- Archicad 23
-- Archicad 24
+This template is tested with all Archicad versions starting from Archicad 23.
 
 ## Use in Archicad
 
