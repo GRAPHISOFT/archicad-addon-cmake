@@ -2,7 +2,7 @@
 
 'STR#' ID_ADDON_INFO "Add-on Name and Description" {
 /* [  1] */		"Example AddOn"
-/* [  2] */		"Description..."
+/* [  2] */		"Example AddOn Description..."
 }
 
 'STR#' ID_ADDON_MENU "Strings for the Menu" {
