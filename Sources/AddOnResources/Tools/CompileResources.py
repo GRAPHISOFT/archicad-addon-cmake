@@ -4,7 +4,6 @@ import platform
 import subprocess
 import shutil
 import codecs
-import glob
 
 class ResourceCompiler (object):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
