@@ -107,9 +107,7 @@ class WinResourceCompiler (ResourceCompiler):
 			return defaultNativeResourceFile
 
 		existingNativeResourceFiles = self.CollectFilesFromFolderWithExtension (os.path.join (self.resourcesPath, 'RFIX.win'), '.rc2')
-		if not existingNativeResourceFiles:
-			print ('Native resource file was not found at RFIX.win folder')
-			return False
+		assert existingNativeResourceFiles, 'Native resource file was not found at RFIX.win folder'
 
 		return existingNativeResourceFiles[0]
 
