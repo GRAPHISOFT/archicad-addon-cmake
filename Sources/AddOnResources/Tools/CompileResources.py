@@ -65,7 +65,7 @@ class ResourceCompiler (object):
 		result = []
 		for fileName in os.listdir (folderPath):
 			fileExtension = os.path.splitext (fileName)[1]
-			if fileExtension == extension:
+			if fileExtension.lower () == extension.lower ():
 				fullPath = os.path.join (folderPath, fileName)
 				result.append (fullPath)
 		return result
@@ -101,14 +101,19 @@ class WinResourceCompiler (ResourceCompiler):
 			return False
 		return self.RunResConv ('W', '1252', precompiledGrcFilePath, '.rc2')
 
+	def GetNativeResourceFile (self):
+		defaultNativeResourceFile = os.path.join (self.resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
+		if os.path.exists (defaultNativeResourceFile):
+			return defaultNativeResourceFile
+
+		existingNativeResourceFiles = self.CollectFilesFromFolderWithExtension (os.path.join (self.resourcesPath, 'RFIX.win'), '.rc2')
+		if not existingNativeResourceFiles:
+			print ('Native resource file was not found at RFIX.win folder')
+			return False
+
+		return existingNativeResourceFiles[0]
+
 	def CompileNativeResource (self, resultResourcePath):
-		nativeResourceFiles = self.CollectFilesFromFolderWithExtension (os.path.join (self.resourcesPath, 'RFIX.win'), '.rc2')
-		if not nativeResourceFiles:
-			print ('Native resource file was not found')
-			return False
-		if len (nativeResourceFiles) > 1:
-			print ('More than one native resource file was found')
-			return False
 		result = subprocess.call ([
 			'rc',
 			'/i', os.path.join (self.devKitPath, 'Support', 'Inc'),
@@ -116,7 +121,7 @@ class WinResourceCompiler (ResourceCompiler):
 			'/i', self.sourcesPath,
 			'/i', self.resourceObjectsPath,
 			'/fo', resultResourcePath,
-			nativeResourceFiles[0]
+			self.GetNativeResourceFile ()
 		])
 		if result != 0:
 			print ('Failed to compile native resource')
@@ -160,7 +165,7 @@ class MacResourceCompiler (ResourceCompiler):
 		resultLocalizableStringsFile = codecs.open (resultLocalizableStringsPath, 'w', 'utf-16')
 		for fileName in os.listdir (self.resourceObjectsPath):
 			filePath = os.path.join (self.resourceObjectsPath, fileName)
-			extension = os.path.splitext (fileName)[1]
+			extension = os.path.splitext (fileName)[1].lower ()
 			if extension == '.tif':
 				shutil.copy (filePath, resultResourcePath)
 			elif extension == '.rsrd':
