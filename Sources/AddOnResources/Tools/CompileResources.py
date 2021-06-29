@@ -4,6 +4,7 @@ import platform
 import subprocess
 import shutil
 import codecs
+import glob
 
 class ResourceCompiler (object):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
@@ -21,9 +22,13 @@ class ResourceCompiler (object):
 			return False
 		return True
 
+	def GetPrecompiledResourceFilePath (self, grcFilePath):
+		grcFileName = os.path.split (grcFilePath)[1]
+		return os.path.join (self.resourceObjectsPath, grcFileName + '.i')
+
 	def CompileLocalizedResources (self):
 		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode)
-		grcFiles = self.CollectGrcFilesFromFolder (locResourcesFolder)
+		grcFiles = self.CollectFilesFromFolderWithExtension (locResourcesFolder, '.grc')
 		for grcFilePath in grcFiles:
 			if not self.CompileResourceFile (grcFilePath):
 				print ('Failed to compile resource: ' + grcFilePath)
@@ -32,20 +37,47 @@ class ResourceCompiler (object):
 
 	def CompileFixResources (self):
 		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX')
-		grcFiles = self.CollectGrcFilesFromFolder (fixResourcesFolder)
+		grcFiles = self.CollectFilesFromFolderWithExtension (fixResourcesFolder, '.grc')
 		for grcFilePath in grcFiles:
 			if not self.CompileResourceFile (grcFilePath):
 				print ('Failed to compile resource: ' + grcFilePath)
 				return False
 		return True
 
-	def CollectGrcFilesFromFolder (self, folderPath):
+	def RunResConv (self, platformSign, codepage, inputFilePath, nativeResourceFileExtenion):
+		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
+		inputFileBaseName = os.path.splitext (os.path.split (inputFilePath)[1])[0]
+		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, inputFileBaseName + nativeResourceFileExtenion)
+		result = subprocess.call ([
+			self.resConvPath,
+			'-m', 'r',						# resource compile mode
+			'-T', platformSign,				# target platform
+			'-q', 'utf8', codepage,			# code page conversion
+			'-w', '2',						# HiDPI image size list
+			'-p', imageResourcesFolder,		# image search path
+			'-i', inputFilePath,			# input path
+			'-o', nativeResourceFilePath	# output path
+		])
+		if result != 0:
+			return False
+		return True
+
+	def CollectFilesFromFolderWithExtension (self, folderPath, extension):
 		result = []
 		for fileName in os.listdir (folderPath):
-			extension = os.path.splitext (fileName)[1]
-			if extension == '.grc':
-				grcFilePath = os.path.join (folderPath, fileName)
-				result.append (grcFilePath)
+			fileExtension = os.path.splitext (fileName)[1]
+			if fileExtension == extension:
+				fullPath = os.path.join (folderPath, fileName)
+				result.append (fullPath)
+		return result
+
+	def CollectFilesFromFolderRecursive (self, path, name):
+		result = []
+		for folder, subs, files in os.walk (path):
+			for fileName in files + subs:
+				if fileName.lower () == name.lower ():
+					fullPath = os.path.join (folder, fileName)
+					result.append (fullPath)
 		return result
 
 class WinResourceCompiler (ResourceCompiler):
@@ -53,25 +85,40 @@ class WinResourceCompiler (ResourceCompiler):
 		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
-	def CompileResourceFile (self, grcFilePath):
-		grcFileName = os.path.split (grcFilePath)[1]
-		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
-		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
+	def PrecompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.GetPrecompiledResourceFilePath (grcFilePath)
 		result = subprocess.call ([
-			self.resConvPath,
-			'-m', 'r',						# resource compile mode
-			'-T', 'W',						# windows target
-			'-q', 'utf8', '1252',			# code page conversion
-			'-w', '2',						# HiDPI image size list
-			'-p', imageResourcesFolder,		# image search path
-			'-i', grcFilePath,				# input path
-			'-o', nativeResourceFilePath	# output path
+			'cl',
+			'/nologo',
+			'/X',
+			'/EP',
+			'/P',
+			'/I', os.path.join (self.devKitPath, 'Support', 'Inc'),
+			'/I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
+			'/I', self.sourcesPath,
+			'/DWINDOWS',
+			'/execution-charset:utf-8',
+			'/Fi{}'.format (precompiledGrcFilePath),
+			grcFilePath,
 		])
 		if result != 0:
+			return None
+		return precompiledGrcFilePath
+
+	def CompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.PrecompileResourceFile (grcFilePath)
+		if not precompiledGrcFilePath:
 			return False
-		return True
+		return self.RunResConv ('W', '1252', precompiledGrcFilePath, '.rc2')
 
 	def CompileNativeResource (self, resultResourcePath):
+		nativeResourceFiles = self.CollectFilesFromFolderWithExtension (os.path.join (self.resourcesPath, 'RFIX.win'), '.rc2')
+		if not nativeResourceFiles:
+			print ('Native resource file was not found')
+			return False
+		if len (nativeResourceFiles) > 1:
+			print ('More than one native resource file was found')
+			return False
 		result = subprocess.call ([
 			'rc',
 			'/i', os.path.join (self.devKitPath, 'Support', 'Inc'),
@@ -79,7 +126,7 @@ class WinResourceCompiler (ResourceCompiler):
 			'/i', self.sourcesPath,
 			'/i', self.resourceObjectsPath,
 			'/fo', resultResourcePath,
-			os.path.join (self.resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
+			nativeResourceFiles[0]
 		])
 		if result != 0:
 			print ('Failed to compile native resource')
@@ -91,36 +138,29 @@ class MacResourceCompiler (ResourceCompiler):
 		super (MacResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'OSX', 'ResConv')
 
-	def CompileResourceFile (self, grcFilePath):
-		grcFileName = os.path.split (grcFilePath)[1]
-		precompiledGrcFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.i')
+	def PrecompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.GetPrecompiledResourceFilePath (grcFilePath)
 		result = subprocess.call ([
 			'clang',
 			'-x', 'c++',
 			'-E',
 			'-P',
 			'-Dmacintosh',
+			'-I', os.path.join (self.devKitPath, 'Support', 'Inc'),
+			'-I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
 			'-I', self.sourcesPath,
 			'-o', precompiledGrcFilePath,
 			grcFilePath,
 		])
 		if result != 0:
+			return None
+		return precompiledGrcFilePath
+
+	def CompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.PrecompileResourceFile (grcFilePath)
+		if not precompiledGrcFilePath:
 			return False
-		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.ro')
-		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
-		result = subprocess.call ([
-			self.resConvPath,
-			'-m', 'r',						# resource compile mode
-			'-T', 'M',						# macos target
-			'-q', 'utf8', 'utf16',			# code page conversion
-			'-w', '2',						# HiDPI image size list
-			'-p', imageResourcesFolder,		# image search path
-			'-i', precompiledGrcFilePath,	# input path
-			'-o', nativeResourceFilePath	# output path
-		])
-		if result != 0:
-			return False
-		return True
+		return self.RunResConv ('M', 'utf16', precompiledGrcFilePath, '.ro')
 
 	def CompileNativeResource (self, resultResourcePath):
 		resultLocalizedResourcePath = os.path.join (resultResourcePath, 'English.lproj')
