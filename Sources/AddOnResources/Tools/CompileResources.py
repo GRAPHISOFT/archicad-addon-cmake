@@ -71,15 +71,6 @@ class ResourceCompiler (object):
 				result.append (fullPath)
 		return result
 
-	def CollectFilesFromFolderRecursive (self, path, name):
-		result = []
-		for folder, subs, files in os.walk (path):
-			for fileName in files + subs:
-				if fileName.lower () == name.lower ():
-					fullPath = os.path.join (folder, fileName)
-					result.append (fullPath)
-		return result
-
 class WinResourceCompiler (ResourceCompiler):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
 		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
