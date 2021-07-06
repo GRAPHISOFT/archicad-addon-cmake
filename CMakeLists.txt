@@ -12,7 +12,9 @@ function (SetCompilerOptions target)
 			-Wno-invalid-offsetof
 			-Wno-ignored-qualifiers
 			-Wno-reorder
-			-Wno-overloaded-virtual)
+			-Wno-overloaded-virtual
+			-Wno-unused-parameter
+			-Wno-deprecated-copy)
 	endif ()
 endfunction ()
 
