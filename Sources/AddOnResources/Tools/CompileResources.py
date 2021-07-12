@@ -29,19 +29,13 @@ class ResourceCompiler (object):
 		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode)
 		grcFiles = self.CollectFilesFromFolderWithExtension (locResourcesFolder, '.grc')
 		for grcFilePath in grcFiles:
-			if not self.CompileResourceFile (grcFilePath):
-				print ('Failed to compile resource: ' + grcFilePath)
-				return False
-		return True
+			assert self.CompileResourceFile (grcFilePath), 'Failed to compile resource: ' + grcFilePath
 
 	def CompileFixResources (self):
 		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX')
 		grcFiles = self.CollectFilesFromFolderWithExtension (fixResourcesFolder, '.grc')
 		for grcFilePath in grcFiles:
-			if not self.CompileResourceFile (grcFilePath):
-				print ('Failed to compile resource: ' + grcFilePath)
-				return False
-		return True
+			assert self.CompileResourceFile (grcFilePath), 'Failed to compile resource: ' + grcFilePath
 
 	def RunResConv (self, platformSign, codepage, inputFilePath, nativeResourceFileExtenion):
 		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
@@ -91,14 +85,11 @@ class WinResourceCompiler (ResourceCompiler):
 			'/Fi{}'.format (precompiledGrcFilePath),
 			grcFilePath,
 		])
-		if result != 0:
-			return None
+		assert result == 0, "Failed to precompile resource " + grcFilePath
 		return precompiledGrcFilePath
 
 	def CompileResourceFile (self, grcFilePath):
 		precompiledGrcFilePath = self.PrecompileResourceFile (grcFilePath)
-		if not precompiledGrcFilePath:
-			return False
 		return self.RunResConv ('W', '1252', precompiledGrcFilePath, '.rc2')
 
 	def GetNativeResourceFile (self):
@@ -112,6 +103,7 @@ class WinResourceCompiler (ResourceCompiler):
 		return existingNativeResourceFiles[0]
 
 	def CompileNativeResource (self, resultResourcePath):
+		nativeResourceFile = self.GetNativeResourceFile ()
 		result = subprocess.call ([
 			'rc',
 			'/i', os.path.join (self.devKitPath, 'Support', 'Inc'),
@@ -119,12 +111,9 @@ class WinResourceCompiler (ResourceCompiler):
 			'/i', self.sourcesPath,
 			'/i', self.resourceObjectsPath,
 			'/fo', resultResourcePath,
-			self.GetNativeResourceFile ()
+			nativeResourceFile
 		])
-		if result != 0:
-			print ('Failed to compile native resource')
-			return False
-		return True
+		assert result == 0, 'Failed to compile native resource ' + nativeResourceFile
 
 class MacResourceCompiler (ResourceCompiler):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
@@ -145,14 +134,11 @@ class MacResourceCompiler (ResourceCompiler):
 			'-o', precompiledGrcFilePath,
 			grcFilePath,
 		])
-		if result != 0:
-			return None
+		assert result == 0, "Failed to precompile resource " + grcFilePath
 		return precompiledGrcFilePath
 
 	def CompileResourceFile (self, grcFilePath):
 		precompiledGrcFilePath = self.PrecompileResourceFile (grcFilePath)
-		if not precompiledGrcFilePath:
-			return False
 		return self.RunResConv ('M', 'utf16', precompiledGrcFilePath, '.ro')
 
 	def CompileNativeResource (self, resultResourcePath):
@@ -173,12 +159,9 @@ class MacResourceCompiler (ResourceCompiler):
 				resultLocalizableStringsFile.write (stringsFile.read ())
 				stringsFile.close ()
 		resultLocalizableStringsFile.close ()
-		return True
 
 def Main (argv):
-	if len (argv) != 7:
-		print ('Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>')
-		return 1
+	assert len (argv) == 7, 'Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>'
 
 	currentDir = os.path.dirname (os.path.abspath (__file__))
 	os.chdir (currentDir)
@@ -197,22 +180,12 @@ def Main (argv):
 	elif system == 'Darwin':
 		resourceCompiler = MacResourceCompiler (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 
-	if resourceCompiler == None:
-		print ('Platform is not supported')
-		return 1
+	assert resourceCompiler, 'Platform is not supported'
+	assert resourceCompiler.IsValid (), 'Invalid resource compiler'
 
-	if not resourceCompiler.IsValid ():
-		print ('Invalid resource compiler')
-		return 1
-
-	if not resourceCompiler.CompileLocalizedResources ():
-		return 1
-
-	if not resourceCompiler.CompileFixResources ():
-		return 1
-
-	if not resourceCompiler.CompileNativeResource (resultResourcePath):
-		return 1
+	resourceCompiler.CompileLocalizedResources ()
+	resourceCompiler.CompileFixResources ()
+	resourceCompiler.CompileNativeResource (resultResourcePath)
 
 	return 0
 
