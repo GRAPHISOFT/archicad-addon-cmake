@@ -21,31 +21,47 @@ class ResourceCompiler (object):
 			return False
 		return True
 
+	def GetPrecompiledResourceFilePath (self, grcFilePath):
+		grcFileName = os.path.split (grcFilePath)[1]
+		return os.path.join (self.resourceObjectsPath, grcFileName + '.i')
+
 	def CompileLocalizedResources (self):
 		locResourcesFolder = os.path.join (self.resourcesPath, 'R' + self.languageCode)
-		grcFiles = self.CollectGrcFilesFromFolder (locResourcesFolder)
+		grcFiles = self.CollectFilesFromFolderWithExtension (locResourcesFolder, '.grc')
 		for grcFilePath in grcFiles:
-			if not self.CompileResourceFile (grcFilePath):
-				print ('Failed to compile resource: ' + grcFilePath)
-				return False
-		return True
+			assert self.CompileResourceFile (grcFilePath), 'Failed to compile resource: ' + grcFilePath
 
 	def CompileFixResources (self):
 		fixResourcesFolder = os.path.join (self.resourcesPath, 'RFIX')
-		grcFiles = self.CollectGrcFilesFromFolder (fixResourcesFolder)
+		grcFiles = self.CollectFilesFromFolderWithExtension (fixResourcesFolder, '.grc')
 		for grcFilePath in grcFiles:
-			if not self.CompileResourceFile (grcFilePath):
-				print ('Failed to compile resource: ' + grcFilePath)
-				return False
+			assert self.CompileResourceFile (grcFilePath), 'Failed to compile resource: ' + grcFilePath
+
+	def RunResConv (self, platformSign, codepage, inputFilePath, nativeResourceFileExtenion):
+		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
+		inputFileBaseName = os.path.splitext (os.path.split (inputFilePath)[1])[0]
+		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, inputFileBaseName + nativeResourceFileExtenion)
+		result = subprocess.call ([
+			self.resConvPath,
+			'-m', 'r',						# resource compile mode
+			'-T', platformSign,				# target platform
+			'-q', 'utf8', codepage,			# code page conversion
+			'-w', '2',						# HiDPI image size list
+			'-p', imageResourcesFolder,		# image search path
+			'-i', inputFilePath,			# input path
+			'-o', nativeResourceFilePath	# output path
+		])
+		if result != 0:
+			return False
 		return True
 
-	def CollectGrcFilesFromFolder (self, folderPath):
+	def CollectFilesFromFolderWithExtension (self, folderPath, extension):
 		result = []
 		for fileName in os.listdir (folderPath):
-			extension = os.path.splitext (fileName)[1]
-			if extension == '.grc':
-				grcFilePath = os.path.join (folderPath, fileName)
-				result.append (grcFilePath)
+			fileExtension = os.path.splitext (fileName)[1]
+			if fileExtension.lower () == extension.lower ():
+				fullPath = os.path.join (folderPath, fileName)
+				result.append (fullPath)
 		return result
 
 class WinResourceCompiler (ResourceCompiler):
@@ -53,25 +69,41 @@ class WinResourceCompiler (ResourceCompiler):
 		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
 
-	def CompileResourceFile (self, grcFilePath):
-		grcFileName = os.path.split (grcFilePath)[1]
-		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.rc2')
-		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
+	def PrecompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.GetPrecompiledResourceFilePath (grcFilePath)
 		result = subprocess.call ([
-			self.resConvPath,
-			'-m', 'r',						# resource compile mode
-			'-T', 'W',						# windows target
-			'-q', 'utf8', '1252',			# code page conversion
-			'-w', '2',						# HiDPI image size list
-			'-p', imageResourcesFolder,		# image search path
-			'-i', grcFilePath,				# input path
-			'-o', nativeResourceFilePath	# output path
+			'cl',
+			'/nologo',
+			'/X',
+			'/EP',
+			'/P',
+			'/I', os.path.join (self.devKitPath, 'Support', 'Inc'),
+			'/I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
+			'/I', self.sourcesPath,
+			'/DWINDOWS',
+			'/execution-charset:utf-8',
+			'/Fi{}'.format (precompiledGrcFilePath),
+			grcFilePath,
 		])
-		if result != 0:
-			return False
-		return True
+		assert result == 0, "Failed to precompile resource " + grcFilePath
+		return precompiledGrcFilePath
+
+	def CompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.PrecompileResourceFile (grcFilePath)
+		return self.RunResConv ('W', '1252', precompiledGrcFilePath, '.rc2')
+
+	def GetNativeResourceFile (self):
+		defaultNativeResourceFile = os.path.join (self.resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
+		if os.path.exists (defaultNativeResourceFile):
+			return defaultNativeResourceFile
+
+		existingNativeResourceFiles = self.CollectFilesFromFolderWithExtension (os.path.join (self.resourcesPath, 'RFIX.win'), '.rc2')
+		assert existingNativeResourceFiles, 'Native resource file was not found at RFIX.win folder'
+
+		return existingNativeResourceFiles[0]
 
 	def CompileNativeResource (self, resultResourcePath):
+		nativeResourceFile = self.GetNativeResourceFile ()
 		result = subprocess.call ([
 			'rc',
 			'/i', os.path.join (self.devKitPath, 'Support', 'Inc'),
@@ -79,48 +111,35 @@ class WinResourceCompiler (ResourceCompiler):
 			'/i', self.sourcesPath,
 			'/i', self.resourceObjectsPath,
 			'/fo', resultResourcePath,
-			os.path.join (self.resourcesPath, 'RFIX.win', 'AddOnMain.rc2')
+			nativeResourceFile
 		])
-		if result != 0:
-			print ('Failed to compile native resource')
-			return False
-		return True
+		assert result == 0, 'Failed to compile native resource ' + nativeResourceFile
 
 class MacResourceCompiler (ResourceCompiler):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
 		super (MacResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'OSX', 'ResConv')
 
-	def CompileResourceFile (self, grcFilePath):
-		grcFileName = os.path.split (grcFilePath)[1]
-		precompiledGrcFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.i')
+	def PrecompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.GetPrecompiledResourceFilePath (grcFilePath)
 		result = subprocess.call ([
 			'clang',
 			'-x', 'c++',
 			'-E',
 			'-P',
 			'-Dmacintosh',
+			'-I', os.path.join (self.devKitPath, 'Support', 'Inc'),
+			'-I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
 			'-I', self.sourcesPath,
 			'-o', precompiledGrcFilePath,
 			grcFilePath,
 		])
-		if result != 0:
-			return False
-		nativeResourceFilePath = os.path.join (self.resourceObjectsPath, grcFileName + '.ro')
-		imageResourcesFolder = os.path.join (self.resourcesPath, 'RFIX', 'Images')
-		result = subprocess.call ([
-			self.resConvPath,
-			'-m', 'r',						# resource compile mode
-			'-T', 'M',						# macos target
-			'-q', 'utf8', 'utf16',			# code page conversion
-			'-w', '2',						# HiDPI image size list
-			'-p', imageResourcesFolder,		# image search path
-			'-i', precompiledGrcFilePath,	# input path
-			'-o', nativeResourceFilePath	# output path
-		])
-		if result != 0:
-			return False
-		return True
+		assert result == 0, "Failed to precompile resource " + grcFilePath
+		return precompiledGrcFilePath
+
+	def CompileResourceFile (self, grcFilePath):
+		precompiledGrcFilePath = self.PrecompileResourceFile (grcFilePath)
+		return self.RunResConv ('M', 'utf16', precompiledGrcFilePath, '.ro')
 
 	def CompileNativeResource (self, resultResourcePath):
 		resultLocalizedResourcePath = os.path.join (resultResourcePath, 'English.lproj')
@@ -130,7 +149,7 @@ class MacResourceCompiler (ResourceCompiler):
 		resultLocalizableStringsFile = codecs.open (resultLocalizableStringsPath, 'w', 'utf-16')
 		for fileName in os.listdir (self.resourceObjectsPath):
 			filePath = os.path.join (self.resourceObjectsPath, fileName)
-			extension = os.path.splitext (fileName)[1]
+			extension = os.path.splitext (fileName)[1].lower ()
 			if extension == '.tif':
 				shutil.copy (filePath, resultResourcePath)
 			elif extension == '.rsrd':
@@ -140,12 +159,9 @@ class MacResourceCompiler (ResourceCompiler):
 				resultLocalizableStringsFile.write (stringsFile.read ())
 				stringsFile.close ()
 		resultLocalizableStringsFile.close ()
-		return True
 
 def Main (argv):
-	if len (argv) != 7:
-		print ('Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>')
-		return 1
+	assert len (argv) == 7, 'Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>'
 
 	currentDir = os.path.dirname (os.path.abspath (__file__))
 	os.chdir (currentDir)
@@ -164,22 +180,12 @@ def Main (argv):
 	elif system == 'Darwin':
 		resourceCompiler = MacResourceCompiler (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
 
-	if resourceCompiler == None:
-		print ('Platform is not supported')
-		return 1
+	assert resourceCompiler, 'Platform is not supported'
+	assert resourceCompiler.IsValid (), 'Invalid resource compiler'
 
-	if not resourceCompiler.IsValid ():
-		print ('Invalid resource compiler')
-		return 1
-
-	if not resourceCompiler.CompileLocalizedResources ():
-		return 1
-
-	if not resourceCompiler.CompileFixResources ():
-		return 1
-
-	if not resourceCompiler.CompileNativeResource (resultResourcePath):
-		return 1
+	resourceCompiler.CompileLocalizedResources ()
+	resourceCompiler.CompileFixResources ()
+	resourceCompiler.CompileNativeResource (resultResourcePath)
 
 	return 0
 
