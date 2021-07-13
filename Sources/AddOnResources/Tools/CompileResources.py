@@ -4,6 +4,7 @@ import platform
 import subprocess
 import shutil
 import codecs
+import argparse
 
 class ResourceCompiler (object):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
@@ -85,7 +86,7 @@ class WinResourceCompiler (ResourceCompiler):
 			'/Fi{}'.format (precompiledGrcFilePath),
 			grcFilePath,
 		])
-		assert result == 0, "Failed to precompile resource " + grcFilePath
+		assert result == 0, 'Failed to precompile resource ' + grcFilePath
 		return precompiledGrcFilePath
 
 	def CompileResourceFile (self, grcFilePath):
@@ -134,7 +135,7 @@ class MacResourceCompiler (ResourceCompiler):
 			'-o', precompiledGrcFilePath,
 			grcFilePath,
 		])
-		assert result == 0, "Failed to precompile resource " + grcFilePath
+		assert result == 0, 'Failed to precompile resource ' + grcFilePath
 		return precompiledGrcFilePath
 
 	def CompileResourceFile (self, grcFilePath):
@@ -161,17 +162,24 @@ class MacResourceCompiler (ResourceCompiler):
 		resultLocalizableStringsFile.close ()
 
 def Main (argv):
-	assert len (argv) == 7, 'Usage: CompileResources.py <languageCode> <devKitPath> <sourcesPath> <resourcesPath> <resourceObjectsPath> <resultResourcePath>'
+	parser = argparse.ArgumentParser (description = 'Archicad Add-On Resource Compiler.')
+	parser.add_argument ('languageCode', help = 'Language code of the Add-On.')
+	parser.add_argument ('devKitPath', help = 'Path of the Archicad Development Kit.')
+	parser.add_argument ('sourcesPath', help = 'Path of the sources folder of the Add-On.')
+	parser.add_argument ('resourcesPath', help = 'Path of the resources folder of the Add-On.')
+	parser.add_argument ('resourceObjectsPath', help = 'Path of the folder to build resource objects.')
+	parser.add_argument ('resultResourcePath', help = 'Path of the resulting resource.')
+	args = parser.parse_args ()
 
 	currentDir = os.path.dirname (os.path.abspath (__file__))
 	os.chdir (currentDir)
 
-	languageCode = argv[1]
-	devKitPath = os.path.abspath (argv[2])
-	sourcesPath = os.path.abspath (argv[3])
-	resourcesPath = os.path.abspath (argv[4])
-	resourceObjectsPath = os.path.abspath (argv[5])
-	resultResourcePath = os.path.abspath (argv[6])
+	languageCode = args.languageCode
+	devKitPath = os.path.abspath (args.devKitPath)
+	sourcesPath = os.path.abspath (args.sourcesPath)
+	resourcesPath = os.path.abspath (args.resourcesPath)
+	resourceObjectsPath = os.path.abspath (args.resourceObjectsPath)
+	resultResourcePath = os.path.abspath (args.resultResourcePath)
 
 	resourceCompiler = None
 	system = platform.system ()
