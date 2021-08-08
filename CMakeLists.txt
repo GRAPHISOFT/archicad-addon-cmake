@@ -38,7 +38,14 @@ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (CMAKE_SUPPRESS_REGENERATION 1)
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
-set (AC_API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
+
+if(EXISTS ${AC_API_DEVKIT_DIR})
+	message (STATUS "SDK Directory OK")
+	set (AC_API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
+else()
+	message (FATAL_ERROR "SDK Directory does not exist.\n Please check the value of the AC_API_DEVKIT_DIR variable.\n" $ENV{AC_API_DEVKIT_DIR})
+endif()
+
 set (AC_ADDON_NAME "ExampleAddOn" CACHE STRING "Add-On name.")
 set (AC_ADDON_LANGUAGE "INT" CACHE STRING "Add-On language code.")
 
