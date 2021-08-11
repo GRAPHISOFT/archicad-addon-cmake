@@ -67,7 +67,25 @@
 	</PropertyGroup>
 	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<ClCompile>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImageBase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImage;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GX;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGGraphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Pattern;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>
+				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;
+				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;
+				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImageBase;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImage;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GX;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGGraphix;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Pattern;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 			<AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
 			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
 			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -87,7 +105,20 @@
 		</ClCompile>
 		<ResourceCompile>
 			<PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;DEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"Debug\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;
+				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;
+				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;
+				%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 		</ResourceCompile>
 		<Midl>
 			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -98,7 +129,22 @@
 			<ProxyFileName>%(Filename)_p.c</ProxyFileName>
 		</Midl>
 		<Link>
-			<AdditionalDependencies>C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STATD.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot\Win\GSRootImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils\Win\GSUtilsImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase\Win\ObjectDatabaseImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix\Win\GraphixImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine\Win\TextEngineImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib\Win\DGImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP\Win\HTTPImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImage\Win\GXImageImp.LIB;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImageBase\Win\GXImageBaseImp.LIB;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GX\Win\GXImp.LIB;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGGraphix\Win\DGGraphixImp.LIB;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Pattern\Win\PatternImp.LIB;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+			<AdditionalDependencies>
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STATD.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot\Win\GSRootImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils\Win\GSUtilsImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase\Win\ObjectDatabaseImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix\Win\GraphixImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine\Win\TextEngineImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib\Win\DGImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP\Win\HTTPImp.lib;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImage\Win\GXImageImp.LIB;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImageBase\Win\GXImageBaseImp.LIB;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GX\Win\GXImp.LIB;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGGraphix\Win\DGGraphixImp.LIB;
+				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Pattern\Win\PatternImp.LIB
+				;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
 			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
 			<AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/ResourceObjects/polyGIS.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
 			<GenerateDebugInformation>true</GenerateDebugInformation>
