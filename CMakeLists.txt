@@ -174,6 +174,17 @@ else ()
 	)
 endif ()
 
+if (WIN32)
+	message(STATUS "Danis comment")
+	add_custom_command (OUTPUT ${CMAKE_BINARY_DIR}
+		COMMENT "Dani's custom command yeeeeey"
+		#COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AC_ADDON_NAME}.res"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/test.py"
+	)
+endif()
+
+
+
 SetCompilerOptions (AddOn)
 add_dependencies (AddOn AddOnResources)
 

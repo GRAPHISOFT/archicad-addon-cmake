@@ -1,3 +1,5 @@
 Build/*
 .DS_Store
 .vscode
+/Build
+Sources/AddOnResources/Tools/__pycache__
