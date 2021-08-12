@@ -1,271 +1,219 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup Label="ProjectConfigurations">
-		<ProjectConfiguration Include="Debug|x64">
-			<Configuration>Debug</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|x64">
-			<Configuration>Release</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="RelWithDebInfo|x64">
-			<Configuration>RelWithDebInfo</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-	</ItemGroup>
-	<PropertyGroup Label="Globals">
-		<ProjectGuid>{6D94533B-1A7F-39EC-9DEB-745D423CC597}</ProjectGuid>
-		<WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-		<Keyword>Win32Proj</Keyword>
-		<Platform>x64</Platform>
-		<ProjectName>AddOn</ProjectName>
-		<VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
-	</PropertyGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-		<ConfigurationType>DynamicLibrary</ConfigurationType>
-		<CharacterSet>Unicode</CharacterSet>
-		<PlatformToolset>v141</PlatformToolset>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-		<ConfigurationType>DynamicLibrary</ConfigurationType>
-		<CharacterSet>Unicode</CharacterSet>
-		<PlatformToolset>v141</PlatformToolset>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
-		<ConfigurationType>DynamicLibrary</ConfigurationType>
-		<CharacterSet>Unicode</CharacterSet>
-		<PlatformToolset>v141</PlatformToolset>
-	</PropertyGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-	<ImportGroup Label="ExtensionSettings"></ImportGroup>
-	<ImportGroup Label="PropertySheets">
-		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-	</ImportGroup>
-	<PropertyGroup Label="UserMacros" />
-	<PropertyGroup>
-		<_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-		<OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\TEMP\CPP DEVELOPMENT\polyGIS\Build\Debug\</OutDir>
-		<IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AddOn.dir\Debug\</IntDir>
-		<TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">polyGIS</TargetName>
-		<TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.apx</TargetExt>
-		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
-		<GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-		<OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\TEMP\CPP DEVELOPMENT\polyGIS\Build\Release\</OutDir>
-		<IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AddOn.dir\Release\</IntDir>
-		<TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">polyGIS</TargetName>
-		<TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.apx</TargetExt>
-		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-		<GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
-		<OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\TEMP\CPP DEVELOPMENT\polyGIS\Build\RelWithDebInfo\</OutDir>
-		<IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">AddOn.dir\RelWithDebInfo\</IntDir>
-		<TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">polyGIS</TargetName>
-		<TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.apx</TargetExt>
-		<LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
-		<GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
-	</PropertyGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<ClCompile>
-			<AdditionalIncludeDirectories>
-				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;
-				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;
-				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImageBase;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImage;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GX;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGGraphix;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Pattern;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-			<DisableSpecificWarnings>4499</DisableSpecificWarnings>
-			<ExceptionHandling>Sync</ExceptionHandling>
-			<InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-			<Optimization>Disabled</Optimization>
-			<PrecompiledHeader>NotUsing</PrecompiledHeader>
-			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-			<RuntimeTypeInfo>true</RuntimeTypeInfo>
-			<TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-			<TreatWarningAsError>true</TreatWarningAsError>
-			<UseFullPaths>false</UseFullPaths>
-			<WarningLevel>Level4</WarningLevel>
-			<PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR="Debug";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<ObjectFileName>$(IntDir)</ObjectFileName>
-		</ClCompile>
-		<ResourceCompile>
-			<PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;DEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"Debug\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;
-				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;
-				D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;
-				%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-		</ResourceCompile>
-		<Midl>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-			<HeaderFileName>%(Filename).h</HeaderFileName>
-			<TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-			<InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-			<ProxyFileName>%(Filename)_p.c</ProxyFileName>
-		</Midl>
-		<Link>
-			<AdditionalDependencies>
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STATD.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot\Win\GSRootImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils\Win\GSUtilsImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase\Win\ObjectDatabaseImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix\Win\GraphixImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine\Win\TextEngineImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib\Win\DGImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP\Win\HTTPImp.lib;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImage\Win\GXImageImp.LIB;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GXImageBase\Win\GXImageBaseImp.LIB;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GX\Win\GXImp.LIB;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGGraphix\Win\DGGraphixImp.LIB;
-				C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Pattern\Win\PatternImp.LIB
-				;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/ResourceObjects/polyGIS.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
-			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-			<ImportLibrary>D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/Debug/polyGIS.lib</ImportLibrary>
-			<ProgramDataBaseFile>D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/Debug/polyGIS.pdb</ProgramDataBaseFile>
-			<SubSystem>Console</SubSystem>
-		</Link>
-		<ProjectReference>
-			<LinkLibraryDependencies>false</LinkLibraryDependencies>
-		</ProjectReference>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<ClCompile>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-			<DisableSpecificWarnings>4499</DisableSpecificWarnings>
-			<ExceptionHandling>Sync</ExceptionHandling>
-			<InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-			<Optimization>MaxSpeed</Optimization>
-			<PrecompiledHeader>NotUsing</PrecompiledHeader>
-			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-			<RuntimeTypeInfo>true</RuntimeTypeInfo>
-			<TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-			<TreatWarningAsError>true</TreatWarningAsError>
-			<UseFullPaths>false</UseFullPaths>
-			<WarningLevel>Level4</WarningLevel>
-			<PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR="Release";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<ObjectFileName>$(IntDir)</ObjectFileName>
-			<DebugInformationFormat></DebugInformationFormat>
-		</ClCompile>
-		<ResourceCompile>
-			<PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"Release\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-		</ResourceCompile>
-		<Midl>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-			<HeaderFileName>%(Filename).h</HeaderFileName>
-			<TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-			<InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-			<ProxyFileName>%(Filename)_p.c</ProxyFileName>
-		</Midl>
-		<Link>
-			<AdditionalDependencies>C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STAT.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot\Win\GSRootImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils\Win\GSUtilsImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase\Win\ObjectDatabaseImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix\Win\GraphixImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine\Win\TextEngineImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib\Win\DGImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP\Win\HTTPImp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/ResourceObjects/polyGIS.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
-			<GenerateDebugInformation>false</GenerateDebugInformation>
-			<IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-			<ImportLibrary>D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/Release/polyGIS.lib</ImportLibrary>
-			<ProgramDataBaseFile>D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/Release/polyGIS.pdb</ProgramDataBaseFile>
-			<SubSystem>Console</SubSystem>
-		</Link>
-		<ProjectReference>
-			<LinkLibraryDependencies>false</LinkLibraryDependencies>
-		</ProjectReference>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
-		<ClCompile>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
-			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-			<DisableSpecificWarnings>4499</DisableSpecificWarnings>
-			<ExceptionHandling>Sync</ExceptionHandling>
-			<InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-			<Optimization>MaxSpeed</Optimization>
-			<PrecompiledHeader>NotUsing</PrecompiledHeader>
-			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-			<RuntimeTypeInfo>true</RuntimeTypeInfo>
-			<TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
-			<TreatWarningAsError>true</TreatWarningAsError>
-			<UseFullPaths>false</UseFullPaths>
-			<WarningLevel>Level4</WarningLevel>
-			<PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR="RelWithDebInfo";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<ObjectFileName>$(IntDir)</ObjectFileName>
-		</ClCompile>
-		<ResourceCompile>
-			<PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"RelWithDebInfo\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-		</ResourceCompile>
-		<Midl>
-			<AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include;D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
-			<HeaderFileName>%(Filename).h</HeaderFileName>
-			<TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-			<InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-			<ProxyFileName>%(Filename)_p.c</ProxyFileName>
-		</Midl>
-		<Link>
-			<AdditionalDependencies>C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STAT.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot\Win\GSRootImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils\Win\GSUtilsImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase\Win\ObjectDatabaseImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix\Win\GraphixImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine\Win\TextEngineImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib\Win\DGImp.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\HTTP\Win\HTTPImp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
-			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-			<AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/ResourceObjects/polyGIS.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
-			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-			<ImportLibrary>D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/RelWithDebInfo/polyGIS.lib</ImportLibrary>
-			<ProgramDataBaseFile>D:/TEMP/CPP DEVELOPMENT/polyGIS/Build/RelWithDebInfo/polyGIS.pdb</ProgramDataBaseFile>
-			<SubSystem>Console</SubSystem>
-		</Link>
-		<ProjectReference>
-			<LinkLibraryDependencies>false</LinkLibraryDependencies>
-		</ProjectReference>
-	</ItemDefinitionGroup>
-	<ItemGroup>
-		<ClInclude Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\APIEnvir.h" />
-		<ClInclude Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\ResourceIds.hpp" />
-		<ClCompile Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\AddOnMain.cpp" />
-		<ClInclude Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include\HTTPHandler.h" />
-		<ClInclude Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include\MainDialog.h" />
-		<ClInclude Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\include\Source.h" />
-		<ClCompile Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source\HTTPHandler.cpp" />
-		<ClCompile Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source\MainDialog.cpp" />
-		<ClCompile Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Sources\AddOn\source\Source.cpp" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="D:\TEMP\CPP DEVELOPMENT\polyGIS\Build\AddOnResources.vcxproj">
-			<Project>{4F3D584E-231D-30F5-B098-DB88F762687B}</Project>
-			<Name>AddOnResources</Name>
-			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</ProjectReference>
-	</ItemGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-	<ImportGroup Label="ExtensionTargets"></ImportGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{00F67DD0-14CF-37A0-956D-0A381D87055A}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>AddOn</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings"></ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AddOn.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ExampleAddOn</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.apx</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AddOn.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ExampleAddOn</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.apx</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">AddOn.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">ExampleAddOn</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.apx</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4499</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR="Debug";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;DEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"Debug\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STATD.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/ResourceObjects/ExampleAddOn.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/Debug/ExampleAddOn.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/Debug/ExampleAddOn.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DisableSpecificWarnings>4499</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR="Release";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat></DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"Release\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STAT.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/ResourceObjects/ExampleAddOn.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/Release/ExampleAddOn.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/Release/ExampleAddOn.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4499</DisableSpecificWarnings>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level4</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR="RelWithDebInfo";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;ACExtension;CMAKE_INTDIR=\"RelWithDebInfo\";AddOn_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Inc;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSRoot;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\GSUtils;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\ObjectDatabase;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\Graphix;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\TextEngine;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\DGLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Lib\Win\ACAP_STAT.lib;C:\Program Files\GRAPHISOFT\API Development Kit 24.3009\Support\Modules\InputOutput\Win\InputOutputImp.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64 "D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/ResourceObjects/ExampleAddOn.res" /export:GetExportedFuncAddrs,@1 /export:SetImportedFuncAddrs,@2</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/RelWithDebInfo/ExampleAddOn.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/TEMP/CPP DEVELOPMENT/archicad-addon-cmake/build/RelWithDebInfo/ExampleAddOn.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn\APIEnvir.h" />
+    <ClInclude Include="D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn\ResourceIds.hpp" />
+    <ClCompile Include="D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Sources\AddOn\AddOnMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\build\AddOnResources.vcxproj">
+      <Project>{79728D45-A46F-381E-A5EA-FB8F30CBF445}</Project>
+      <Name>AddOnResources</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets"></ImportGroup>
 </Project>

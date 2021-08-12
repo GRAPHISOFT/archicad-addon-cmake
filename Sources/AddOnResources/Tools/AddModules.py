@@ -1,4 +1,3 @@
-from ntpath import join
 import os
 import sys
 import platform
@@ -8,48 +7,17 @@ import codecs
 import argparse
 from pathlib import Path
 
+from ModuleTypes import CModule, Module
 import xml.etree.ElementTree as ET
 import re
 
 
-class Module(object):
-    def __init__(self, target: str, folderName: Path, libraryName: Path, devKit):
-        self.folderName = folderName
-        self.libraryName = libraryName
-        self.target = target
-        self.devKit = devKit
-        self.libraryPath = self.GetLibraryFileAbsoluteLocation()
-        self.folderAbsolutePath = self.GetModulAbsoluteFolder()
-
-    def GetLibraryFileAbsoluteLocation(self):
-        libFile = f"Support\\Modules\\{self.folderName}\\Win\\{self.libraryName}"
-
-        path = Path(self.devKit)
-        path = path.joinpath(libFile)
-        return path
-
-    def GetModulAbsoluteFolder(self):
-        modulesFolder = f"Support\\Modules\\{self.folderName}"
-        path = Path(self.devKit)
-        path = path.joinpath(modulesFolder)
-        print(path)
-        return path
-
-    def ADDGSModule(self) -> str:
-        libraryNameStripped = str(self.libraryName)
-        libSubRegex = r"(Imp.*[LIB|lib])"
-        libraryNameStripped = re.sub(libSubRegex, "", libraryNameStripped)
-        return f"ADDGSModule({self.target} { self.folderName } { libraryNameStripped })"
-
-    def __str__(self) -> str:
-        return self.ADDGSModule()
-
-
 class WinModulesCollector(object):
-    def __init__(self, devKitPath, cmakeFilePath, vcxprojectFolder, archicadVersion):
+    def __init__(
+        self, devKitPath, cmakeFilePath, vcxprojectFolder, configuration="Debug|x64"
+    ):
         self.INCLUDEPATH = os.path.join(devKitPath, "Support\\Modules")
-
-        self.archicadVersion = archicadVersion
+        self.configuration = configuration
         # - The path to the Dev Kit Directory
         self.devKitPath = os.path.join(devKitPath)
         # - The path to the CMakeList.txt CMAKE_CURRENT_LIST_DIR
@@ -67,11 +35,19 @@ class WinModulesCollector(object):
         self.additionalDependencies = self.GetIncludedModules(
             f"ItemDefinitionGroup/Link/AdditionalDependencies"
         )
-        self.existingModules = self.CollectModules()
+        self.PROJECTMODULES = self.GenerateModules()
 
     def GetNamespace(self, element: ET.Element) -> str:
         m = re.match(r"\{.*\}", element.tag)
         return m.group(0) if m else ""
+
+    @staticmethod
+    def Intersection(lst1, lst2):
+        tempList = []
+        for el in lst1:
+            if el not in lst2:
+                tempList.append(el)
+        return tempList
 
     def ConvertToPath(self, textPath: str) -> Path:
         return Path(textPath)
@@ -83,36 +59,50 @@ class WinModulesCollector(object):
             return False
 
     ## List of modules
-    def CollectModules(self) -> list:
+    def GenerateModules(self) -> list:
+        """creates an array of modules collected from the vcxproj file"""
         moduleList = []
         includeFolders = self.additionalIncludeFolders
         dependencies = self.additionalDependencies
         while dependencies:
             dep = dependencies.pop()
             depsParent = dep.parent.parent
-            head, libraryFolderName = os.path.split(depsParent)
+            head, libraryFolder = os.path.split(depsParent)
             head, libraryName = os.path.split(dep)
+            tempModule = Module("AddOn", libraryFolder, libraryName, self.devKitPath)
+            if tempModule.IsExcluded():
+                continue
             if depsParent in includeFolders:
-                moduleList.append(
-                    Module("AddOn", libraryFolderName, libraryName, self.devKitPath)
-                )
+                moduleList.append(tempModule)
                 includeFolders.remove(depsParent)
         while includeFolders:
             includeFolder = includeFolders.pop()
             path, folderName = os.path.split(includeFolder)
-            moduleList.append(Module("AddOn", folderName, folderName, self.devKitPath))
+            tempModule = Module("AddOn", folderName, folderName, self.devKitPath)
+            if tempModule.IsExcluded():
+                continue
+            moduleList.append(tempModule)
         return moduleList
 
+    def ItemDefinitionGroups(self) -> ET.Element:
+        namespace = self.GetNamespace(self.root)
+        ItemDefGroups = self.root.findall(namespace + "ItemDefinitionGroup")
+        for itemDef in ItemDefGroups:
+            if self.configuration in str(itemDef.attrib["Condition"]):
+                return itemDef
+        return self.root
+
     def GetIncludedModules(self, xpath: str) -> list:
+        """Reads from vcxproj file the dependencies specified in the xpath"""
         namespace = self.GetNamespace(self.root)
         xpathWithNameSpace = ""
         for elem in xpath.split("/"):
             xpathWithNameSpace += namespace + elem + "/"
-        xpathWithNameSpace = xpathWithNameSpace[:-1]
+            xpathWithNameSpace = xpathWithNameSpace[:-1]
 
         listOfDependencies = []
         tempList = []
-        AdditionalDependencies = self.root.findall(xpathWithNameSpace)
+        AdditionalDependencies = self.ItemDefinitionGroups().findall(xpathWithNameSpace)
         for dependency in AdditionalDependencies:
             dependencyList = (
                 dependency.text.replace("\t", "").replace("\n", "").split(";")
@@ -126,46 +116,97 @@ class WinModulesCollector(object):
 
 
 class CMakeListAutoModuleIncluder(WinModulesCollector):
-    def __init__(self, devKitPath, cmakeFilePath, vcxprojectFolder, archicadVersion):
-        super().__init__(devKitPath, cmakeFilePath, vcxprojectFolder, archicadVersion)
-        self.CMAKEMODULES = []
+    def __init__(self, devKitPath, cmakeFilePath, vcxprojectFolder, configuration):
+        super().__init__(devKitPath, cmakeFilePath, vcxprojectFolder, configuration)
+        self.CMAKELIST_STRING = self.ReadCMakeFile()
+        self.CMAKEMODULES = self.GetCmakeExistingModules()
 
-    def GetCmakeExistingModules(self):
-        c_string = ""
+    def ReadCMakeFile(self):
+        """Reads the existing CMakeFile.txt and stores it."""
+        cmakestring = ""
         with open(self.cmakeFilePath, "r") as cmfile:
             for line in cmfile:
-                c_string += line
+                cmakestring += line
             cmfile.close()
+        return cmakestring
+
+    def RemoveModuleFromCMakeFile(self, module):
+        """Removes the specified CModule a.k.a AddGSFunction() line from cmakelist.txt"""
+        if type(module) is CModule:
+            if len(self.CMAKELIST_STRING) > module.end:
+                self.CMAKELIST_STRING = (
+                    self.CMAKELIST_STRING[0 : module.start :]
+                    + self.CMAKELIST_STRING[module.end + 1 : :]
+                )
+        elif type(module) is Module:
+            cMod = self.CMAKEMODULES[self.CMAKEMODULES.index(module)]
+            if len(self.CMAKELIST_STRING) > cMod.end:
+                self.CMAKELIST_STRING = (
+                    self.CMAKELIST_STRING[0 : cMod.start :]
+                    + self.CMAKELIST_STRING[cMod.end + 1 : :]
+                )
+            print(f"Just removed {module} of type {type(module)}")
+        else:
+            return
+        self.CMAKEMODULES = self.GetCmakeExistingModules()
+
+    def AddModule(self, module: Module):
+        """Adds the specified Module a.k.a AddGSFunction() line to cmakelist.txt"""
+        self.CMAKELIST_STRING += f"{str(module)}\n"
+        print(f"Added: {module.folderName} folder to CMakeList.txt")
+        self.CMAKEMODULES = self.GetCmakeExistingModules()
+        pass
+
+    def Save(self):
+        """Write to the existing CMakeList.txt and save changes"""
+        pass
+
+    def GetCmakeExistingModules(self):
+        """Collects the existing AddGSModule(___ ___ ___) functions, and puts them into an array"""
+        tempCmakeModules = []
         extractADDGSFunctionsRegex = r"(AddGSModule.*\(.*\))"
         extractModuleNameRegex = r"\((\w*)\s(\w*)\s(\w*)\)"
 
-        matches = re.finditer(extractADDGSFunctionsRegex, c_string, re.MULTILINE)
+        matches = re.finditer(
+            extractADDGSFunctionsRegex, self.CMAKELIST_STRING, re.MULTILINE
+        )
 
         for match in matches:
             modules = re.finditer(extractModuleNameRegex, match.group())
             for module in modules:
-                print(module.group())
+                target = module.group(1)
+                folder = module.group(2)
+                dependency = module.group(3)
+                tempModule = CModule(target, folder, dependency, match, self.devKitPath)
+                if tempModule.IsExcluded():
+                    continue
+                tempCmakeModules.append(tempModule)
+        return tempCmakeModules
 
-        # for matchNum, match in enumerate(matches, start=1):
-        #     print(
-        #         "Match {matchNum} was found at {start}-{end}: {match}".format(
-        #             matchNum=matchNum,
-        #             start=match.start(),
-        #             end=match.end(),
-        #             match=match.group(),
-        #         )
-        #     )
-
-        # for groupNum in range(0, len(match.groups())):
-        #     groupNum = groupNum + 1
-        #     print(
-        #         "Group {groupNum} found at {start}-{end}: {group}".format(
-        #             groupNum=groupNum,
-        #             start=match.start(groupNum),
-        #             end=match.end(groupNum),
-        #             group=match.group(groupNum),
-        #         )
-        #     )
+    def UpdateCMakeLists(self):
+        if len(self.PROJECTMODULES) == len(self.CMAKEMODULES):
+            print("MODULES ARE UP TO DATE, EXITING PROGRAM")
+            return
+        if len(self.PROJECTMODULES) > len(self.CMAKEMODULES):
+            print(
+                f"DETECTED MORE MODULES IN PROJECT THAN IN CMAKELIST, ADDING MISSING MODULES TO CMakeList.txt"
+            )
+            intersection = self.Intersection(self.PROJECTMODULES, self.CMAKEMODULES)
+            print(intersection)
+            while intersection:
+                module = intersection.pop()
+                self.AddModule(module)
+            return
+        else:
+            print(
+                f"DETECTED LESS MODULES IN PROJECT THAN IN CMAKELIST, REMOVING EXTRA MODULES FROM CMakeList.txt"
+            )
+            intersection = self.Intersection(self.CMAKEMODULES, self.PROJECTMODULES)
+            print(intersection)
+            while intersection:
+                module = intersection.pop()
+                self.RemoveModuleFromCMakeFile(module)
+            return
 
 
 def Main(argv):
@@ -174,29 +215,40 @@ def Main(argv):
         "-devKitPath", "--devKitPath", help="Path to the Archicad Development Kit"
     )
     parser.add_argument(
-        "-cmakeFilePath", "--cmakeFilePath", help="Path to the CMakeLists.txt"
+        "-cmakeFilePath", "--cmakeFilePath", help="Path to the CMakeList.txt"
     )
     parser.add_argument(
         "-vcxprojectFolder", "--vcxprojectFolder", help="The path to the AddOn.vcxproj"
     )
     parser.add_argument(
-        "-ACVersion", "--ACVersion", help="The path to the AddOn.vcxproj"
+        "-configuration",
+        "--configuration",
+        nargs="?",
+        default="Debug|x64",
+        help="The path to the AddOn.vcxproj",
     )
     args = parser.parse_args()
+
+    assert os.path.exists(
+        args.devKitPath
+    ), "Check if you entered correctly the Archicad Development Path"
+    assert os.path.exists(
+        f"{args.cmakeFilePath}\\CMakeLists.txt"
+    ), "Check if you entered correctly the CMakeLists.txt folder location"
+    assert os.path.isfile(
+        f"{args.vcxprojectFolder}\\AddOn.vcxproj"
+    ), "Check if you entered correctly the AddOn.vcxproj folder location or the project was built before"
 
     # python AddModules.py -devKitPath "C:\Program Files\GRAPHISOFT\API Development Kit 24.3009" -cmakeFilePath "D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake" -vcxprojectFolder "D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Build" -ACVersion 24
     moduleIncluder = CMakeListAutoModuleIncluder(
         devKitPath=args.devKitPath,
         cmakeFilePath=args.cmakeFilePath,
         vcxprojectFolder=args.vcxprojectFolder,
-        archicadVersion=args.ACVersion,
+        configuration=args.configuration,
     )
-    # assert os.path.exists(
-    #     moduleIncluder.vcxprojectFilePath
-    # ), f"Error vcxproj not found: {moduleIncluder.vcxprojectFilePath}"
 
-    for el in moduleIncluder.existingModules:
-        print(el)
+    moduleIncluder.UpdateCMakeLists()
+    moduleIncluder.Save()
     return 0
 
 
