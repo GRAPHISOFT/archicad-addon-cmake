@@ -16,24 +16,24 @@ class WinModulesCollector(object):
     def __init__(
         self, devKitPath, cmakeFilePath, vcxprojectFolder, configuration="Debug|x64"
     ):
-        self.INCLUDEPATH = os.path.join(devKitPath, "Support\\Modules")
+        self.INCLUDEPATH = Path(os.path.join(devKitPath, "Support\\Modules"))
         self.configuration = configuration
         # - The path to the Dev Kit Directory
-        self.devKitPath = os.path.join(devKitPath)
+        self.devKitPath = Path(os.path.join(devKitPath))
         # - The path to the CMakeList.txt CMAKE_CURRENT_LIST_DIR
-        self.cmakeFilePath = os.path.join(cmakeFilePath, "CMakeLists.txt")
+        self.cmakeFilePath = Path(os.path.join(cmakeFilePath, "CMakeLists.txt"))
         # - The path to the AddOn.vcxprojx CMAKE_CURRENT_BINARY_DIR
-        self.vcxprojectFilePath = os.path.join(vcxprojectFolder, "AddOn.vcxproj")
+        self.vcxprojectFilePath = Path(os.path.join(vcxprojectFolder, "AddOn.vcxproj"))
 
         # vcxproj Tree init
         self.root = ET.parse(self.vcxprojectFilePath).getroot()
         self.namespace = self.GetNamespace(self.root)
         # The list of all include folders added from archicad library
         self.additionalIncludeFolders = self.GetIncludedModules(
-            f"ItemDefinitionGroup/ClCompile/AdditionalIncludeDirectories"
+            f"ClCompile/AdditionalIncludeDirectories"
         )
         self.additionalDependencies = self.GetIncludedModules(
-            f"ItemDefinitionGroup/Link/AdditionalDependencies"
+            f"Link/AdditionalDependencies"
         )
         self.PROJECTMODULES = self.GenerateModules()
 
@@ -52,11 +52,8 @@ class WinModulesCollector(object):
     def ConvertToPath(self, textPath: str) -> Path:
         return Path(textPath)
 
-    def isDevKitPath(self, path: os.path) -> bool:
-        if self.INCLUDEPATH in str(path):
-            return True
-        else:
-            return False
+    def isDevKitPath(self, path: Path) -> bool:
+        return self.INCLUDEPATH in list(path.parents)
 
     ## List of modules
     def GenerateModules(self) -> list:
@@ -84,13 +81,15 @@ class WinModulesCollector(object):
             moduleList.append(tempModule)
         return moduleList
 
-    def ItemDefinitionGroups(self) -> ET.Element:
-        namespace = self.GetNamespace(self.root)
-        ItemDefGroups = self.root.findall(namespace + "ItemDefinitionGroup")
-        for itemDef in ItemDefGroups:
-            if self.configuration in str(itemDef.attrib["Condition"]):
-                return itemDef
-        return self.root
+    def FilterItemDefinitionGroupsByConfiguration(self, elements: list):
+        """A function that filters the Definition groups from .vcxproj file by the given parameter
+        Default: Debux|x64 or as it says inside the function the self.configuration"""
+        tempList = []
+        if type(elements) is list:
+            for element in elements:
+                if self.configuration in str(element.attrib["Condition"]):
+                    tempList.append(element)
+        return tempList
 
     def GetIncludedModules(self, xpath: str) -> list:
         """Reads from vcxproj file the dependencies specified in the xpath"""
@@ -98,20 +97,26 @@ class WinModulesCollector(object):
         xpathWithNameSpace = ""
         for elem in xpath.split("/"):
             xpathWithNameSpace += namespace + elem + "/"
-            xpathWithNameSpace = xpathWithNameSpace[:-1]
+        xpathWithNameSpace = xpathWithNameSpace[:-1]
 
         listOfDependencies = []
         tempList = []
-        AdditionalDependencies = self.ItemDefinitionGroups().findall(xpathWithNameSpace)
-        for dependency in AdditionalDependencies:
-            dependencyList = (
-                dependency.text.replace("\t", "").replace("\n", "").split(";")
-            )
-            listOfDependencies = list(map(self.ConvertToPath, dependencyList))
-            listOfDependencies = list(filter(self.isDevKitPath, listOfDependencies))
-            for dep in listOfDependencies:
-                if dep not in tempList:
-                    tempList.append(dep)
+        ItemDefinitionGroups = self.root.findall(namespace + "ItemDefinitionGroup")
+        ItemDefinitionGroups = self.FilterItemDefinitionGroupsByConfiguration(
+            ItemDefinitionGroups
+        )
+        for group in ItemDefinitionGroups:
+            for dependency in group.findall(xpathWithNameSpace):
+                dependencyList = (
+                    dependency.text.replace("\t", "").replace("\n", "").split(";")
+                )
+                # Convert the splitted paths to actual Path
+                listOfDependencies = list(map(self.ConvertToPath, dependencyList))
+                # Filter only the GS Dependencies not the user added
+                listOfDependencies = list(filter(self.isDevKitPath, listOfDependencies))
+                for dep in listOfDependencies:
+                    if dep not in tempList:
+                        tempList.append(dep)
         return tempList
 
 
@@ -130,7 +135,7 @@ class CMakeListAutoModuleIncluder(WinModulesCollector):
             cmfile.close()
         return cmakestring
 
-    def RemoveModuleFromCMakeFile(self, module):
+    def RemoveModuleFromCMakeFile(self, module: Module):
         """Removes the specified CModule a.k.a AddGSFunction() line from cmakelist.txt"""
         if type(module) is CModule:
             if len(self.CMAKELIST_STRING) > module.end:
@@ -146,19 +151,27 @@ class CMakeListAutoModuleIncluder(WinModulesCollector):
                     + self.CMAKELIST_STRING[cMod.end + 1 : :]
                 )
             print(f"Just removed {module} of type {type(module)}")
-        else:
-            return
+
         self.CMAKEMODULES = self.GetCmakeExistingModules()
 
     def AddModule(self, module: Module):
         """Adds the specified Module a.k.a AddGSFunction() line to cmakelist.txt"""
         self.CMAKELIST_STRING += f"{str(module)}\n"
-        print(f"Added: {module.folderName} folder to CMakeList.txt")
+        print(f"Added: {module} module to CMakeList.txt")
         self.CMAKEMODULES = self.GetCmakeExistingModules()
         pass
 
     def Save(self):
         """Write to the existing CMakeList.txt and save changes"""
+        cmakeFile = open(self.cmakeFilePath, "w")
+        cmakeFile.write(self.CMAKELIST_STRING)
+        cmakeFile.close()
+        pass
+
+    def PrintDifferences(self, listOfModules):
+        print("These dependencies are different")
+        for dependecy in listOfModules:
+            print(f"${dependecy.folderName} ${dependecy.libraryName}")
         pass
 
     def GetCmakeExistingModules(self):
@@ -170,15 +183,16 @@ class CMakeListAutoModuleIncluder(WinModulesCollector):
         matches = re.finditer(
             extractADDGSFunctionsRegex, self.CMAKELIST_STRING, re.MULTILINE
         )
-
         for match in matches:
             modules = re.finditer(extractModuleNameRegex, match.group())
             for module in modules:
-                target = module.group(1)
-                folder = module.group(2)
-                dependency = module.group(3)
+                target = module.group(1)  # The target
+                folder = module.group(2)  # Folder name
+                dependency = module.group(3)  # Library file
                 tempModule = CModule(target, folder, dependency, match, self.devKitPath)
-                if tempModule.IsExcluded():
+                if (
+                    tempModule.IsExcluded()
+                ):  # The excluded modules are inside if statements
                     continue
                 tempCmakeModules.append(tempModule)
         return tempCmakeModules
@@ -192,17 +206,18 @@ class CMakeListAutoModuleIncluder(WinModulesCollector):
                 f"DETECTED MORE MODULES IN PROJECT THAN IN CMAKELIST, ADDING MISSING MODULES TO CMakeList.txt"
             )
             intersection = self.Intersection(self.PROJECTMODULES, self.CMAKEMODULES)
-            print(intersection)
+            self.PrintDifferences(intersection)
             while intersection:
                 module = intersection.pop()
                 self.AddModule(module)
             return
-        else:
+        elif len(self.PROJECTMODULES) < len(self.CMAKEMODULES):
+
             print(
                 f"DETECTED LESS MODULES IN PROJECT THAN IN CMAKELIST, REMOVING EXTRA MODULES FROM CMakeList.txt"
             )
             intersection = self.Intersection(self.CMAKEMODULES, self.PROJECTMODULES)
-            print(intersection)
+            self.PrintDifferences(intersection)
             while intersection:
                 module = intersection.pop()
                 self.RemoveModuleFromCMakeFile(module)
@@ -239,7 +254,6 @@ def Main(argv):
         f"{args.vcxprojectFolder}\\AddOn.vcxproj"
     ), "Check if you entered correctly the AddOn.vcxproj folder location or the project was built before"
 
-    # python AddModules.py -devKitPath "C:\Program Files\GRAPHISOFT\API Development Kit 24.3009" -cmakeFilePath "D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake" -vcxprojectFolder "D:\TEMP\CPP DEVELOPMENT\archicad-addon-cmake\Build" -ACVersion 24
     moduleIncluder = CMakeListAutoModuleIncluder(
         devKitPath=args.devKitPath,
         cmakeFilePath=args.cmakeFilePath,

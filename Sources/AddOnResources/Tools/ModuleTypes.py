@@ -34,7 +34,9 @@ class Module(object):
         libraryNameStripped = str(self.libraryName)
         libSubRegex = r"(Imp.*[LIB|lib])"
         libraryNameStripped = re.sub(libSubRegex, "", libraryNameStripped)
-        return f"ADDGSModule({self.target} { self.folderName } { libraryNameStripped })"
+        return (
+            f"AddGSModule ({self.target} { self.folderName } { libraryNameStripped })"
+        )
 
     def __str__(self) -> str:
         return self.ADDGSModuleString()

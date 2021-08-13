@@ -175,11 +175,10 @@ else ()
 endif ()
 
 if (WIN32)
-	message(STATUS "Danis comment")
-	add_custom_command (OUTPUT ${CMAKE_BINARY_DIR}
-		COMMENT "Dani's custom command yeeeeey"
+	add_custom_command (TARGET AddOn
+		COMMENT "Checking dependecies and include folders ... "
 		#COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AC_ADDON_NAME}.res"
-		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/test.py"
+		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/AddModules.py" -devKitPath "${AC_API_DEVKIT_DIR}" -cmakeFilePath "${CMAKE_SOURCE_DIR}" -vcxprojectFolder "${CMAKE_BINARY_DIR}"
 	)
 endif()
 
@@ -201,3 +200,5 @@ endif ()
 AddGSModule (AddOn Graphix Graphix)
 AddGSModule (AddOn TextEngine TextEngine)
 AddGSModule (AddOn DGLib DG)
+
+AddGSModule (AddOn Geometry Geometry)
