@@ -1,15 +1,17 @@
+"""
+@author: Arh. Mihalcea Bogdan Daniel
+@email:  mihalcea.bogdan.daniel@gmail.com
+
+"""
+
 import os
 import sys
-import platform
-import subprocess
-import shutil
-import codecs
 import argparse
+import re
 from pathlib import Path
 
 from ModuleTypes import CModule, Module
 import xml.etree.ElementTree as ET
-import re
 
 
 class WinModulesCollector(object):
