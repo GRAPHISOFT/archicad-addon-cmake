@@ -163,6 +163,11 @@ else ()
 endif ()
 
 SetCompilerOptions (AddOn)
+file (GLOB AllCFiles
+	${AddOnSourcesFolder}/*.c
+)
+set_source_files_properties(${AllCFiles} PROPERTIES LANGUAGE CXX)
+
 file (GLOB ModuleFolders ${AC_API_DEVKIT_DIR}/Support/Modules/*)
 target_include_directories (AddOn PUBLIC ${ModuleFolders})
 if (WIN32)
