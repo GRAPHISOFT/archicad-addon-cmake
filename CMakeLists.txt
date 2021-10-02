@@ -22,6 +22,33 @@ function (SetCompilerOptions target)
 	endif ()
 endfunction ()
 
+# Generates the Private.hpp file
+function (GeneratePrivateHeader)
+set (PRIVATE_HPP_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Sources/AddOn/Private.hpp")
+	if(EXISTS "${PRIVATE_HPP_LOCATION}")
+		MESSAGE(STATUS "Private.hpp already exists. \n ----------------Do not make this file public!----------------")
+	else()
+		MESSAGE(WARNING "Private.hpp doesn't exist.")
+		MESSAGE(STATUS "Creating Private.hpp at ${PRIVATE_HPP_LOCATION}")
+		FILE(WRITE ${PRIVATE_HPP_LOCATION} 
+			"/*\n"
+			"This file is added to the .gitignore file\n"
+			"DO NOT REMOVE IT FROM .gitignore, CONTAINS PERSONAL INFORMATION\n"
+			"Here you can store API Tokens, third party login informations etc.\n"
+			"*/\n"
+			"#ifndef PRIVATE_HPP\n"
+			"#define PRIVATE_HPP\n"
+			"\n"
+			"#define DEVELOPER_ID 1 /*Replace with developer ID*/\n"
+			"#define LOCAL_ID 1 /*Replace with local ID*/\n"
+			"#endif"
+		)
+
+	endif()
+	
+endfunction()
+
+
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (CMAKE_SUPPRESS_REGENERATION 1)
@@ -162,6 +189,7 @@ else ()
 	)
 endif ()
 
+GeneratePrivateHeader()
 SetCompilerOptions (AddOn)
 set_source_files_properties (${AddOnSourceFiles} PROPERTIES LANGUAGE CXX)
 
