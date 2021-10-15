@@ -56,6 +56,10 @@ set (AddOnResourcesFolder Sources/AddOnResources)
 
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 
+set (MDID_DEV "1" CACHE STRING "Your developer ID")
+set (MDID_LOC "1" CACHE STRING "Your local ID")
+configure_file (${AddOnResourcesFolder}/ResourceMDIDIds.hpp.in ${ResourceObjectsDir}/ResourceMDIDIds.hpp)
+
 file (GLOB AddOnImageFiles
 	${AddOnResourcesFolder}/RFIX/Images/*.svg
 )
