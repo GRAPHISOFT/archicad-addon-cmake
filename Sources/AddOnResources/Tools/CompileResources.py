@@ -81,6 +81,7 @@ class WinResourceCompiler (ResourceCompiler):
 			'/I', os.path.join (self.devKitPath, 'Support', 'Inc'),
 			'/I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
 			'/I', self.sourcesPath,
+			'/I', self.resourceObjectsPath,
 			'/DWINDOWS',
 			'/execution-charset:utf-8',
 			'/Fi{}'.format (precompiledGrcFilePath),
@@ -132,6 +133,7 @@ class MacResourceCompiler (ResourceCompiler):
 			'-I', os.path.join (self.devKitPath, 'Support', 'Inc'),
 			'-I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
 			'-I', self.sourcesPath,
+			'-I', self.resourceObjectsPath,
 			'-o', precompiledGrcFilePath,
 			grcFilePath,
 		])
