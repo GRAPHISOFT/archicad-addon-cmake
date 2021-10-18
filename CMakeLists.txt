@@ -29,6 +29,8 @@ set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
 set (AC_API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
 set (AC_ADDON_NAME "ExampleAddOn" CACHE STRING "Add-On name.")
 set (AC_ADDON_LANGUAGE "INT" CACHE STRING "Add-On language code.")
+set (AC_MDID_DEV "1" CACHE STRING "Your developer ID")
+set (AC_MDID_LOC "1" CACHE STRING "Your local ID")
 
 set (ACAPINC_FILE_LOCATION ${AC_API_DEVKIT_DIR}/Support/Inc/ACAPinc.h)
 if (EXISTS ${ACAPINC_FILE_LOCATION})
@@ -55,6 +57,8 @@ set (AddOnResourcesFolder Sources/AddOnResources)
 # AddOnResources
 
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
+
+configure_file (${AddOnResourcesFolder}/ResourceMDIDIds.hpp.in ${ResourceObjectsDir}/ResourceMDIDIds.hpp)
 
 file (GLOB AddOnImageFiles
 	${AddOnResourcesFolder}/RFIX/Images/*.svg
