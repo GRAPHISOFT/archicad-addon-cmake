@@ -18,7 +18,7 @@ function (SetCompilerOptions target)
 			-Wno-reorder
 			-Wno-overloaded-virtual
 			-Wno-unused-parameter
-			-Wno-deprecated-copy)
+			-Wno-deprecated)
 	endif ()
 endfunction ()
 
