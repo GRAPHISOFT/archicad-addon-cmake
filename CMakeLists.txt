@@ -36,7 +36,7 @@ set (AC_ADDON_LANGUAGE "INT" CACHE STRING "Add-On language code.")
 set (AC_MDID_DEV "1" CACHE STRING "Your Developer ID")
 set (AC_MDID_LOC "1" CACHE STRING "Add-On Local ID")
 
-set (ACAPINC_FILE_LOCATION ${AC_API_DEVKIT_DIR}/Support/Inc/ACAPinc.h)
+set (ACAPINC_FILE_LOCATION ${AC_API_DEVKIT_DIR}/Inc/ACAPinc.h)
 if (EXISTS ${ACAPINC_FILE_LOCATION})
 	file (READ ${ACAPINC_FILE_LOCATION} ACAPIncContent)
 	string (REGEX MATCHALL "#define[ \t]+ServerMainVers_([0-9][0-9])" VersionList ${ACAPIncContent})
@@ -110,7 +110,7 @@ else ()
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
 		COMMAND python "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/Resources"
-		COMMAND ${CMAKE_COMMAND} -E copy "${AC_API_DEVKIT_DIR}/Support/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/PkgInfo"
+		COMMAND ${CMAKE_COMMAND} -E copy "${AC_API_DEVKIT_DIR}/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/PkgInfo"
 		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
 	)
 endif ()
@@ -153,19 +153,19 @@ endif ()
 
 target_include_directories (AddOn PUBLIC
 	${AddOnSourcesFolder}
-	${AC_API_DEVKIT_DIR}/Support/Inc
+	${AC_API_DEVKIT_DIR}/Inc
 )
 
 if (WIN32)
 	target_link_libraries (AddOn
-		"$<$<CONFIG:Debug>:${AC_API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STATD.lib>"
-		"$<$<CONFIG:Release>:${AC_API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STAT.lib>"
-		"$<$<CONFIG:RelWithDebInfo>:${AC_API_DEVKIT_DIR}/Support/Lib/Win/ACAP_STAT.lib>"
+		"$<$<CONFIG:Debug>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STATD.lib>"
+		"$<$<CONFIG:Release>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STAT.lib>"
+		"$<$<CONFIG:RelWithDebInfo>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STAT.lib>"
 	)
 else ()
 	find_library (CocoaFramework Cocoa)
 	target_link_libraries (AddOn
-		"${AC_API_DEVKIT_DIR}/Support/Lib/Mactel/libACAP_STAT.a"
+		"${AC_API_DEVKIT_DIR}/Lib/Mactel/libACAP_STAT.a"
 		${CocoaFramework}
 	)
 endif ()
@@ -173,13 +173,13 @@ endif ()
 SetCompilerOptions (AddOn ARCHICAD_VERSION)
 set_source_files_properties (${AddOnSourceFiles} PROPERTIES LANGUAGE CXX)
 
-file (GLOB ModuleFolders ${AC_API_DEVKIT_DIR}/Support/Modules/*)
+file (GLOB ModuleFolders ${AC_API_DEVKIT_DIR}/Modules/*)
 target_include_directories (AddOn PUBLIC ${ModuleFolders})
 if (WIN32)
-	file (GLOB LibFilesInFolder ${AC_API_DEVKIT_DIR}/Support/Modules/*/*/*.lib)
+	file (GLOB LibFilesInFolder ${AC_API_DEVKIT_DIR}/Modules/*/*/*.lib)
 	target_link_libraries (AddOn ${LibFilesInFolder})
 else ()
-	file (GLOB FrameworkFilesInFolder ${AC_API_DEVKIT_DIR}/Support/Frameworks/*.framework)
+	file (GLOB FrameworkFilesInFolder ${AC_API_DEVKIT_DIR}/Frameworks/*.framework)
 	target_link_libraries (AddOn ${FrameworkFilesInFolder})
 endif ()
 add_dependencies (AddOn AddOnResources)

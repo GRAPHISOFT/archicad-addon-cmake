@@ -12,7 +12,7 @@ This repository contains a CMake template for Archicad Add-On Development. You c
 - [Download the CMake Template from here](https://github.com/GRAPHISOFT/archicad-addon-cmake/archive/master.zip).
 - [Download the Archicad Add-On Development Kit from here](http://archicadapi.graphisoft.com).
 - Generate the IDE project with CMake, and set the following variables:
-  - `AC_API_DEVKIT_DIR`: The root folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
+  - `AC_API_DEVKIT_DIR`: The Support folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
   - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
   - `AC_MDID_DEV`: (optional) Your Developer ID. Ommitting this will result in a 1 value.
@@ -26,7 +26,7 @@ Run these commands from the command line.
 ```
 mkdir Build
 cd Build
-cmake -G "Visual Studio 15 2017" -A "x64" -DAC_API_DEVKIT_DIR="C:\API Development Kit 24.3009" ..
+cmake -G "Visual Studio 15 2017" -A "x64" -DAC_API_DEVKIT_DIR="C:\API Development Kit 24.3009\Support" ..
 cd ..
 ```
 
@@ -37,14 +37,14 @@ Run these commands from the command line.
 ```
 mkdir Build
 cd Build
-cmake -G "Xcode" -DAC_API_DEVKIT_DIR=/Applications/GRAPHISOFT\ ARCHICAD\ API\ DevKit\ 24.3009 ..
+cmake -G "Xcode" -DAC_API_DEVKIT_DIR=/Applications/GRAPHISOFT\ ARCHICAD\ API\ DevKit\ 24.3009/Support ..
 cd ..
 ```
 
 ### Visual Studio Code (Platform Independent)
 
 - Install the "CMake Tools" extension for Visual Studio Code.
-- Set the "AC_API_DEVKIT_DIR" environment variable to the installed Development Kit folder.
+- Set the "AC_API_DEVKIT_DIR" environment variable to the installed Development Kit Support folder.
 - Open the root folder in Visual Studio Code, configure and build the solution.
 
 ## Archicad Compatibility

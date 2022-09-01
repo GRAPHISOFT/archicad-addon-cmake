@@ -68,7 +68,7 @@ class ResourceCompiler (object):
 class WinResourceCompiler (ResourceCompiler):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
 		super (WinResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
-		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'Win', 'ResConv.exe')
+		self.resConvPath = os.path.join (devKitPath, 'Tools', 'Win', 'ResConv.exe')
 
 	def PrecompileResourceFile (self, grcFilePath):
 		precompiledGrcFilePath = self.GetPrecompiledResourceFilePath (grcFilePath)
@@ -78,8 +78,8 @@ class WinResourceCompiler (ResourceCompiler):
 			'/X',
 			'/EP',
 			'/P',
-			'/I', os.path.join (self.devKitPath, 'Support', 'Inc'),
-			'/I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
+			'/I', os.path.join (self.devKitPath, 'Inc'),
+			'/I', os.path.join (self.devKitPath, 'Modules', 'DGLib'),
 			'/I', self.sourcesPath,
 			'/I', self.resourceObjectsPath,
 			'/DWINDOWS',
@@ -108,8 +108,8 @@ class WinResourceCompiler (ResourceCompiler):
 		nativeResourceFile = self.GetNativeResourceFile ()
 		result = subprocess.call ([
 			'rc',
-			'/i', os.path.join (self.devKitPath, 'Support', 'Inc'),
-			'/i', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
+			'/i', os.path.join (self.devKitPath, 'Inc'),
+			'/i', os.path.join (self.devKitPath, 'Modules', 'DGLib'),
 			'/i', self.sourcesPath,
 			'/i', self.resourceObjectsPath,
 			'/fo', resultResourcePath,
@@ -120,7 +120,7 @@ class WinResourceCompiler (ResourceCompiler):
 class MacResourceCompiler (ResourceCompiler):
 	def __init__ (self, devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath):
 		super (MacResourceCompiler, self).__init__ (devKitPath, languageCode, sourcesPath, resourcesPath, resourceObjectsPath)
-		self.resConvPath = os.path.join (devKitPath, 'Support', 'Tools', 'OSX', 'ResConv')
+		self.resConvPath = os.path.join (devKitPath, 'Tools', 'OSX', 'ResConv')
 
 	def PrecompileResourceFile (self, grcFilePath):
 		precompiledGrcFilePath = self.GetPrecompiledResourceFilePath (grcFilePath)
@@ -130,8 +130,8 @@ class MacResourceCompiler (ResourceCompiler):
 			'-E',
 			'-P',
 			'-Dmacintosh',
-			'-I', os.path.join (self.devKitPath, 'Support', 'Inc'),
-			'-I', os.path.join (self.devKitPath, 'Support', 'Modules', 'DGLib'),
+			'-I', os.path.join (self.devKitPath, 'Inc'),
+			'-I', os.path.join (self.devKitPath, 'Modules', 'DGLib'),
 			'-I', self.sourcesPath,
 			'-I', self.resourceObjectsPath,
 			'-o', precompiledGrcFilePath,
