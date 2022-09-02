@@ -11,6 +11,7 @@ function (SetCompilerOptions target ac_version)
 		target_compile_options (${target} PUBLIC /W4 /WX
 			/Zc:wchar_t-
 			/wd4499
+			/EHsc
 		)
 	else ()
 		target_compile_options (${target} PUBLIC -Wall -Wextra -Werror
@@ -26,11 +27,23 @@ function (SetCompilerOptions target ac_version)
 	endif ()
 endfunction ()
 
+set (API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR})
+
+if (CONAN_DEVKIT)
+	include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+	set (CONAN_DISABLE_CHECK_COMPILER true)
+	conan_basic_setup (NO_OUTPUT_DIRS)
+	set (API_DEVKIT_DIR ${CONAN_ARCHICAD-APIDEVKIT_ROOT})
+endif ()
+
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
+if (WIN32)
+	set (CMAKE_GENERATOR_TOOLSET "v142")
+endif ()
 set (CMAKE_SUPPRESS_REGENERATION 1)
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
-set (AC_API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
+set (AC_API_DEVKIT_DIR ${API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
 set (AC_ADDON_NAME "ExampleAddOn" CACHE STRING "Add-On name.")
 set (AC_ADDON_LANGUAGE "INT" CACHE STRING "Add-On language code.")
 set (AC_MDID_DEV "1" CACHE STRING "Your Developer ID")
@@ -140,6 +153,7 @@ endif ()
 set_target_properties (AddOn PROPERTIES OUTPUT_NAME ${AC_ADDON_NAME})
 if (WIN32)
 	set_target_properties (AddOn PROPERTIES SUFFIX ".apx")
+	set_target_properties (AddOn PROPERTIES RUNTIME_OUTPUT_DIRECTORY_$<CONFIG> "${CMAKE_BINARY_DIR}/$<CONFIG>")
 else ()
 	set_target_properties (AddOn PROPERTIES BUNDLE TRUE)
 	set_target_properties (AddOn PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/${AddOnResourcesFolder}/RFIX.mac/Info.plist")
