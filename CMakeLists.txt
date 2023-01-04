@@ -38,9 +38,6 @@ endif ()
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
-if (WIN32)
-	set (CMAKE_GENERATOR_TOOLSET "v142")
-endif ()
 set (CMAKE_SUPPRESS_REGENERATION 1)
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
 set (AC_API_DEVKIT_DIR ${API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
