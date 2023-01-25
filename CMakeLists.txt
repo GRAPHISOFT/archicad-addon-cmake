@@ -29,11 +29,9 @@ endfunction ()
 
 set (API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR})
 
-if (CONAN_DEVKIT)
-	include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-	set (CONAN_DISABLE_CHECK_COMPILER true)
-	conan_basic_setup (NO_OUTPUT_DIRS)
-	set (API_DEVKIT_DIR ${CONAN_ARCHICAD-APIDEVKIT_ROOT})
+if (GITHUB_BUILD)
+	include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+	set (API_DEVKIT_DIR ${CONAN_ARCHICAD-APIDEVKIT_ROOT}/bin)
 endif ()
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)

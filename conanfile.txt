@@ -1,5 +1,0 @@
-[requires]
-archicad-apidevkit/26
-
- [generators]
- cmake
