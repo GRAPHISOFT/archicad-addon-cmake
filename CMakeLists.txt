@@ -24,6 +24,9 @@ function (SetCompilerOptions target ac_version)
 			-Wno-overloaded-virtual
 			-Wno-unused-parameter
 			-Wno-deprecated)
+		if (${ac_version} LESS_EQUAL "24")
+			target_compile_options (${target} PUBLIC -Wno-non-c-typedef-for-linkage)
+		endif ()
 	endif ()
 endfunction ()
 
