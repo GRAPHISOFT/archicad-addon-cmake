@@ -8,7 +8,7 @@ This repository contains a CMake template for Archicad Add-On Development. You c
 
 - [CMake](https://cmake.org) (3.16 minimum version is needed).
 - [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
-- [Conan](https://conan.io) for convenience.
+- [Conan](https://conan.io) for convenience (version 1.x).
 
 There are several possibilities to build this Add-On, using different IDEs, with downloaded Archicad API Development Kit or by using the Conan C++ package manager.
 
@@ -21,7 +21,7 @@ There are several possibilities to build this Add-On, using different IDEs, with
   - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
   - `AC_MDID_DEV`: (optional) Your Developer ID. Omitting this will result in a 1 value.
-  - `AC_MDID_LOC`: (optional) Add-On Local ID. Omitting this will result in a 1 value. 
+  - `AC_MDID_LOC`: (optional) Add-On Local ID. Omitting this will result in a 1 value.
 - To release your Add-On you have to provide valid MDIDs.
 
 ### Visual Studio (Windows)
@@ -54,7 +54,7 @@ cd ..
 
 ## Build using the Conan Package Manager
 ### Prepare
-- [Download the package manager](https://conan.io/downloads.html)
+- [Download the package manager](https://conan.io/downloads.html), please install conan v1.x.
 - Run conan to create the default profile (use Command Prompt on Windows and Terminal on MacOS):
 
       conan profile new default --detect
@@ -95,11 +95,11 @@ cd ..
 - Open the root folder in Visual Studio Code, configure and build the solution.
 ## Archicad Compatibility
 
-This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting fro Archicad 25 using Conan. 
+This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting fro Archicad 25 using Conan.
 
 ## Use in Archicad
 
-To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu. Please note that the example Add-On works only in the demo version of Archicad. 
+To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu. Please note that the example Add-On works only in the demo version of Archicad.
 
 You can start Archicad in demo mode with the following command line commands:
 - Windows: `ARCHICAD.exe -DEMO`
