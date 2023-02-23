@@ -22,7 +22,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Get Conan
-      uses: turtlebrowser/get-conan@v1.0
+      uses: turtlebrowser/get-conan@v1.2
+      with:
+        version: 1.59.0
       
     - name: Create Conan default profile
       run: conan profile new default --detect
