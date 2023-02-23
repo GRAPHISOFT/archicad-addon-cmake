@@ -5,3 +5,4 @@ conan/*
 out/*
 .vsconan
 CMakeUserPresets.json
+.idea

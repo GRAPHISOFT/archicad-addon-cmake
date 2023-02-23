@@ -2,56 +2,55 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  workflow_dispatch:
+    branches: [test]
 
 jobs:
   build:
-
     runs-on: ${{matrix.os-type}}
-    
+
     strategy:
       matrix:
-        os-type: [windows-latest, macos-latest]
-        configuration: [Debug, Release, RelWithDebInfo] 
+        os-type: [macos-latest]
+        configuration: [Debug]
 
     steps:
-    - name: Checkout source
-      uses: actions/checkout@v2
+      - name: Checkout source
+        uses: actions/checkout@v2
 
-    - name: Get Conan
-      uses: turtlebrowser/get-conan@v1.2
-      with:
-        version: 1.59.0
-      
-    - name: Create Conan default profile
-      run: conan profile new default --detect
-      
-    - name: Set compiler for WIN
-      if: matrix.os-type == 'windows-latest'
-      run: conan profile update settings.compiler.version=16 default
-      
-    - name: Set compiler for OSX
-      if: matrix.os-type == 'macos-latest'
-      run: conan profile update settings.compiler.version=13 default
-      
-    - name: Install dependencies
-      run: conan install . --install-folder=${{github.workspace}}/build
+      - run: |
+          sw_vers
+          cmake --version
 
-    - name: Configure
-      run: cmake -B ${{github.workspace}}/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}} -DGITHUB_BUILD=true
+      - name: Get Conan
+        uses: turtlebrowser/get-conan@v1.2
+        with:
+          version: 1.59.0
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/Build --config ${{matrix.configuration}}
+      - name: Create Conan default profile
+        run: conan profile new default --detect
 
+      - name: Set compiler for WIN
+        if: matrix.os-type == 'windows-latest'
+        run: conan profile update settings.compiler.version=16 default
 
-    - name: Test
-      working-directory: ${{github.workspace}}/Build
-      run: ctest -C ${{matrix.configuration}}
+      - name: Set compiler for OSX
+        if: matrix.os-type == 'macos-latest'
+        run: conan profile update settings.compiler.version=13 default
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Add-On ${{matrix.os-type}} ${{matrix.configuration}}
-        path: ${{github.workspace}}/Build/${{matrix.configuration}}/
+      - name: Install dependencies
+        run: conan install . --install-folder=${{github.workspace}}/build
+
+      - name: Configure
+        run: cmake -B ${{github.workspace}}/Build -DCMAKE_BUILD_TYPE=${{matrix.configuration}} -DGITHUB_BUILD=true
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/Build --config ${{matrix.configuration}}
+
+      - name: Test
+        working-directory: ${{github.workspace}}/Build
+        run: ctest -C ${{matrix.configuration}}
+
+    # - uses: actions/upload-artifact@v2
+    #   with:
+    #     name: Add-On ${{matrix.os-type}} ${{matrix.configuration}}
+    #     path: ${{github.workspace}}/Build/${{matrix.configuration}}/
