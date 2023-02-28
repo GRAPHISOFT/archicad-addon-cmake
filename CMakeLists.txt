@@ -32,7 +32,7 @@ endfunction ()
 
 set (API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR})
 
-if (NOT EXISTS ${API_DEVKIT_DIR})
+if (NOT ${API_DEVKIT_DIR})
 	include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 	set (API_DEVKIT_DIR ${CONAN_ARCHICAD-APIDEVKIT_ROOT}/bin)
 endif ()
