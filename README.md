@@ -59,7 +59,7 @@ cd ..
 
       conan profile new default --detect
 - Set the proper version of the compiler:
-  * Windows
+  - Windows
 
         conan profile update settings.compiler.version=16 default
   - MacOS
@@ -68,6 +68,14 @@ cd ..
 - Install dependencies
 
       conan install . -pr:b=default --install-folder=build/
+
+- Set the environment
+  - Windows
+
+        /conan/conanbuild.bat
+  - MacOS
+
+        source conan/conanbuild.sh
 
 ### Visual Studio (Windows)
 
@@ -93,6 +101,7 @@ cd ..
 
 - Install the "CMake Tools" extension for Visual Studio Code.
 - Open the root folder in Visual Studio Code, configure and build the solution.
+      code .
 ## Archicad Compatibility
 
 This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting fro Archicad 25 using Conan.
