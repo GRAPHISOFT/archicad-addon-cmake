@@ -58,7 +58,7 @@ else ()
 endif ()
 
 if (WIN32)
-	add_definitions (-DUNICODE -D_UNICODE -D_ITERATOR_DEBUG_LEVEL=0)
+	add_definitions (-DUNICODE -D_UNICODE)
 else ()
 	add_definitions (-Dmacintosh=1)
 endif ()
