@@ -71,7 +71,7 @@ set (AddOnResourcesFolder Sources/AddOnResources)
 
 # AddOnResources
 
-find_package(Python COMPONENTS Interpreter)
+find_package (Python COMPONENTS Interpreter)
 
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 set (ResourceStampFile "${ResourceObjectsDir}/AddOnResources.stamp")
