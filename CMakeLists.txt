@@ -71,8 +71,10 @@ set (AddOnResourcesFolder Sources/AddOnResources)
 
 # AddOnResources
 
-set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
+find_package (Python COMPONENTS Interpreter)
 
+set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
+set (ResourceStampFile "${ResourceObjectsDir}/AddOnResources.stamp")
 configure_file (${AddOnResourcesFolder}/ResourceMDIDIds.hpp.in ${ResourceObjectsDir}/ResourceMDIDIds.hpp)
 
 file (GLOB AddOnImageFiles
@@ -95,36 +97,26 @@ else ()
 	)
 endif ()
 
-source_group ("Images" FILES ${AddOnImageFiles})
-source_group ("Resources" FILES ${AddOnResourceFiles})
-add_custom_target (
-	AddOnResources ALL
-	DEPENDS "${ResourceObjectsDir}/AddOnResources.stamp"
-	SOURCES ${AddOnResourceFiles} ${AddOnImageFiles}
-)
-
-find_package(Python COMPONENTS Interpreter)
-
 get_filename_component (AddOnSourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnSourcesFolder}" ABSOLUTE)
 get_filename_component (AddOnResourcesFolderAbsolute "${CMAKE_CURRENT_LIST_DIR}/${AddOnResourcesFolder}" ABSOLUTE)
 if (WIN32)
 	add_custom_command (
-		OUTPUT "${ResourceObjectsDir}/AddOnResources.stamp"
+		OUTPUT ${ResourceStampFile}
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
 		COMMAND ${Python_EXECUTABLE} "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${ResourceObjectsDir}/${AC_ADDON_NAME}.res"
-		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
+		COMMAND ${CMAKE_COMMAND} -E touch ${ResourceStampFile}
 	)
 else ()
 	add_custom_command (
-		OUTPUT "${ResourceObjectsDir}/AddOnResources.stamp"
+		OUTPUT ${ResourceStampFile}
 		DEPENDS ${AddOnResourceFiles} ${AddOnImageFiles}
 		COMMENT "Compiling resources..."
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${ResourceObjectsDir}"
 		COMMAND ${Python_EXECUTABLE} "${AddOnResourcesFolderAbsolute}/Tools/CompileResources.py" "${AC_ADDON_LANGUAGE}" "${AC_API_DEVKIT_DIR}" "${AddOnSourcesFolderAbsolute}" "${AddOnResourcesFolderAbsolute}" "${ResourceObjectsDir}" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/Resources"
 		COMMAND ${CMAKE_COMMAND} -E copy "${AC_API_DEVKIT_DIR}/Inc/PkgInfo" "${CMAKE_BINARY_DIR}/$<CONFIG>/${AC_ADDON_NAME}.bundle/Contents/PkgInfo"
-		COMMAND ${CMAKE_COMMAND} -E touch "${ResourceObjectsDir}/AddOnResources.stamp"
+		COMMAND ${CMAKE_COMMAND} -E touch ${ResourceStampFile}
 	)
 endif ()
 
@@ -138,12 +130,18 @@ file (GLOB AddOnSourceFiles
 	${AddOnSourcesFolder}/*.c
 	${AddOnSourcesFolder}/*.cpp
 )
+
 set (
 	AddOnFiles
 	${AddOnHeaderFiles}
 	${AddOnSourceFiles}
+	${AddOnImageFiles}
+	${AddOnResourceFiles}
+	${ResourceStampFile}
 )
-source_group ("Sources" FILES ${AddOnFiles})
+source_group ("Sources" FILES ${AddOnHeaderFiles} ${AddOnSourceFiles})
+source_group ("Images" FILES ${AddOnImageFiles})
+source_group ("Resources" FILES ${AddOnResourceFiles})
 if (WIN32)
 	add_library (AddOn SHARED ${AddOnFiles})
 else ()
@@ -196,4 +194,4 @@ else ()
 	file (GLOB FrameworkFilesInFolder ${AC_API_DEVKIT_DIR}/Frameworks/*.framework)
 	target_link_libraries (AddOn ${FrameworkFilesInFolder})
 endif ()
-add_dependencies (AddOn AddOnResources)
+
