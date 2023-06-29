@@ -66,8 +66,8 @@ add_definitions (-DACExtension)
 
 project (${AC_ADDON_NAME})
 
-set (AddOnSourcesFolder Sources/AddOn)
-set (AddOnResourcesFolder Sources/AddOnResources)
+set (AddOnSourcesFolder Src)
+set (AddOnResourcesFolder .)
 
 # AddOnResources
 
@@ -75,7 +75,7 @@ find_package (Python COMPONENTS Interpreter)
 
 set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 set (ResourceStampFile "${ResourceObjectsDir}/AddOnResources.stamp")
-configure_file (${AddOnResourcesFolder}/ResourceMDIDIds.hpp.in ${ResourceObjectsDir}/ResourceMDIDIds.hpp)
+configure_file (${AddOnResourcesFolder}/Tools/ResourceMDIDIds.hpp.in ${ResourceObjectsDir}/ResourceMDIDIds.hpp)
 
 file (GLOB AddOnImageFiles
 	${AddOnResourcesFolder}/RFIX/Images/*.svg
