@@ -1,4 +1,4 @@
-#include "ResourceIds.hpp"
+﻿#include "ResourceIds.hpp"
 
 'STR#' ID_ADDON_INFO "Add-on Name and Description" {
 /* [  1] */		"Example AddOn"

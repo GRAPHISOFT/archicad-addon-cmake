@@ -83,6 +83,7 @@ class WinResourceCompiler (ResourceCompiler):
 			'/I', self.sourcesPath,
 			'/I', self.resourceObjectsPath,
 			'/DWINDOWS',
+            '/source-charset:utf-8',
 			'/execution-charset:utf-8',
 			'/Fi{}'.format (precompiledGrcFilePath),
 			grcFilePath,
