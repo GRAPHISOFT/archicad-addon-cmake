@@ -101,7 +101,7 @@ cd ..
 
 - Install the "CMake Tools" extension for Visual Studio Code.
 - Open the root folder in Visual Studio Code, configure and build the solution.
-      code .
+
 ## Archicad Compatibility
 
 This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting fro Archicad 25 using Conan.
