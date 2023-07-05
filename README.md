@@ -62,11 +62,15 @@ You can use the Conan package manager to get the Development Kit. This method wo
 
 ### Preparation
 
-[Download the package manager](https://conan.io/downloads.html). Please not that you need to **install version 1.x**.
+[Download the Conan package manager](https://conan.io/downloads.html). Please not that you need to **install version 1.x**.
+
+```
+pip install conan==1.59.0
+```
 
 #### Windows
 
-Create the default profile, set the compiler version and install dependencies by using the following commands.
+Create the default profile, set the compiler version and install dependencies by using the following commands:
 
 ```
 conan profile new default --detect
@@ -77,7 +81,7 @@ conan\conanbuild.bat
 
 #### MacOS
 
-Create the default profile, set the compiler version and install dependencies by using the following commands.
+Create the default profile, set the compiler version and install dependencies by using the following commands:
 
 ```
 conan profile new default --detect
@@ -91,7 +95,7 @@ source conan/conanbuild.sh
 Run this command from the command line:
 
 ```
-cmake -B Build -G "Visual Studio 15 2017" .
+cmake -B Build -G "Visual Studio 17 2022" .
 ```
 
 ### XCode (MacOS)
