@@ -35,14 +35,16 @@ Run these command from the command line to generate the Visual Studio project. R
 | Archicad 24 | Visual Studio 2017 | v141 |
 | Archicad 23 | Visual Studio 2017 | v141 |
 
-Please note that you can always use the latest Visual Studio, but make sure you provide the correct platform toolset. Example for using Visual Studio 2022 with platform toolset 142:
+Please note that you can always use the latest Visual Studio, but make sure you provide the correct platform toolset.
+
+Example for using Visual Studio 2022 with platform toolset 142:
 ```
 cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
 ```
 
 ### XCode (MacOS)
 
-Run these command from the command line to generate the XCode project.
+Run this command from the command line to generate the XCode project:
 
 ```
 cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
@@ -55,48 +57,49 @@ cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
 - Open the root folder in Visual Studio Code, configure and build the solution.
 
 ## Build using the Conan Package Manager
-### Prepare
-- [Download the package manager](https://conan.io/downloads.html), please install conan v1.x.
-- Run conan to create the default profile (use Command Prompt on Windows and Terminal on MacOS):
 
-      conan profile new default --detect
-- Set the proper version of the compiler:
-  - Windows
+You can use the Conan package manager to get the Development Kit. This method works only for Archicad 25 and later versions.
 
-        conan profile update settings.compiler.version=16 default
-  - MacOS
+### Preparation
 
-        conan profile update settings.compiler.version=13 default
-- Install dependencies
+[Download the package manager](https://conan.io/downloads.html). Please not that you need to **install version 1.x**.
 
-      conan install . -pr:b=default --install-folder=build/
+#### Windows
 
-- Set the environment
-  - Windows
+Create the default profile, set the compiler version and install dependencies by using the following commands.
 
-        /conan/conanbuild.bat
-  - MacOS
+```
+conan profile new default --detect
+conan profile update settings.compiler.version=16 default
+conan install . -pr:b=default --install-folder=Build/
+conan\conanbuild.bat
+```
 
-        source conan/conanbuild.sh
+#### MacOS
+
+Create the default profile, set the compiler version and install dependencies by using the following commands.
+
+```
+conan profile new default --detect
+conan profile update settings.compiler.version=13 default
+conan install . -pr:b=default --install-folder=Build/
+source conan/conanbuild.sh
+```
 
 ### Visual Studio (Windows)
 
-Run these commands from the command line.
+Run this command from the command line:
 
 ```
-cd build
-cmake -G "Visual Studio 15 2017" ..
-cd ..
+cmake -B Build -G "Visual Studio 15 2017" .
 ```
 
 ### XCode (MacOS)
 
-Run these commands from the command line.
+Run this command from the command line:
 
 ```
-cd build
-cmake -G "Xcode" ..
-cd ..
+cmake -B Build -G "Xcode" .
 ```
 
 ### Visual Studio Code (Platform Independent)
@@ -106,13 +109,13 @@ cd ..
 
 ## Archicad Compatibility
 
-This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting fro Archicad 25 using Conan.
+This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting from Archicad 25 using Conan.
 
 ## Use in Archicad
 
-To use the Add-On in Archicad, you have to add your compiled .apx file in Add-On Manager. The example Add-On registers a new command into the Options menu. Please note that the example Add-On works only in the demo version of Archicad.
+To use the Add-On in Archicad, you have to add your compiled .apx or .bundle file in Add-On Manager. The example Add-On registers a new command into the Options menu. Please note that the example Add-On works only in the demo version of Archicad.
 
-You can start Archicad in demo mode with the following command line commands:
+You can start Archicad in demo mode by the following command line commands:
 - Windows: `ARCHICAD.exe -DEMO`
 - MacOS: `ARCHICAD\ 26.app/Contents/MacOS/ARCHICAD -demo`
 
