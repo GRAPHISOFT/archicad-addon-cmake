@@ -62,7 +62,7 @@ You can use the Conan package manager to get the Development Kit. This method wo
 
 ### Preparation
 
-[Download the Conan package manager](https://conan.io/downloads.html). Please not that you need to **install version 1.x**.
+[Install the Conan package manager](https://conan.io/downloads.html). Please not that you need to **install version 1.x**.
 
 ```
 pip install conan==1.59.0
