@@ -1,16 +1,15 @@
 # Archicad Add-On CMake Template
 
-This repository contains a CMake template for Archicad Add-On Development. You can use it to generate native Visual Studio or XCode project or to develop an Add-On directly in Visual Studio Code without using any other environments.
+This repository contains a CMake template for Archicad Add-On Development.
 
 [![Build](https://github.com/GRAPHISOFT/archicad-addon-cmake/actions/workflows/build.yml/badge.svg)](https://github.com/GRAPHISOFT/archicad-addon-cmake/actions/workflows/build.yml)
 
 ## Prerequisites
 
+- [Archicad Development Kit](https://archicadapi.graphisoft.com/downloads/api-development-kit) (that matches your Archicad version).
 - [CMake](https://cmake.org) (3.16 minimum version is needed).
 - [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
-- [Conan](https://conan.io) for convenience (version 1.x).
-
-There are several possibilities to build this Add-On, using different IDEs, with downloaded Archicad API Development Kit or by using the Conan C++ package manager.
+- [Conan](https://conan.io) (version 1.x, optional).
 
 ## Build with downloaded Archicad API Development Kit
 
@@ -22,28 +21,31 @@ There are several possibilities to build this Add-On, using different IDEs, with
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
   - `AC_MDID_DEV`: (optional) Your Developer ID. Omitting this will result in a 1 value.
   - `AC_MDID_LOC`: (optional) Add-On Local ID. Omitting this will result in a 1 value.
-- To release your Add-On you have to provide valid MDIDs.
+- To release your Add-On you need to provide valid MDIDs, you can generate them on the [Archicad API site](https://archicadapi.graphisoft.com/profile/add-ons).
 
 ### Visual Studio (Windows)
 
-Run these commands from the command line.
+Run these command from the command line to generate the Visual Studio project. Replace `<DevKitSupportDir>` with the path of the Support folder in your downloaded Development Kit. See the list below for the matching Visual Studio versions for different Archicad versions.
 
+| Archicad | Visual Studio | Platform toolset |
+|---|---|---|
+| Archicad 27 | Visual Studio 2019 | v142 |
+| Archicad 26 | Visual Studio 2019 | v142 |
+| Archicad 25 | Visual Studio 2019 | v142 |
+| Archicad 24 | Visual Studio 2017 | v141 |
+| Archicad 23 | Visual Studio 2017 | v141 |
+
+Please note that you can always use the latest Visual Studio, but make sure you provide the correct platform toolset. Example for using Visual Studio 2022 with platform toolset 142:
 ```
-mkdir Build
-cd Build
-cmake -G "Visual Studio 15 2017" -A "x64" -DAC_API_DEVKIT_DIR="C:\API Development Kit 24.3009\Support" ..
-cd ..
+cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
 ```
 
 ### XCode (MacOS)
 
-Run these commands from the command line.
+Run these command from the command line to generate the XCode project.
 
 ```
-mkdir Build
-cd Build
-cmake -G "Xcode" -DAC_API_DEVKIT_DIR=/Applications/GRAPHISOFT\ ARCHICAD\ API\ DevKit\ 24.3009/Support ..
-cd ..
+cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
 ```
 
 ### Visual Studio Code (Platform Independent)
