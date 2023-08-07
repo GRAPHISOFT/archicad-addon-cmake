@@ -39,7 +39,6 @@ endif ()
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
-set (CMAKE_SUPPRESS_REGENERATION 1)
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
 set (AC_API_DEVKIT_DIR ${API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
 set (AC_ADDON_NAME "ExampleAddOn" CACHE STRING "Add-On name.")
@@ -77,11 +76,11 @@ set (ResourceObjectsDir ${CMAKE_BINARY_DIR}/ResourceObjects)
 set (ResourceStampFile "${ResourceObjectsDir}/AddOnResources.stamp")
 configure_file (${AddOnResourcesFolder}/Tools/ResourceMDIDIds.hpp.in ${ResourceObjectsDir}/ResourceMDIDIds.hpp)
 
-file (GLOB AddOnImageFiles
+file (GLOB AddOnImageFiles CONFIGURE_DEPENDS
 	${AddOnResourcesFolder}/RFIX/Images/*.svg
 )
 if (WIN32)
-	file (GLOB AddOnResourceFiles
+	file (GLOB AddOnResourceFiles CONFIGURE_DEPENDS
 		${AddOnResourcesFolder}/R${AC_ADDON_LANGUAGE}/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
@@ -89,7 +88,7 @@ if (WIN32)
 		${AddOnResourcesFolder}/Tools/*.py
 	)
 else ()
-	file (GLOB AddOnResourceFiles
+	file (GLOB AddOnResourceFiles CONFIGURE_DEPENDS
 		${AddOnResourcesFolder}/R${AC_ADDON_LANGUAGE}/*.grc
 		${AddOnResourcesFolder}/RFIX/*.grc
 		${AddOnResourcesFolder}/RFIX.mac/*.plist
@@ -122,11 +121,11 @@ endif ()
 
 # AddOn
 
-file (GLOB AddOnHeaderFiles
+file (GLOB AddOnHeaderFiles CONFIGURE_DEPENDS
 	${AddOnSourcesFolder}/*.h
 	${AddOnSourcesFolder}/*.hpp
 )
-file (GLOB AddOnSourceFiles
+file (GLOB AddOnSourceFiles CONFIGURE_DEPENDS
 	${AddOnSourcesFolder}/*.c
 	${AddOnSourcesFolder}/*.cpp
 )
@@ -209,4 +208,3 @@ else ()
 	file (GLOB FrameworkFilesInFolder ${AC_API_DEVKIT_DIR}/Frameworks/*.framework)
 	target_link_libraries (AddOn ${FrameworkFilesInFolder})
 endif ()
-
