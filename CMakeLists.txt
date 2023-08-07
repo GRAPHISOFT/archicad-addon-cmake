@@ -168,17 +168,32 @@ target_include_directories (AddOn PUBLIC
 )
 
 if (WIN32)
-	target_link_libraries (AddOn
-		"$<$<CONFIG:Debug>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STATD.lib>"
-		"$<$<CONFIG:Release>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STAT.lib>"
-		"$<$<CONFIG:RelWithDebInfo>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STAT.lib>"
-	)
+	if (${ARCHICAD_VERSION} LESS 27)
+		target_link_libraries (AddOn
+			"$<$<CONFIG:Debug>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STATD.lib>"
+			"$<$<CONFIG:Release>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STAT.lib>"
+			"$<$<CONFIG:RelWithDebInfo>:${AC_API_DEVKIT_DIR}/Lib/Win/ACAP_STAT.lib>"
+		)
+	else ()
+		target_link_libraries (AddOn
+			"$<$<CONFIG:Debug>:${AC_API_DEVKIT_DIR}/Lib/ACAP_STATD.lib>"
+			"$<$<CONFIG:Release>:${AC_API_DEVKIT_DIR}/Lib/ACAP_STAT.lib>"
+			"$<$<CONFIG:RelWithDebInfo>:${AC_API_DEVKIT_DIR}/Lib/ACAP_STAT.lib>"
+		)
+	endif ()
 else ()
 	find_library (CocoaFramework Cocoa)
-	target_link_libraries (AddOn
-		"${AC_API_DEVKIT_DIR}/Lib/Mactel/libACAP_STAT.a"
-		${CocoaFramework}
-	)
+	if (${ARCHICAD_VERSION} LESS 27)
+		target_link_libraries (AddOn
+			"${AC_API_DEVKIT_DIR}/Lib/Mactel/libACAP_STAT.a"
+			${CocoaFramework}
+		)
+	else ()
+		target_link_libraries (AddOn
+			"${AC_API_DEVKIT_DIR}/Lib/libACAP_STAT.a"
+			${CocoaFramework}
+		)
+	endif ()
 endif ()
 
 SetCompilerOptions (AddOn ARCHICAD_VERSION)

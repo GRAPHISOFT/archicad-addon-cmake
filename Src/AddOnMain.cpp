@@ -92,12 +92,20 @@ API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
 
 GSErrCode __ACDLL_CALL RegisterInterface (void)
 {
+#ifdef ServerMainVers_2700
+	return ACAPI_MenuItem_RegisterMenu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+#else
 	return ACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+#endif
 }
 
 GSErrCode __ACENV_CALL Initialize (void)
 {
+#ifdef ServerMainVers_2700
+	return ACAPI_MenuItem_InstallMenuHandler (AddOnMenuID, MenuCommandHandler);
+#else
 	return ACAPI_Install_MenuHandler (AddOnMenuID, MenuCommandHandler);
+#endif
 }
 
 GSErrCode __ACENV_CALL FreeData (void)
