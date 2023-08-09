@@ -10,6 +10,7 @@ function (SetGlobalCompilerDefinitions)
 endfunction ()
 
 function (SetCompilerOptions target acVersion)
+
     if (${acVersion} LESS 27)
         target_compile_features (${target} PUBLIC cxx_std_14)
     else ()
@@ -37,6 +38,7 @@ function (SetCompilerOptions target acVersion)
             target_compile_options (${target} PUBLIC -Wno-non-c-typedef-for-linkage)
         endif ()
     endif ()
+	
 endfunction ()
 
 function (DetectACVersion devKitDir acVersion)
