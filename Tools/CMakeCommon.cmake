@@ -115,7 +115,6 @@ function (GenerateAddOnProject acVersion devKitDir addOnName addOnFolder addOnLa
         file (GLOB AddOnResourceFiles CONFIGURE_DEPENDS
             ${AddOnResourcesFolder}/R${addOnLanguage}/*.grc
             ${AddOnResourcesFolder}/RFIX/*.grc
-            ${AddOnResourcesFolder}/RFIX/*.grc
             ${AddOnResourcesFolder}/RFIX.win/*.rc2
             ${AddOnResourcesFolder}/Tools/*.py
         )
