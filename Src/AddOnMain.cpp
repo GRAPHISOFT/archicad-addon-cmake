@@ -82,7 +82,7 @@ static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 	return NoError;
 }
 
-API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
+API_AddonType CheckEnvironment (API_EnvirParams* envir)
 {
 	RSGetIndString (&envir->addOnInfo.name, AddOnInfoID, AddOnNameID, ACAPI_GetOwnResModule ());
 	RSGetIndString (&envir->addOnInfo.description, AddOnInfoID, AddOnDescriptionID, ACAPI_GetOwnResModule ());
@@ -90,7 +90,7 @@ API_AddonType __ACDLL_CALL CheckEnvironment (API_EnvirParams* envir)
 	return APIAddon_Normal;
 }
 
-GSErrCode __ACDLL_CALL RegisterInterface (void)
+GSErrCode RegisterInterface (void)
 {
 #ifdef ServerMainVers_2700
 	return ACAPI_MenuItem_RegisterMenu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
@@ -99,7 +99,7 @@ GSErrCode __ACDLL_CALL RegisterInterface (void)
 #endif
 }
 
-GSErrCode __ACENV_CALL Initialize (void)
+GSErrCode Initialize (void)
 {
 #ifdef ServerMainVers_2700
 	return ACAPI_MenuItem_InstallMenuHandler (AddOnMenuID, MenuCommandHandler);
@@ -108,7 +108,7 @@ GSErrCode __ACENV_CALL Initialize (void)
 #endif
 }
 
-GSErrCode __ACENV_CALL FreeData (void)
+GSErrCode FreeData (void)
 {
 	return NoError;
 }
