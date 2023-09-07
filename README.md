@@ -19,8 +19,6 @@ This repository contains a CMake template for Archicad Add-On Development.
   - `AC_API_DEVKIT_DIR`: The Support folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
   - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
-  - `AC_MDID_DEV`: (optional) Your Developer ID. Omitting this will result in a 1 value.
-  - `AC_MDID_LOC`: (optional) Add-On Local ID. Omitting this will result in a 1 value.
 - To release your Add-On you need to provide valid MDIDs, you can generate them on the [Archicad API site](https://archicadapi.graphisoft.com/profile/add-ons).
 
 ### Visual Studio (Windows)
