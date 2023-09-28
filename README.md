@@ -10,7 +10,7 @@ https://github.com/GRAPHISOFT/archicad-addon-cmake-tools is included as a submod
 
 - Clone the repository using
   ```
-  git pull --recurse-submodules
+  git clone --recurse-submodules
   ```
   **OR**
   
@@ -20,7 +20,14 @@ https://github.com/GRAPHISOFT/archicad-addon-cmake-tools is included as a submod
   ```
 
 
-- To update the submodule, use the following command:
+- To get the latest changes use:
+  ```
+  git pull --recurse-submodules
+  ```
+  
+  **OR**
+
+  Run this, if you only want to update the subrepo:
   ```
   git submodule update --recursive --remote
   ```
