@@ -11,6 +11,20 @@ This repository contains a CMake template for Archicad Add-On Development.
 - [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
 - [Conan](https://conan.io) (version 1.x, optional).
 
+#### Cloning the repository
+
+https://github.com/GRAPHISOFT/archicad-addon-cmake-tools is included as a submodule.
+
+- Clone the repository using
+  ```
+  git clone --recurse-submodules
+  ```
+
+- To get the latest changes use:
+  ```
+  git pull --recurse-submodules
+  ```
+
 ## Build with downloaded Archicad API Development Kit
 
 - [Download the CMake Template from here](https://github.com/GRAPHISOFT/archicad-addon-cmake/archive/master.zip).
