@@ -4,7 +4,14 @@ This repository contains a CMake template for Archicad Add-On Development.
 
 [![Build](https://github.com/GRAPHISOFT/archicad-addon-cmake/actions/workflows/build.yml/badge.svg)](https://github.com/GRAPHISOFT/archicad-addon-cmake/actions/workflows/build.yml)
 
-## Cloning the repository
+## Prerequisites
+
+- [Archicad Development Kit](https://archicadapi.graphisoft.com/downloads/api-development-kit) (that matches your Archicad version).
+- [CMake](https://cmake.org) (3.16 minimum version is needed).
+- [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
+- [Conan](https://conan.io) (version 1.x, optional).
+
+#### Cloning the repository
 
 https://github.com/GRAPHISOFT/archicad-addon-cmake-tools is included as a submodule.
 
@@ -12,33 +19,11 @@ https://github.com/GRAPHISOFT/archicad-addon-cmake-tools is included as a submod
   ```
   git clone --recurse-submodules
   ```
-  **OR**
-  
-  Run this command after the **first time** you clone the repository:
-  ```
-  git submodule update --init --recursive
-  ```
-
 
 - To get the latest changes use:
   ```
   git pull --recurse-submodules
   ```
-  
-  **OR**
-
-  Run this, if you only want to update the subrepo:
-  ```
-  git submodule update --recursive --remote
-  ```
-  (Note: for older git versions, the <em> --remote </em> flag may not be neccesary)
-
-## Prerequisites
-
-- [Archicad Development Kit](https://archicadapi.graphisoft.com/downloads/api-development-kit) (that matches your Archicad version).
-- [CMake](https://cmake.org) (3.16 minimum version is needed).
-- [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
-- [Conan](https://conan.io) (version 1.x, optional).
 
 ## Build with downloaded Archicad API Development Kit
 
