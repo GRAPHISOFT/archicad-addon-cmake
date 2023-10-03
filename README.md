@@ -13,17 +13,17 @@ This repository contains a CMake template for Archicad Add-On Development.
 
 #### Cloning the repository
 
-https://github.com/GRAPHISOFT/archicad-addon-cmake-tools is included as a submodule.
+This repository uses [archicad-addon-cmake-tools](https://github.com/GRAPHISOFT/archicad-addon-cmake-tools) as a submodule, so in order to use this repository you need to be sure that all submodules are cloned properly.
 
-- Clone the repository using
-  ```
-  git clone --recurse-submodules
-  ```
+To clone the repository with submodules, use the following command.
+```
+git clone --recurse-submodules
+```
 
-- To get the latest changes use:
-  ```
-  git pull --recurse-submodules
-  ```
+To get the latest changes together with submodule changes, use the following command.
+```
+git pull --recurse-submodules
+```
 
 ## Build with downloaded Archicad API Development Kit
 
