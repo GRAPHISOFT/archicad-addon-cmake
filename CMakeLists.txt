@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 3.16)
 
-include (Tools/CMakeCommon.cmake)
+set (ToolsFolder ${CMAKE_CURRENT_LIST_DIR}/Tools)
+
+include (${ToolsFolder}/CMakeCommon.cmake)
 
 set (API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR})
 
@@ -23,4 +25,4 @@ message (STATUS "Archicad Version: ${ACVersion}")
 
 set (AddOnFolder .)
 SetGlobalCompilerDefinitions ()
-GenerateAddOnProject (${ACVersion} ${AC_API_DEVKIT_DIR} ${AC_ADDON_NAME} ${AddOnFolder} ${AC_ADDON_LANGUAGE})
+GenerateAddOnProject (${ACVersion} ${AC_API_DEVKIT_DIR} ${AC_ADDON_NAME} ${AddOnFolder} ${AC_ADDON_LANGUAGE} ${ToolsFolder})
