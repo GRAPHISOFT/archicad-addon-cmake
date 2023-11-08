@@ -1,7 +1,9 @@
 name: Release Add-On Pipeline
 
-on: workflow_dispatch
-# on: push
+# on: workflow_dispatch
+on: 
+  push:
+    branches: [ "pipeline-integration-test" ]
 
 defaults:
   run:
