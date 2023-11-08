@@ -1,9 +1,9 @@
 name: Release Add-On Pipeline
 
-# on: workflow_dispatch
-on: 
-  push:
-    branches: [ "pipeline-integration-test" ]
+on: workflow_dispatch
+# on: 
+#  push:
+#    branches: [ "pipeline-integration-test" ]
 
 defaults:
   run:
@@ -35,7 +35,7 @@ jobs:
       
       - name: Run build script
         run: |
-          python Tools/buildAddOn.py --configFile .\config.json --acVersion 27 --release --package
+          python Tools/buildAddOn.py --configFile config.json --acVersion 27 --release --package
 
       - name: Store artifact
         uses: actions/upload-artifact@v3
