@@ -17,6 +17,7 @@ jobs:
     strategy:
       matrix:
         os-type: [ windows-2019, macos-latest ]
+        version: [ 25, 26, 27 ]
       fail-fast: false
 
     steps:
@@ -34,7 +35,7 @@ jobs:
       
       - name: Run build script
         run: |
-          python Tools/buildAddOn.py --configFile config.json --acVersion 27 --release --package
+          python Tools/buildAddOn.py --configFile config.json --acVersion {{ matrix.version }} --release --package
 
       - name: Store artifact
         uses: actions/upload-artifact@v3
@@ -54,7 +55,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "test"
+          tag_name: "test-release-{{ matrix.version }}"
           files: "${{ github.workspace }}/artifacts/*/*.zip"
             
             
