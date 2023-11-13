@@ -40,7 +40,7 @@ jobs:
       - name: Store artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-${{ matrix.os-type }}-Release-localized
+          name: ${{ github.event.repository.name }}-${{ matrix.os-type }}-${{ matrix.version }}-Release-localized
           path: "${{ github.workspace }}/Build/Package/*.zip"
   
   release:
@@ -50,10 +50,18 @@ jobs:
       matrix:
         version: [ 25, 26, 27 ]
       fail-fast: false
+
     steps:
-      - name: Download artifacts
+      - name: Download artifact WIN
         uses: actions/download-artifact@v3
         with:
+          name: ${{ github.event.repository.name }}-windows-2019-${{ matrix.version }}-Release-localized
+          path: "${{ github.workspace }}/artifacts"
+
+      - name: Download artifact MAC
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-macos-latest-${{ matrix.version }}-Release-localized
           path: "${{ github.workspace }}/artifacts"
 
       - name: Create Release
