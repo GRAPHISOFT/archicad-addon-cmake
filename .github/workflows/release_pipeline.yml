@@ -67,7 +67,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "test-release-${{ matrix.version }}"
+          tag_name: "${{ matrix.version }}-Release-localized"
           files: "${{ github.workspace }}/artifacts/*.zip"
             
             
