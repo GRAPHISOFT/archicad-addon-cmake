@@ -8,6 +8,5 @@
     "languages": [
         "INT"
     ],
-    "winCMakeProjectGenerator": "Visual Studio 16 2019",
-    "winCMakePlatformToolset": "v142"
+    "winCMakeProjectGenerator": "Visual Studio 16 2019"
 }

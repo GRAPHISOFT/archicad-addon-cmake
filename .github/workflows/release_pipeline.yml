@@ -11,8 +11,6 @@ defaults:
 jobs:
   build:
     runs-on: ${{matrix.os-type}}
-    outputs:
-      releaseVersion: ${{ steps.setVersion.outputs.version }}
 
     strategy:
       matrix:
