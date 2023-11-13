@@ -46,6 +46,10 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ 25, 26, 27 ]
+      fail-fast: false
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v3
