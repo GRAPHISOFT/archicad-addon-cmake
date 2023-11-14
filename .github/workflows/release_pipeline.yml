@@ -59,7 +59,7 @@ jobs:
       - name: Download artifact MAC
         uses: actions/download-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-macos-latest-${{ matrix.version }}-Release
+          name: ${{ github.event.repository.name }}-macos-12-${{ matrix.version }}-Release
           path: "${{ github.workspace }}/artifacts"
 
       - name: Create Release
