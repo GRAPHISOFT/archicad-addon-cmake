@@ -2,7 +2,7 @@ name: Release Add-On Pipeline
 
 on: 
   push:
-    branches: [ "pipeline-integration-test" ]
+    branches: [ "master" ]
 
 defaults:
   run:
