@@ -9,7 +9,6 @@ This repository contains a CMake template for Archicad Add-On Development.
 - [Archicad Development Kit](https://archicadapi.graphisoft.com/downloads/api-development-kit) (that matches your Archicad version).
 - [CMake](https://cmake.org) (3.16 minimum version is needed).
 - [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
-- [Conan](https://conan.io) (version 1.x, optional).
 
 ### Clone this repository
 
@@ -67,40 +66,6 @@ cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
 - Install the "CMake Tools" extension for Visual Studio Code.
 - Set the "AC_API_DEVKIT_DIR" environment variable to the installed Development Kit Support folder.
 - Open the root folder in Visual Studio Code, configure and build the solution.
-
-## Build using the Conan Package Manager
-
-You can use the Conan package manager to get the Development Kit. This method works only for Archicad 25 and later versions.
-
-### Preparation
-
-[Install the Conan package manager](https://conan.io/downloads.html). Please not that you need to **install version 1.x**.
-
-```
-pip install conan==1.59.0
-```
-
-#### Windows
-
-Create the default profile, set the compiler version and install dependencies by using the following commands:
-
-```
-conan profile new default --detect
-conan profile update settings.compiler.version=16 default
-conan install . -pr:b=default --install-folder=Build/
-conan\conanbuild.bat
-```
-
-#### MacOS
-
-Create the default profile, set the compiler version and install dependencies by using the following commands:
-
-```
-conan profile new default --detect
-conan profile update settings.compiler.version=13 default
-conan install . -pr:b=default --install-folder=Build/
-source conan/conanbuild.sh
-```
 
 ### Visual Studio (Windows)
 
