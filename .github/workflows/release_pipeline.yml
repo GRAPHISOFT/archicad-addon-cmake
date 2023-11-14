@@ -1,0 +1,72 @@
+name: Release Add-On Pipeline
+
+on: 
+  push:
+    branches: [ "master" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{matrix.os-type}}
+
+    strategy:
+      matrix:
+        os-type: [ windows-2019, macos-12 ]
+        version: [ 25, 26, 27 ]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Checkout the submodule
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      
+      - name: Run build script
+        run: |
+          python Tools/buildAddOn.py --configFile config.json --acVersion ${{ matrix.version }} --release --package
+
+      - name: Store artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-${{ matrix.os-type }}-${{ matrix.version }}-Release
+          path: "${{ github.workspace }}/Build/Package/*.zip"
+  
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [ 25, 26, 27 ]
+      fail-fast: false
+
+    steps:
+      - name: Download artifact WIN
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-windows-2019-${{ matrix.version }}-Release
+          path: "${{ github.workspace }}/artifacts"
+
+      - name: Download artifact MAC
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-macos-12-${{ matrix.version }}-Release
+          path: "${{ github.workspace }}/artifacts"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "${{ matrix.version }}-Release"
+          files: "${{ github.workspace }}/artifacts/*.zip"
+            
+            
+      

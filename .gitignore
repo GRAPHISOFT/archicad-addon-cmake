@@ -1,7 +1,6 @@
 Build/*
 .DS_Store
 .vscode
-conan/*
 out/*
-.vsconan
 CMakeUserPresets.json
+APIDevKit-*/

@@ -1,0 +1,12 @@
+{
+    "addOnName": "ExampleAddOn",
+    "devKitLinks": {
+        "27": "https://github.com/GRAPHISOFT/archicad-api-devkit/releases/download/27.3001",
+        "26": "https://github.com/GRAPHISOFT/archicad-api-devkit/releases/download/26.3000",
+        "25": "https://github.com/GRAPHISOFT/archicad-api-devkit/releases/download/25.3002"
+    },
+    "languages": [
+        "INT"
+    ],
+    "winCMakeProjectGenerator": "Visual Studio 16 2019"
+}
