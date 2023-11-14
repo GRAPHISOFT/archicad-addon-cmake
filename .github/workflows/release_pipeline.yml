@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        os-type: [ windows-2019, macos-latest ]
+        os-type: [ windows-2019, macos-12 ]
         version: [ 25, 26, 27 ]
       fail-fast: false
 
@@ -38,7 +38,7 @@ jobs:
       - name: Store artifact
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-${{ matrix.os-type }}-${{ matrix.version }}-Release-localized
+          name: ${{ github.event.repository.name }}-${{ matrix.os-type }}-${{ matrix.version }}-Release
           path: "${{ github.workspace }}/Build/Package/*.zip"
   
   release:
@@ -53,19 +53,19 @@ jobs:
       - name: Download artifact WIN
         uses: actions/download-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-windows-2019-${{ matrix.version }}-Release-localized
+          name: ${{ github.event.repository.name }}-windows-2019-${{ matrix.version }}-Release
           path: "${{ github.workspace }}/artifacts"
 
       - name: Download artifact MAC
         uses: actions/download-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-macos-latest-${{ matrix.version }}-Release-localized
+          name: ${{ github.event.repository.name }}-macos-latest-${{ matrix.version }}-Release
           path: "${{ github.workspace }}/artifacts"
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "${{ matrix.version }}-Release-localized"
+          tag_name: "${{ matrix.version }}-Release"
           files: "${{ github.workspace }}/artifacts/*.zip"
             
             
