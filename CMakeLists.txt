@@ -4,11 +4,6 @@ include (Tools/CMakeCommon.cmake)
 
 set (API_DEVKIT_DIR $ENV{AC_API_DEVKIT_DIR})
 
-if (GITHUB_BUILD)
-    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
-    set (API_DEVKIT_DIR ${CONAN_ARCHICAD-APIDEVKIT_ROOT}/bin)
-endif ()
-
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
