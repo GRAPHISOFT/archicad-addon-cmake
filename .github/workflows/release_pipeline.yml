@@ -1,8 +1,9 @@
 name: Release Add-On Pipeline
 
-on: 
-  push:
-    branches: [ "master" ]
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [ "master" ]
 
 defaults:
   run:
@@ -10,12 +11,11 @@ defaults:
 
 jobs:
   build:
-    runs-on: ${{matrix.os-type}}
+    runs-on: ${{ matrix.os-type }}
 
     strategy:
       matrix:
         os-type: [ windows-2019, macos-12 ]
-        version: [ 25, 26, 27 ]
       fail-fast: false
 
     steps:
@@ -33,40 +33,24 @@ jobs:
       
       - name: Run build script
         run: |
-          python Tools/buildAddOn.py --configFile config.json --acVersion ${{ matrix.version }} --release --package
+          python Tools/buildAddOn.py --configFile config.json --release --package
 
-      - name: Store artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ github.event.repository.name }}-${{ matrix.os-type }}-${{ matrix.version }}-Release
-          path: "${{ github.workspace }}/Build/Package/*.zip"
-  
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ 25, 26, 27 ]
-      fail-fast: false
-
-    steps:
-      - name: Download artifact WIN
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ github.event.repository.name }}-windows-2019-${{ matrix.version }}-Release
-          path: "${{ github.workspace }}/artifacts"
-
-      - name: Download artifact MAC
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ github.event.repository.name }}-macos-12-${{ matrix.version }}-Release
-          path: "${{ github.workspace }}/artifacts"
+      - name: Set release tag
+        id: setTag
+        run: |
+          if [[ $(git tag | grep '^v') ]]
+          then
+            newTag=$(git tag | grep '^v'| tail -1 | awk -F'.' '/^v/{split($1,a,"v"); print "v" a[2]+1 ".0"}')
+          else
+            newTag=v1.0
+          fi
+          echo "newTag=$newTag" >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "${{ matrix.version }}-Release"
-          files: "${{ github.workspace }}/artifacts/*.zip"
+          tag_name: ${{ steps.setTag.outputs.newTag }}
+          files: "${{ github.workspace }}/Build/Package/*.zip"
             
             
       
