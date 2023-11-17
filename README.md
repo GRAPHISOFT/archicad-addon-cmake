@@ -2,8 +2,6 @@
 
 This repository contains a CMake template for Archicad Add-On Development.
 
-[![Build](https://github.com/GRAPHISOFT/archicad-addon-cmake/actions/workflows/build.yml/badge.svg)](https://github.com/GRAPHISOFT/archicad-addon-cmake/actions/workflows/build.yml)
-
 ## Prerequisites
 
 - [Archicad Development Kit](https://archicadapi.graphisoft.com/downloads/api-development-kit) (that matches your Archicad version).
@@ -90,7 +88,7 @@ cmake -B Build -G "Xcode" .
 
 ## Archicad Compatibility
 
-This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit and starting from Archicad 25 using Conan.
+This template is tested with all Archicad versions starting from Archicad 23 using the downloaded Archicad API Development Kit.
 
 ## Use in Archicad
 
