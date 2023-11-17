@@ -33,7 +33,7 @@ jobs:
       
       - name: Run build script
         run: |
-          python Tools/buildAddOn.py --configFile config.json --release --package
+          python Tools/BuildAddOn.py --configFile config.json --release --package
 
       - name: Set release tag
         id: setTag
