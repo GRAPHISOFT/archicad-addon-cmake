@@ -14,7 +14,7 @@ This repository uses [archicad-addon-cmake-tools](https://github.com/GRAPHISOFT/
 
 To clone the repository with submodules, use the following command.
 ```
-git clone --recurse-submodules
+git clone https://github.com/GRAPHISOFT/archicad-addon-cmake.git --recurse-submodules
 ```
 
 To get the latest changes together with submodule changes, use the following command.
