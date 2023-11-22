@@ -1,0 +1,35 @@
+name: Build
+
+on:
+  push:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os-type }}
+
+    strategy:
+      matrix:
+        os-type: [ windows-2019, macos-12 ]
+        ac-version: [ 25, 26, 27 ]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Checkout the submodule
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      
+      - name: Run build script
+        run: |
+          python Tools/BuildAddOn.py --configFile config.json --acVersion ${{ matrix.ac-version }}
