@@ -8,7 +8,7 @@ This repository contains a CMake template for Archicad Add-On Development.
   - Windows: [Visual Studio](https://visualstudio.microsoft.com/downloads/)
   - MacOS: [Xcode](https://developer.apple.com/xcode/resources/)
 - [CMake](https://cmake.org) (3.16 minimum version is needed).
-- [Python](https://www.python.org) for resource compilation (version 2.7+ or 3.8+).
+- [Python](https://www.python.org) for resource compilation and build script usage (3.8+).
 
 ## Quick setup
 
@@ -23,6 +23,14 @@ git clone https://github.com/GRAPHISOFT/archicad-addon-cmake.git --recurse-submo
 ```
 python Tools/BuildAddOn.py --configFile config.json --acVersion 26 27
 ```
+
+The script reads the config.json file for additional build parameters:
+- addOnName: name of the Add-On, must be equal to the one specified in the CMakeLists.txt file.
+- devKitLinks: stores Archicad version numbers as keys, and download URLs to the public API Development Kit releases as values.
+- languages: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
+- addOnSpecificCMakeParameterEnvVars (optional): a list containing environment variable names which can be set by the building environment (local computer or pipeline), and the build script will forward it to CMake as an add-on specific parameter.
+
+See the example [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json).
 
 ## Detailed instructions
 
@@ -45,7 +53,7 @@ git pull --recurse-submodules
 ### Build with downloaded Archicad API Development Kit
 
 - Clone this repository as it's described in the previous section.
-- [Download the Archicad Add-On Development Kit from here](https://archicadapi.graphisoft.com/downloads/api-development-kit).
+- [Download the Archicad Add-On Development Kit from here](https://archicadapi.graphisoft.com/downloads/api-development-kit) or from [here](https://github.com/GRAPHISOFT/archicad-api-devkit/releases).
 - Generate the IDE project with CMake, and set the following variables:
   - `AC_API_DEVKIT_DIR`: The Support folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
   - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
