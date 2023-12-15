@@ -31,4 +31,4 @@ jobs:
       
       - name: Run build script
         run: |
-          python Tools/BuildAddOn.py --configFile config.json --acVersion ${{ matrix.ac-version }}
+          python Tools/BuildAddOn.py --languageConfig config.json --acVersion ${{ matrix.ac-version }}
