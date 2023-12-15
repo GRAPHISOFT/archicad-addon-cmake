@@ -24,13 +24,7 @@ git clone https://github.com/GRAPHISOFT/archicad-addon-cmake.git --recurse-submo
 python Tools/BuildAddOn.py --configFile config.json --acVersion 26 27
 ```
 
-The script reads the config.json file for additional build parameters:
-- addOnName: name of the Add-On, must be equal to the one specified in the CMakeLists.txt file.
-- devKitLinks: stores Archicad version numbers as keys, and download URLs to the public API Development Kit releases as values.
-- languages: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
-- addOnSpecificCMakeParameterEnvVars (optional): a list containing environment variable names which can be set by the building environment (local computer or pipeline), and the build script will forward it to CMake as an add-on specific parameter.
-
-See the example [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json).
+The script reads the [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json) file which consists of languages for which localization can be done / for which the .grc files are present in their respective directories.
 
 ## Detailed instructions
 
