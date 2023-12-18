@@ -21,10 +21,10 @@ git clone https://github.com/GRAPHISOFT/archicad-addon-cmake.git --recurse-submo
 ```
 3. Run the build script from the root of the repository:
 ```
-python Tools/BuildAddOn.py --languageConfig languages.json --acVersion 26 27
+python Tools/BuildAddOn.py --configFile config.json --acVersion 26 27
 ```
 
-The script reads the [languages.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/languages.json) file which consists of languages for which localization can be done / for which the .grc files are present in their respective directories.
+The script reads the [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json) file which consists of languages for which localization can be done / for which the .grc files are present in their respective directories.
 
 ## Detailed instructions
 
