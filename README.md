@@ -25,10 +25,11 @@ python Tools/BuildAddOn.py --configFile config.json --acVersion 26 27
 ```
 
 The script reads the config.json file for additional build parameters:
-- addOnName: name of the Add-On, must be equal to the one specified in the CMakeLists.txt file.
-- devKitLinks: stores Archicad version numbers as keys, and download URLs to the public API Development Kit releases as values.
+
+- addOnName: name of the Add-On.
+- defaultLanguage: a single language for which the Add-On is built when localization is not enabled.
 - languages: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
-- addOnSpecificCMakeParameterEnvVars (optional): a list containing environment variable names which can be set by the building environment (local computer or pipeline), and the build script will forward it to CMake as an add-on specific parameter.
+- additionalCMakeParams (optional): a list of additional Add-On specific CMake parameters as key=value pairs. The build script will forward it to CMake.
 
 See the example [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json).
 
