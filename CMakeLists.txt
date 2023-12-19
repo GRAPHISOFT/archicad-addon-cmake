@@ -8,9 +8,6 @@ set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (CMAKE_CONFIGURATION_TYPES Debug;Release;RelWithDebInfo)
 set (AC_API_DEVKIT_DIR ${API_DEVKIT_DIR} CACHE PATH "API DevKit directory.")
-if (NOT DEFINED AC_ADDON_NAME)
-    set (AC_ADDON_NAME "ExampleAddOn")
-endif ()
 set (AC_ADDON_LANGUAGE "INT" CACHE STRING "Add-On language code.")
 
 DetectACVersion (${AC_API_DEVKIT_DIR} ACVersion)

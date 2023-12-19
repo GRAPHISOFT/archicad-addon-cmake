@@ -50,7 +50,7 @@ git pull --recurse-submodules
 - [Download the Archicad Add-On Development Kit from here](https://archicadapi.graphisoft.com/downloads/api-development-kit) or from [here](https://github.com/GRAPHISOFT/archicad-api-devkit/releases).
 - Generate the IDE project with CMake, and set the following variables:
   - `AC_API_DEVKIT_DIR`: The Support folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
-  - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
+  - `AC_ADDON_NAME`: The name of the project file and the result binary Add-On file.
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
 - To release your Add-On you need to provide valid MDIDs, you can generate them on the [Archicad API site](https://archicadapi.graphisoft.com/profile/add-ons).
 
@@ -70,7 +70,7 @@ Please note that you can always use the latest Visual Studio, but make sure you 
 
 Example for using Visual Studio 2022 with platform toolset 142:
 ```
-cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
+cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_ADDON_NAME=<AddOnName> .
 ```
 
 #### XCode (MacOS)
@@ -78,7 +78,7 @@ cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<De
 Run this command from the command line to generate the XCode project:
 
 ```
-cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> .
+cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_ADDON_NAME=<AddOnName> .
 ```
 
 #### Visual Studio Code (Platform Independent)
