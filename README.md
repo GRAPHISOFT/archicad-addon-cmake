@@ -56,6 +56,7 @@ git pull --recurse-submodules
 - Clone this repository as it's described in the previous section.
 - [Download the Archicad Add-On Development Kit from here](https://archicadapi.graphisoft.com/downloads/api-development-kit) or from [here](https://github.com/GRAPHISOFT/archicad-api-devkit/releases).
 - Generate the IDE project with CMake, and set the following variables:
+  - `AC_VERSION`: The version number of Archicad that the Add-On is built for.
   - `AC_API_DEVKIT_DIR`: The Support folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
   - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
