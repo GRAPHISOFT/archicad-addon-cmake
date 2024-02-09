@@ -64,7 +64,7 @@ git pull --recurse-submodules
 
 #### Visual Studio (Windows)
 
-Run these command from the command line to generate the Visual Studio project. Replace `<DevKitSupportDir>` with the path of the Support folder in your downloaded Development Kit. See the list below for the matching Visual Studio versions for different Archicad versions.
+See the list below for the matching Visual Studio and platform toolset versions for different Archicad versions.
 
 | Archicad | Visual Studio | Platform toolset |
 |---|---|---|
@@ -82,6 +82,16 @@ cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<De
 ```
 
 #### XCode (MacOS)
+
+See the list below for the matching deployment targets for different Archicad versions.
+
+| Archicad | Deployment target |
+|---|---|
+| Archicad 27 | 10.15 |
+| Archicad 26 | 10.15 |
+| Archicad 25 | 10.15 |
+| Archicad 24 | 10.13 |
+| Archicad 23 | 10.12 |
 
 Run this command from the command line to generate the XCode project:
 
