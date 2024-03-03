@@ -24,7 +24,9 @@ git clone https://github.com/GRAPHISOFT/archicad-addon-cmake.git --recurse-submo
 python Tools/BuildAddOn.py --configFile config.json --acVersion 26 27
 ```
 
-The script reads the config.json file for additional build parameters:
+## Config file
+
+The build script reads the config.json file for additional build parameters:
 
 - addOnName: name of the Add-On.
 - defaultLanguage: a single language for which the Add-On is built when localization is not enabled.
