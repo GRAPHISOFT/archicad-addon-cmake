@@ -70,6 +70,7 @@ See the list below for the matching Visual Studio and platform toolset versions 
 
 | Archicad | Visual Studio | Platform toolset |
 |---|---|---|
+| Archicad 28 | Visual Studio 2019 | v142 |
 | Archicad 27 | Visual Studio 2019 | v142 |
 | Archicad 26 | Visual Studio 2019 | v142 |
 | Archicad 25 | Visual Studio 2019 | v142 |
@@ -89,6 +90,7 @@ See the list below for the matching deployment targets for different Archicad ve
 
 | Archicad | Deployment target |
 |---|---|
+| Archicad 28 | 11.0 |
 | Archicad 27 | 10.15 |
 | Archicad 26 | 10.15 |
 | Archicad 25 | 10.15 |
