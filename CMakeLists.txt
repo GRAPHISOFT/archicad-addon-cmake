@@ -22,4 +22,4 @@ project (${AC_ADDON_NAME})
 
 set (AddOnSourcesFolder Src)
 set (AddOnResourcesFolder .)
-GenerateAddOnProject (${AC_VERSION} ${AC_API_DEVKIT_DIR} ${AC_ADDON_NAME} ${AddOnSourcesFolder} ${AddOnResourcesFolder} ${AC_ADDON_LANGUAGE})
+GenerateAddOnProject (CMakeTarget ${AC_VERSION} ${AC_API_DEVKIT_DIR} ${AC_ADDON_NAME} ${AddOnSourcesFolder} ${AddOnResourcesFolder} ${AC_ADDON_LANGUAGE})
