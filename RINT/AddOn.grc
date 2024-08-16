@@ -12,11 +12,50 @@
 'GDLG' ID_FAVORITE_CONVERTER_DLG Modal | grow 0   0  820  488  "Archicad Favorites Converter Tool" {
 /* [  1] */ Button				  560   451  150   23	LargePlain  "Convert"
 /* [  2] */ Button				  716   451   90   23	LargePlain  "Cancel"
-/* [  3] */ Separator			  316     0    1  488
+/* [  3] */ Separator			  315     0    2  488
+/* [  4] */ CenterText			   20    14  276   26	LargeBold     "Welcome!"
+/* [  5] */ LeftText			   20    40  276   56	LargePlain    "This tool helps you update your favorites to be compatible with the new Library Packages system in Archicad."
+/* [  6] */ LeftText			   20    96  276   26	LargeBold     "How to use it:"
+/* [  7] */ CenterText			   20   122   16   24	LargePlain    "1."
+/* [  8] */ LeftText			   36   122  260   36	LargePlain    "Export your favorites as XML files from within Archicad (Favorites palette)."
+/* [  9] */ CenterText			   20   158   16   24	LargePlain    "2."
+/* [ 10] */ LeftText			   36   158  260   36	LargePlain    "Browse to the folder where the exported favorites are located."
+/* [ 11] */ CenterText			   20   194   16   24	LargePlain    "3."
+/* [ 12] */ LeftText			   36   194  260   36	LargePlain    "Select a different folder where the converted files will be saved."
+/* [ 13] */ CenterText			   20   230   16   24	LargePlain    "4."
+/* [ 14] */ LeftText			   36   230  260   24	LargePlain    "Click the \"Convert\" button."
+/* [ 15] */ CenterText			   20   254   16   24	LargePlain    "5."
+/* [ 16] */ LeftText			   36   254  260   48	LargePlain    "Check the conversion logs for detailed information on the conversion, as well as the newly added or deleted parameters."
+/* [ 17] */ CenterText			   20   302   16   24	LargePlain    "6."
+/* [ 18] */ LeftText			   36   302  260   48	LargePlain    "Import your converted favorites into Archicad (Favorites palette)."
+/* [ 19] */ LeftText			   20   350  276   38	LargePlain    "For more detailed instructions and help interpreting the conversion logs, please read our detailed guide:"
+/* [ 20] */ LeftText			   20   388  276   26	LargePlain    "Favorites Converter Tool Guide"
 }
 
 'DLGH' ID_FAVORITE_CONVERTER_DLG DLG_FavoriteConverter {
 1	""		Button_0
 2	""		Button_1
 3	""		Separator_0
+4	""		CenterText_0
+5	""		LeftText_0
+6	""		LeftText_1
+7	""		CenterText_1
+8	""		LeftText_2
+9	""		CenterText_2
+10	""		LeftText_3
+11	""		CenterText_3
+12	""		LeftText_4
+13	""		CenterText_4
+14	""		LeftText_5
+15	""		CenterText_5
+16	""		LeftText_6
+17	""		CenterText_6
+18	""		LeftText_7
+19	""		LeftText_8
+20	""		LeftText_9
+}
+
+
+'STR#' ID_FAVORITE_CONVERTER_TOOL_GUIDE_LINK_STRS "Favorite Converter Tool Guide Link Strings" {
+/* [  1] */		"https://graphisoft.com/"
 }
