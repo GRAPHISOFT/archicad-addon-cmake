@@ -20,13 +20,13 @@ Dialog::~Dialog ()
 }
 
 
-void Dialog::PanelResized (const DG::PanelResizeEvent& /* ev */)
+void Dialog::PanelResized (const DG::PanelResizeEvent& ev)
 {
-    // BeginMoveResizeItems ();
-    // convertButton.Move (ev.GetHorizontalChange (), ev.GetVerticalChange ());
-    // cancelButton.Move (ev.GetHorizontalChange (), ev.GetVerticalChange ());
-    // separator.MoveAndResize (0, ev.GetVerticalChange (), ev.GetHorizontalChange (), 0);
-    // EndMoveResizeItems ();
+    BeginMoveResizeItems ();
+    convertButton.Move (ev.GetHorizontalChange (), ev.GetVerticalChange ());
+    cancelButton.Move (ev.GetHorizontalChange (), ev.GetVerticalChange ());
+    separator.Resize(0, ev.GetVerticalChange ());
+    EndMoveResizeItems ();
 }
 
 
