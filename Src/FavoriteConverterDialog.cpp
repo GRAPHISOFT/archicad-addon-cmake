@@ -1,15 +1,20 @@
 #include "FavoriteConverterDialog.hpp"
 
+#include "DefaultProgramRunner.hpp"
+
 namespace FC {
 
 Dialog::Dialog () :
     DG::ModalDialog (ACAPI_GetOwnResModule (), DialogResourceId, ACAPI_GetOwnResModule ()),
     convertButton (GetReference (), ConvertButtonId),
     cancelButton (GetReference (), CancelButtonId),
-    separator (GetReference (), SeparatorId)
+    separator (GetReference (), SeparatorId),
+    toolGuideLink (GetReference (), FavoritesConverterToolGuideLinkId)
 {
     AttachToAllItems (*this);
     Attach (*this);
+
+	toolGuideLink.SetLink (RSGetIndString (ID_FAVORITE_CONVERTER_TOOL_GUIDE_LINK_STRS, ToolGuideLinkId, ACAPI_GetOwnResModule ()));
 }
 
 
@@ -37,6 +42,14 @@ void Dialog::ButtonClicked (const DG::ButtonClickEvent& ev)
     } else if (ev.GetSource () == &cancelButton) {
         PostCloseRequest (DG::ModalDialog::Cancel);
     }
+}
+
+
+void Dialog::StaticTextClicked (const DG::StaticTextClickEvent& ev)
+{
+    if (ev.GetSource () == &toolGuideLink) {
+		OSUtils::OpenWithDefaultBrowser (toolGuideLink.GetLinkTarget ());
+	}
 }
 
 } // namespace FC
