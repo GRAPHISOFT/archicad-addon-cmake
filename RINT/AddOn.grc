@@ -1,21 +1,21 @@
 ﻿#include "ResourceIds.hpp"
 
 'STR#' ID_ADDON_INFO "Add-on Name and Description" {
-/* [  1] */		"Example AddOn"
-/* [  2] */		"Example AddOn Description..."
+/* [  1] */		"Favorite Converter"
+/* [  2] */		"Favorite Converter tool..."
 }
 
-'STR#' ID_ADDON_MENU "Strings for the Menu" {
-/* [  1] */		"Example AddOn Command... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
+'STR#' ID_FAVORITE_CONVERTER_MENU "Strings for the Menu" {
+/* [  1] */		"Favorite Converter... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
 }
 
-'GDLG' ID_ADDON_DLG Modal | grow   40   40  345  128  "Example Dialog" {
-/* [  1] */ Button				  245   95   90   23	LargePlain  "OK"
-/* [  2] */ Button				  145   95   90   23	LargePlain  "Cancel"
-/* [  3] */ Separator			   10   83  325    2
+'GDLG' ID_FAVORITE_CONVERTER_DLG Modal 0   0  820  488  "Archicad Favorites Converter Tool" {
+/* [  1] */ Button				  560   451  150   23	LargePlain  "Convert"
+/* [  2] */ Button				  716   451   90   23	LargePlain  "Cancel"
+/* [  3] */ Separator			  316     0    1  488
 }
 
-'DLGH' ID_ADDON_DLG DLG_Example {
+'DLGH' ID_FAVORITE_CONVERTER_DLG DLG_FavoriteConverter {
 1	""		Button_0
 2	""		Button_1
 3	""		Separator_0
