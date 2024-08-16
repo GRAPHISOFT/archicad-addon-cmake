@@ -13,6 +13,7 @@ jobs:
 
     strategy:
       matrix:
+        name: [ "favorite-converter" ]
         os-type: [ windows-2022, macos-14 ]
         ac-version: [ 28 ]
 
@@ -35,4 +36,10 @@ jobs:
       
       - name: Run build script
         run: |
-          python Tools/BuildAddOn.py --configFile config.json --acVersion ${{ matrix.ac-version }}
+          python Tools/BuildAddOn.py --configFile config.json --acVersion ${{ matrix.ac-version }} --additionalCMakeParams 
+
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ matrix.name }}_${{ matrix.os-type }}_${{ github.run_number }}"
+          path: Build/favorite-converter/28/INT/RelWithDebInfo
