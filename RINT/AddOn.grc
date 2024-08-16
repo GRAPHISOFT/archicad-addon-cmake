@@ -9,7 +9,7 @@
 /* [  1] */		"Favorite Converter... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
 }
 
-'GDLG' ID_FAVORITE_CONVERTER_DLG Modal 0   0  820  488  "Archicad Favorites Converter Tool" {
+'GDLG' ID_FAVORITE_CONVERTER_DLG Modal | grow 0   0  820  488  "Archicad Favorites Converter Tool" {
 /* [  1] */ Button				  560   451  150   23	LargePlain  "Convert"
 /* [  2] */ Button				  716   451   90   23	LargePlain  "Cancel"
 /* [  3] */ Separator			  316     0    1  488
