@@ -26,7 +26,7 @@ python Tools/BuildAddOn.py --configFile config.json
 
 ## Config file
 
-The build script reads the config.json file for additional build parameters:
+The build script reads the config.json file for required build parameters:
 
 - addOnName: name of the Add-On.
 - defaultLanguage: a single language for which the Add-On is built when localization is not enabled.
