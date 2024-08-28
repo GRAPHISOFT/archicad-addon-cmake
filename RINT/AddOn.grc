@@ -10,11 +10,12 @@
 }
 
 'GDLG' ID_FAVORITE_CONVERTER_DLG Modal | grow 0   0  820  488  "Archicad Favorites Converter Tool" {
-/* [  1] */ Button				  560   451  150   23	LargePlain  "Convert"
-/* [  2] */ Button				  716   451   90   23	LargePlain  "Cancel"
+/* [  1] */ Button				  560   451  150   23	LargePlain    "Convert"
+/* [  2] */ Button				  716   451   90   23	LargePlain    "Cancel"
 /* [  3] */ Separator			  315     0    2  488
 /* [  4] */ CenterText			   20    14  276   26	LargeBold     "Welcome!"
 /* [  5] */ LeftText			   20    40  276   56	LargePlain    "This tool helps you update your favorites to be compatible with the new Library Packages system in Archicad."
+
 /* [  6] */ LeftText			   20    96  276   26	LargeBold     "How to use it:"
 /* [  7] */ CenterText			   20   122   16   24	LargePlain    "1."
 /* [  8] */ LeftText			   36   122  260   36	LargePlain    "Export your favorites as XML files from within Archicad (Favorites palette)."
@@ -28,8 +29,22 @@
 /* [ 16] */ LeftText			   36   254  260   48	LargePlain    "Check the conversion logs for detailed information on the conversion, as well as the newly added or deleted parameters."
 /* [ 17] */ CenterText			   20   302   16   24	LargePlain    "6."
 /* [ 18] */ LeftText			   36   302  260   48	LargePlain    "Import your converted favorites into Archicad (Favorites palette)."
+
 /* [ 19] */ LeftText			   20   350  276   38	LargePlain    "For more detailed instructions and help interpreting the conversion logs, please read our detailed guide:"
 /* [ 20] */ LeftText			   20   388  276   26	LargePlain    "Favorites Converter Tool Guide"
+
+/* [ 21] */ LeftText			  330    37  276   18	LargePlain    "Favorite XML files to convert:"
+/* [ 22] */ TextEdit			  330    55  380   23	LargePlain    readOnly      1024
+/* [ 23] */ Button				  716    55   90   23	LargePlain    "Browse"
+
+/* [ 24] */ LeftText			  330   101  276   18	LargePlain    "Destination folder for converted favorite XML files and logs:"
+/* [ 25] */ TextEdit			  330   119  380   23	LargePlain    readOnly      1024
+/* [ 26] */ Button				  716   119   90   23	LargePlain    "Browse"
+
+/* [ 27] */ LeftText			  330   318  462   15	LargeBold     "Conversion finished!"
+/* [ 28] */ LeftText			  330   333  462   37	LargePlain    "You can check for more details in the conversion logs. Log files are located in the destination folder."
+/* [ 29] */ LeftText			  330   370  462   15	LargePlain    "conversion_log.txt"
+/* [ 30] */ LeftText			  330   385  462   15	LargePlain    "parameter_changes.csv"
 }
 
 'DLGH' ID_FAVORITE_CONVERTER_DLG DLG_FavoriteConverter {
@@ -53,9 +68,24 @@
 18	""		LeftText_7
 19	""		LeftText_8
 20	""		LeftText_9
+21	""		LeftText_10
+22	""		TextEdit_0
+23	""		Button_2
+24	""		LeftText_11
+25	""		TextEdit_1
+26	""		Button_3
+27	""		LeftText_12
+28	""		LeftText_13
+29	""		LeftText_14
+30	""		LeftText_15
 }
 
 
 'STR#' ID_FAVORITE_CONVERTER_TOOL_GUIDE_LINK_STRS "Favorite Converter Tool Guide Link Strings" {
 /* [  1] */		"https://graphisoft.com/"
+}
+
+
+'STR#' ID_FAVORITE_CONVERTER_CONVERTER_STRS "FC Converter Strings" {
+/* [  1] */		"Converted_Favorites"
 }

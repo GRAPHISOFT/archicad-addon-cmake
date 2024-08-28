@@ -1,4 +1,4 @@
-#include "FavoriteConverterDialog.hpp"
+#include "FCDialog.hpp"
 
 
 static const GSResID AddOnInfoID			= ID_ADDON_INFO;
