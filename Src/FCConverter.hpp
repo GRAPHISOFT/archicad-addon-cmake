@@ -8,19 +8,20 @@ namespace FC {
 class Converter {
 public:
 	Converter (const GS::UniString& sourceFolderPath,
-               const GS::UniString& destinationFolderPath);
+			   const GS::UniString& destinationFolderPath);
 
 	virtual ~Converter ();
 
-    void StartConversion ();
+	void StartConversion ();
 
 private:
-    IO::Folder GetUniqueDestinationFolder (const GS::UniString& parentFolderPath);
+	IO::Folder GetUniqueDestinationFolder (const GS::UniString& parentFolderPath);
 
-    void CopyToDestinationFolder ();
+	void CopyToDestinationFolder ();
 
-    IO::Folder sourceFolder;
-    IO::Folder destinationFolder;
+	IO::Folder sourceFolder;
+	IO::Folder destinationFolder;
+	IO::Location libpartPairsCsv;
 };
 
 } // namespace FC
