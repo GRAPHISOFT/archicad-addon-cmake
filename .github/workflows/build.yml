@@ -17,15 +17,13 @@ jobs:
         ac-version: [ 25, 26, 27 ]
 
     steps:
-      - uses: actions/checkout@v3
-
       - name: Checkout the submodule
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
 
