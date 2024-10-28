@@ -18,7 +18,7 @@ endif ()
 message (STATUS "Archicad Version: ${AC_VERSION}")
 SetGlobalCompilerDefinitions (${AC_VERSION})
 
-project (${AC_ADDON_NAME})
+project (${AC_ADDON_NAME}-${AC_VERSION})
 
 set (AddOnSourcesFolder Src)
 set (AddOnResourcesFolder .)
