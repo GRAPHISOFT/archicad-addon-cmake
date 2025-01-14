@@ -28,8 +28,13 @@ jobs:
           python-version: 3.8
 
       - name: Set version number
+        shell: bash
         run: |
-          sed -e s/changeme/1/ config.json > config.json.new
+          if jq -e '.version != "changeme"' config.json; then
+            echo 'The ".version" field of "config.json" must be the invalid placeholder "changeme"' >&2
+            exit 1
+          fi
+          jq '.version = "1"' config.json > config.json.new
           rm config.json
           mv config.json.new config.json
 
