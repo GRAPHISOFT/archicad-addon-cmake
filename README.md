@@ -142,4 +142,4 @@ To use the Add-On in Archicad, you have to add your compiled .apx or .bundle fil
 
 You can start Archicad in demo mode by the following command line commands:
 - Windows: `ARCHICAD.exe -DEMO`
-- MacOS: `open ARCHICAD\ 26.app --args -demo`
+- MacOS: `open ARCHICAD\ 28.app --args -demo`
