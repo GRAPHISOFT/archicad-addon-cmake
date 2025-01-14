@@ -3,5 +3,10 @@
     "defaultLanguage": "INT",
     "languages": [
         "INT"
-    ]
+    ],
+    "version": "changeme",
+    "copyright": {
+        "name": "Graphisoft SE",
+        "year": "1984-%Y"
+    }
 }

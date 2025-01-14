@@ -7,7 +7,7 @@ This repository contains a CMake template for Archicad Add-On Development.
 - Development environment:
   - Windows: [Visual Studio](https://visualstudio.microsoft.com/downloads/)
   - MacOS: [Xcode](https://developer.apple.com/xcode/resources/)
-- [CMake](https://cmake.org) (3.16 minimum version is needed).
+- [CMake](https://cmake.org) (3.19 minimum version is needed).
 - [Python](https://www.python.org) for resource compilation and build script usage (3.8+).
 
 ## Quick setup
@@ -28,10 +28,12 @@ python Tools/BuildAddOn.py --configFile config.json
 
 The build script reads the config.json file for required build parameters:
 
-- addOnName: name of the Add-On.
-- defaultLanguage: a single language for which the Add-On is built when localization is not enabled.
-- languages: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
-- additionalCMakeParams (optional): a list of additional Add-On specific CMake parameters as JSON key-value pairs. The build script will forward it to CMake.
+- `addOnName`: name of the Add-On.
+- `defaultLanguage`: a single language for which the Add-On is built when localization is not enabled. Must be one of the languages specified in `languages`.
+- `languages`: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
+- `version`: version of the Add-On. Must have 1, 2 or 3 numeric components (`123`, `1.23` or `1.2.3` respectively).
+- `copyright`: an object with fields `name` and `year`. These will be used to embed a copyright notice in the Add-On.
+- `additionalCMakeParams` (optional): a list of additional Add-On specific CMake parameters as JSON key-value pairs. The build script will forward it to CMake.
 
 See the example [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json).
 
@@ -58,14 +60,22 @@ To update only the submodules, use the following command.
 git submodule update --remote
 ```
 
+### Fill in metadata in `config.json`
+
+This template contains an invalid `version` field in the config file described in [Config file](#config-file).
+This will need to be replaced after the repository has been cloned.
+
+You may also want to change the `addOnName` and `copyright` values.
+You may use the `%Y` placeholder in the `copyright.year` field to always refer to the current year.
+
 ### Build with downloaded Archicad API Development Kit
 
 - Clone this repository as it's described in the previous section.
+- Review and modify the config file as it's described in the previous section.
 - [Download the Archicad Add-On Development Kit from here](https://archicadapi.graphisoft.com/downloads/api-development-kit) or from [here](https://github.com/GRAPHISOFT/archicad-api-devkit/releases).
 - Generate the IDE project with CMake, and set the following variables (see example [below](#visual-studio-windows)):
   - `AC_VERSION`: The version number of Archicad that the Add-On is built for.
   - `AC_API_DEVKIT_DIR`: The Support folder of the installed Archicad Add-On Development Kit. You can also set an environment variable with the same name so you don't have to provide this value during project generation.
-  - `AC_ADDON_NAME`: (optional) The name of the project file and the result binary Add-On file (default is "ExampleAddOn").
   - `AC_ADDON_LANGUAGE`: (optional) The language code of the Add-On (default is "INT").
 - To release your Add-On you need to provide valid MDIDs, you can generate them on the [Archicad API site](https://archicadapi.graphisoft.com/profile/add-ons).
 
@@ -86,7 +96,7 @@ Please note that you can always use the latest Visual Studio, but make sure you 
 
 Example for using Visual Studio 2022 with platform toolset 142:
 ```
-cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_VERSION=28 .
+cmake -B Build -G "Visual Studio 17 2022" -A x64 -T v142 -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_VERSION=28
 ```
 
 #### XCode (MacOS)
@@ -105,14 +115,22 @@ See the list below for the matching deployment targets for different Archicad ve
 Run this command from the command line to generate the XCode project:
 
 ```
-cmake -B Build -G "Xcode" -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_VERSION=28 .
+cmake -B Build -G Xcode -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_VERSION=28
 ```
 
 #### Visual Studio Code (Platform Independent)
 
-- Install the "CMake Tools" extension for Visual Studio Code.
-- Set the "AC_API_DEVKIT_DIR" environment variable to the installed Development Kit Support folder.
+- Install the `CMake Tools` extension for Visual Studio Code.
+- Set the `AC_API_DEVKIT_DIR` environment variable to the installed Development Kit Support folder.
 - Open the root folder in Visual Studio Code, configure and build the solution.
+
+### Marking a build suitable for distribution
+
+The `AC_ADDON_FOR_DISTRIBUTION` CMake variable controls whether the result of a build has metadata embedded in it that marks it as a private build.
+When the variable is set to a false value (such as `OFF`), then the add-on is marked private.
+
+Please make sure you have a release workflow setup separate from a developer workflow where this variable is set to a true value (such as `ON`).
+The add-on produced by this release workflow is what should be used for distribution.
 
 ## Archicad Compatibility
 
@@ -124,4 +142,4 @@ To use the Add-On in Archicad, you have to add your compiled .apx or .bundle fil
 
 You can start Archicad in demo mode by the following command line commands:
 - Windows: `ARCHICAD.exe -DEMO`
-- MacOS: `ARCHICAD\ 26.app/Contents/MacOS/ARCHICAD -demo`
+- MacOS: `open ARCHICAD\ 28.app --args -demo`
