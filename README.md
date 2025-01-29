@@ -29,6 +29,7 @@ python Tools/BuildAddOn.py --configFile config.json
 The build script reads the config.json file for required build parameters:
 
 - `addOnName`: name of the Add-On.
+- `description`: description of the Add-On.
 - `defaultLanguage`: a single language for which the Add-On is built when localization is not enabled. Must be one of the languages specified in `languages`.
 - `languages`: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
 - `version`: version of the Add-On. Must have 1, 2 or 3 numeric components (`123`, `1.23` or `1.2.3` respectively) all of which must be in the `0-65535` range.
@@ -65,7 +66,7 @@ git submodule update --remote
 The version number `0.0.0` (or `0.0` or `0` according to the rules above) is recognized as a placeholder and using it will result in a warning.
 This template contains a `version` value with this placeholder value that should be changed.
 
-You may also want to change the `addOnName` and `copyright` values.
+You may also want to change the `addOnName`, `description` and `copyright` values.
 You may use the `%Y` placeholder in the `copyright.year` field to always refer to the current year.
 
 ### Build with downloaded Archicad API Development Kit
