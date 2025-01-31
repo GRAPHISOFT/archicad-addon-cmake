@@ -29,9 +29,10 @@ python Tools/BuildAddOn.py --configFile config.json
 The build script reads the config.json file for required build parameters:
 
 - `addOnName`: name of the Add-On.
+- `description`: description of the Add-On.
 - `defaultLanguage`: a single language for which the Add-On is built when localization is not enabled. Must be one of the languages specified in `languages`.
 - `languages`: list of languages, for which localization can be done / for which the .grc files are present in their respective directories.
-- `version`: version of the Add-On. Must have 1, 2 or 3 numeric components (`123`, `1.23` or `1.2.3` respectively).
+- `version`: version of the Add-On. Must have 1, 2 or 3 numeric components (`123`, `1.23` or `1.2.3` respectively) all of which must be in the `0-65535` range.
 - `copyright`: an object with fields `name` and `year`. These will be used to embed a copyright notice in the Add-On.
 - `additionalCMakeParams` (optional): a list of additional Add-On specific CMake parameters as JSON key-value pairs. The build script will forward it to CMake.
 
@@ -62,16 +63,16 @@ git submodule update --remote
 
 ### Fill in metadata in `config.json`
 
-This template contains an invalid `version` field in the config file described in [Config file](#config-file).
-This will need to be replaced after the repository has been cloned.
+The version number `0.0.0` (or `0.0` or `0` according to the rules above) is recognized as a placeholder and using it will result in a warning.
+This template contains a `version` value with this placeholder value that should be changed.
 
-You may also want to change the `addOnName` and `copyright` values.
+You may also want to change the `addOnName`, `description` and `copyright` values.
 You may use the `%Y` placeholder in the `copyright.year` field to always refer to the current year.
 
 ### Build with downloaded Archicad API Development Kit
 
 - Clone this repository as it's described in the previous section.
-- Review and modify the config file as it's described in the previous section.
+- Review and modify the config file as described in the previous section.
 - [Download the Archicad Add-On Development Kit from here](https://archicadapi.graphisoft.com/downloads/api-development-kit) or from [here](https://github.com/GRAPHISOFT/archicad-api-devkit/releases).
 - Generate the IDE project with CMake, and set the following variables (see example [below](#visual-studio-windows)):
   - `AC_VERSION`: The version number of Archicad that the Add-On is built for.

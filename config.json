@@ -8,5 +8,6 @@
     "copyright": {
         "name": "Graphisoft SE",
         "year": "1984-%Y"
-    }
+    },
+    "description": "Example Archicad addon"
 }
