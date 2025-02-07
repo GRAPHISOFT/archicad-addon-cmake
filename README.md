@@ -38,6 +38,15 @@ The build script reads the config.json file for required build parameters:
 
 See the example [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json).
 
+### Definitions in C++ code
+
+The following macro definitions are set to string literals (they expand to `"a C string"`) with values based on the above:
+
+- `ADDON_NAME`: This is the `addOnName` field as is.
+- `ADDON_DESCRIPTION`: This is the `description` field as is.
+- `ADDON_VERSION`: This is the 3 component version number derived from `version`.
+  - Example: this macro definition expands to `"123.0.0"` if the value of `version` is `"123"`.
+
 ## Detailed instructions
 
 If the provided build script doesn't work for you, you can set up your environment manually.

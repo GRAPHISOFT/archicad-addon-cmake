@@ -9,7 +9,7 @@
 /* [  1] */		"Example AddOn Command... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
 }
 
-'GDLG' ID_ADDON_DLG Modal | grow   40   40  345  128  "Example Dialog" {
+'GDLG' ID_ADDON_DLG Modal | grow   40   40  345  128  "" {
 /* [  1] */ Button				  245   95   90   23	LargePlain  "OK"
 /* [  2] */ Button				  145   95   90   23	LargePlain  "Cancel"
 /* [  3] */ Separator			   10   83  325    2

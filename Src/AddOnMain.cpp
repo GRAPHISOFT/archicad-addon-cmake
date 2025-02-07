@@ -31,6 +31,7 @@ public:
 		cancelButton (GetReference (), CancelButtonId),
 		separator (GetReference (), SeparatorId)
 	{
+		SetTitle (ADDON_NAME " " ADDON_VERSION);
 		AttachToAllItems (*this);
 		Attach (*this);
 	}
