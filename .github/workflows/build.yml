@@ -29,8 +29,15 @@ jobs:
 
       - name: Setup Xcode
         if: runner.os == 'macOS'
-        run: sudo xcode-select -s /Applications/Xcode_14.2.app
-      
+        run: |
+          if [ ${{ matrix.ac-version }} -lt 29 ]; then
+            xcVersion=14.2
+          else
+            xcVersion=15.1
+          fi
+          echo "Using Xcode version: ${xcVersion}"
+          sudo xcode-select -s /Applications/Xcode_${xcVersion}.app
+
       - name: Run build script
         run: |
           python Tools/BuildAddOn.py --configFile config.json --acVersion ${{ matrix.ac-version }} --buildConfig Debug RelWithDebInfo
