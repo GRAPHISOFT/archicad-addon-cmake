@@ -22,4 +22,7 @@ set (AC_ADDON_FOR_DISTRIBUTION OFF CACHE BOOL "")
 
 set (AddOnSourcesFolder Src)
 set (AddOnResourcesFolder .)
-GenerateAddOnProject (CMakeTarget ${AC_VERSION} "${AC_API_DEVKIT_DIR}" ${AddOnSourcesFolder} ${AddOnResourcesFolder} ${AC_ADDON_LANGUAGE} ${addOnDefaultLanguage})
+
+set(PCH_HEADER "Src/ExamplePrecompiledHeader.hpp")
+
+GenerateAddOnProject (CMakeTarget ${AC_VERSION} "${AC_API_DEVKIT_DIR}" ${AddOnSourcesFolder} ${AddOnResourcesFolder} ${AC_ADDON_LANGUAGE} ${addOnDefaultLanguage} ${PCH_HEADER})
