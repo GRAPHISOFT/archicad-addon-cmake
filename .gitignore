@@ -1,6 +1,7 @@
-Build/*
 .DS_Store
 .vscode
+.github/*
+build/*
 out/*
 CMakeUserPresets.json
 APIDevKit-*/

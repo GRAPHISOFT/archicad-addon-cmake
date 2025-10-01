@@ -1,0 +1,73 @@
+﻿! ==============================================================================
+! Lock and hide parameters
+! ==============================================================================
+hideparameter all "AC_TextAlignment_1", "AC_TextLeading_1", "AC_TextCharWidthFactor_1", "AC_TextCharSpaceFactor_1", "AC_TextFont_1", "AC_TextSize_1", "AC_TextStyle_1", "AC_TextPen_1",
+                  "ac_bLabelAlwaysReadable", "ac_bLabelTextWrap", "ac_LabelTextBgrPen", "ac_bLabelFrame", "ac_LabelFrameOffset", "ac_LabelPointerPen",  "ac_LabelPointerLineType", "ac_LabelPointerConnection"
+
+lock "AC_TextAlignment_1", "AC_TextLeading_1", "ac_bLabelTextWrap", "ac_LabelPointerPen",  "ac_LabelPointerLineType", "ac_LabelPointerConnection"
+
+AC_DisableLabelOrientationVal = 2 + 4 + 8 ! disable Perpendicular, Vertical, Horizontal option
+parameters AC_DisableLabelOrientationVal = AC_DisableLabelOrientationVal
+
+
+values "startSymbolMm" 	range(0,)
+values "endSymbolMm" 		range(0,)
+
+values "angleStartSymbol" range[-90, 90]
+values "angleEndSymbol" range[-90, 90]
+
+values{2} "iStartSymbol" 	SYMBOL_LSHAPE, `L字型`,
+							SYMBOL_TSHAPE, `T形`
+
+
+values{2} "iEndSymbol" 	SYMBOL_LSHAPE, `L字型`,
+						SYMBOL_TSHAPE, `T形`
+
+if not(bStartSymbol) then
+	lock "iStartSymbol", "angleStartSymbol", "startSymbolMm", "startSymbolM"
+endif
+
+if not(bEndSymbol) then
+	lock "iEndSymbol", "angleEndSymbol", "endSymbolMm", "endSymbolM"
+endif
+
+if iStartSymbol = SYMBOL_TSHAPE then
+	lock "angleStartSymbol"
+endif
+
+if iEndSymbol = SYMBOL_TSHAPE then
+	lock "angleEndSymbol"
+endif
+
+
+if GLOB_MODPAR_NAME = "startSymbolM" then
+	startSymbolMm = startSymbolM * 1000
+	parameters	startSymbolMm = startSymbolMm
+else
+	startSymbolM = startSymbolMm / 1000
+	parameters startSymbolM = startSymbolM
+endif
+
+if GLOB_MODPAR_NAME = "endSymbolM" then
+	endSymbolMm = endSymbolM * 1000
+	parameters	endSymbolMm = endSymbolMm
+else
+	endSymbolM = endSymbolMm / 1000
+	parameters endSymbolM = endSymbolM
+endif
+
+if GLOB_MODPAR_NAME = "startDistanceM" then
+	startDistanceMm = startDistanceM * 1000
+	parameters	startDistanceMm = startDistanceMm
+else
+	startDistanceM = startDistanceMm / 1000
+	parameters startDistanceM = startDistanceM
+endif
+
+if GLOB_MODPAR_NAME = "endDistanceM" then
+	endDistanceMm = endDistanceM * 1000
+	parameters	endDistanceMm = endDistanceMm
+else
+	endDistanceM = endDistanceMm / 1000
+	parameters endDistanceM = endDistanceM
+endif

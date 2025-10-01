@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LibpartData Owner="1196638531" Signature="776753997" Version="44">
+	<Identification>
+		<MainGUID>8D7EBA48-FBF8-4109-A9B3-EC9B16921FA9</MainGUID>
+		<IsPlaceable>true</IsPlaceable>
+		<IsArchivable>false</IsArchivable>
+		<MigrationValue>Normal</MigrationValue>
+		<IsTemplate>false</IsTemplate>
+	</Identification>
+	<Ancestry SectVersion="1" SectionFlags="0" SubIdent="0"/>
+	<CalledMacros SectVersion="2" SectionFlags="0" SubIdent="0"/>
+	<Script_2D SectVersion="20" SectionFlags="0" SubIdent="0"/>
+	<Script_1D SectVersion="20" SectionFlags="0" SubIdent="0"/>
+	<Script_UI SectVersion="20" SectionFlags="0" SubIdent="0"/>
+	<Script_VL SectVersion="20" SectionFlags="0" SubIdent="0"/>
+	<ParamSection SectVersion="27" SectionFlags="0" SubIdent="0"/>
+	<Copyright SectVersion="1" SectionFlags="0" SubIdent="0"/>
+	<Keywords SectVersion="1" SectionFlags="0" SubIdent="0"/>
+	<Picture MIME="image/svg" Name="Picture_0.svg" SectVersion="19" SectionFlags="1" SubIdent="0"/>
+	<GDLPict MIME="image/svg" Name="startSymbol_hl(1).svg" SectVersion="19" SectionFlags="1" SubIdent="1"/>
+	<GDLPict MIME="image/svg" Name="endSymbol_hl(1).svg" SectVersion="19" SectionFlags="1" SubIdent="2"/>
+</LibpartData>

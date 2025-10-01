@@ -1,0 +1,187 @@
+﻿PROPVAL_BOOL	= 1
+PROPVAL_INT		= 2
+PROPVAL_REALNUM	= 3
+PROPVAL_STRING	= 4
+PROPVAL_LENGTH	= 5
+PROPVAL_AREA	= 6
+PROPVAL_VOLUME	= 7
+PROPVAL_ANGLE	= 8
+
+
+
+! iStartSymbol, iEndSymbol
+SYMBOL_LSHAPE = 1
+SYMBOL_TSHAPE = 2
+
+EDGE_STRAIGHT	= 0
+EDGE_CURVED		= 1
+
+dict EPS
+EPS.LENGTH	= 0.0001				! 1/10 mm
+EPS.SQUARE	= EPS.LENGTH **2
+EPS.SCALAR	= EPS.SQUARE
+EPS.ANGLE	= ACS(1 - EPS.SCALAR)	! 0.0081°
+
+if AC_bLabelOpaqueFill then
+	_AC_LabelTextBgrPen = AC_LabelTextBgrPen
+else
+	_AC_LabelTextBgrPen = 0		! Transparent
+endif
+
+
+! ==============================================================================
+! values for GLOB_ELEM_TYPE
+! ==============================================================================
+! --- values for GLOB_ELEM_TYPE		! _bitAvailableTool
+ELEM_TYPE_LABEL			= 0			!         1
+ELEM_TYPE_OBJECT		= 1			!         2
+ELEM_TYPE_LAMP			= 2			!         4
+ELEM_TYPE_WINDOW		= 3			!         8
+ELEM_TYPE_DOOR			= 4			!        16
+ELEM_TYPE_WALL			= 5			!        32
+ELEM_TYPE_COLUMNPARENT	= 6			!        64
+ELEM_TYPE_SLAB			= 7			!       128
+ELEM_TYPE_ROOF			= 8			!       256
+ELEM_TYPE_FILL			= 9			!       512
+ELEM_TYPE_MESH			= 10		!      1024
+ELEM_TYPE_ZONE			= 11		!      2048
+ELEM_TYPE_BEAMPARENT	= 12		!      4096
+ELEM_TYPE_CW			= 13		!      8192
+ELEM_TYPE_CWFRAME		= 14		!     16384
+ELEM_TYPE_CWPANEL		= 15		!     32768
+ELEM_TYPE_CWJUNCT		= 16		!     65536
+ELEM_TYPE_CWACC			= 17		!    131072
+ELEM_TYPE_SHELL			= 18		!    262144
+ELEM_TYPE_SKYLIGHT		= 19		!    524288
+ELEM_TYPE_MORPH			= 20		!   1048576
+ELEM_TYPE_STAIR			= 21		!   2097152
+ELEM_TYPE_ST_TREAD		= 22		!   4194304
+ELEM_TYPE_ST_RISER		= 23		!   8388608
+ELEM_TYPE_ST_STRUCT		= 24		!  16777216
+ELEM_TYPE_RAILING		= 25		!  33554432
+ELEM_TYPE_OPENING		= 26		!  67108864
+ELEM_TYPE_COLUMNSEGMENT	= 27		! 134217728
+ELEM_TYPE_BEAMSEGMENT	= 28		! 268435456
+
+! Offered Tools
+_enabledTools = 2 **ELEM_TYPE_WALL +\
+				2 **ELEM_TYPE_STAIR
+
+bDefaultElem		= (GLOB_INTGUID = "" | GLOB_INTGUID = "{00000000-0000-0000-0000-000000000000}")
+_isEnabledContent	= (bDefaultElem | bittest(_enabledTools, GLOB_ELEM_TYPE))
+
+! -----------------------------------------------------------------------------
+! Copy from label_placeholder macro!
+! -------------------------------------------------------------------------------
+
+! ------------------------------------------------------------------------------
+! Elem Types
+! ------------------------------------------------------------------------------
+
+! always index after last known tool!
+! bittest maximum is 31. bit (0-based)
+ELEM_TYPE_UNKNOWN		= 29
+! limit to ELEM_TYPE_UNKNOWN
+_elemtype = min(GLOB_ELEM_TYPE, ELEM_TYPE_UNKNOWN)
+
+
+TOOL_LABEL			= ELEM_TYPE_LABEL			+ 1
+TOOL_OBJECT			= ELEM_TYPE_OBJECT			+ 1
+TOOL_LAMP			= ELEM_TYPE_LAMP			+ 1
+TOOL_WINDOW			= ELEM_TYPE_WINDOW			+ 1
+TOOL_DOOR			= ELEM_TYPE_DOOR			+ 1
+TOOL_WALL			= ELEM_TYPE_WALL			+ 1
+TOOL_COLUMNPARENT	= ELEM_TYPE_COLUMNPARENT	+ 1
+TOOL_SLAB			= ELEM_TYPE_SLAB			+ 1
+TOOL_ROOF			= ELEM_TYPE_ROOF			+ 1
+TOOL_FILL			= ELEM_TYPE_FILL			+ 1
+TOOL_MESH			= ELEM_TYPE_MESH			+ 1
+TOOL_BEAMPARENT		= ELEM_TYPE_BEAMPARENT		+ 1
+TOOL_ZONE			= ELEM_TYPE_ZONE			+ 1
+TOOL_CW				= ELEM_TYPE_CW				+ 1
+TOOL_CWFRAME		= ELEM_TYPE_CWFRAME			+ 1
+TOOL_CWPANEL		= ELEM_TYPE_CWPANEL			+ 1
+TOOL_CWJUNCT		= ELEM_TYPE_CWJUNCT			+ 1
+TOOL_CWACC			= ELEM_TYPE_CWACC			+ 1
+TOOL_SHELL			= ELEM_TYPE_SHELL			+ 1
+TOOL_SKYLIGHT		= ELEM_TYPE_SKYLIGHT		+ 1
+TOOL_MORPH			= ELEM_TYPE_MORPH			+ 1
+TOOL_STAIR			= ELEM_TYPE_STAIR			+ 1
+TOOL_ST_TREAD		= ELEM_TYPE_ST_TREAD		+ 1
+TOOL_ST_RISER		= ELEM_TYPE_ST_RISER		+ 1
+TOOL_ST_STRUCT		= ELEM_TYPE_ST_STRUCT		+ 1
+TOOL_RAILING		= ELEM_TYPE_RAILING			+ 1
+TOOL_OPENING		= ELEM_TYPE_OPENING			+ 1
+TOOL_COLUMNSEGMENT	= ELEM_TYPE_COLUMNSEGMENT	+ 1
+TOOL_BEAMSEGMENT	= ELEM_TYPE_BEAMSEGMENT		+ 1
+TOOL_UNKNOWN		= ELEM_TYPE_UNKNOWN			+ 1
+_labeledTool		= _elemtype					+ 1
+
+
+! pack out _bitAvailableTool into boolean array
+_bitAvailableTool 	= _enabledTools
+dim _iAvailableTool[]
+for i = 1 to TOOL_UNKNOWN - 1
+	_iAvailableTool[i] = bittest(_bitAvailableTool, i - 1)
+next i
+
+_isWallEnd = 0
+if _labeledTool = TOOL_WINDOW then
+	nnn = REQUEST ("ASSOCLP_PARVALUE", "AC_fit_to_wall_height", index, type, flags, dim1, dim2, fit_to)
+	if nnn > 0 then		! wall end
+		_isWallEnd = 1
+	endif
+endif
+
+_labelnameGSM = `＜ラベル名＞`
+nnn = REQUEST ("Name_of_macro", "", _labelnameGSM)
+
+if nnn then
+	_iDotPos = strstr (_labelnameGSM, ".")
+	_labelname = strsub (_labelnameGSM, 1, _iDotPos - 1)
+else
+	_labelname = _labelnameGSM
+endif
+
+_stAvailability = `このラベルは以下のツールが利用できます` + ":"
+
+dim sInfo[]
+
+sInfo[TOOL_LABEL]			= `このラベルは独立ラベルでは利用できません。`
+sInfo[TOOL_OBJECT]			= `このラベルはオブジェクトまたは階段では利用できません。`
+sInfo[TOOL_LAMP]			= `このラベルはランプでは利用できません。`
+sInfo[TOOL_WINDOW]			= `このラベルは窓では利用できません。`
+if _isWallEnd then
+	sInfo[TOOL_WINDOW]		= `このラベルは壁の終端では利用できません。`
+endif
+sInfo[TOOL_DOOR]			= `このラベルはドアでは利用できません。`
+sInfo[TOOL_WALL]			= `このラベルは壁では利用できません。`
+sInfo[TOOL_COLUMNPARENT]	= `このラベルは柱では利用できません。`
+sInfo[TOOL_SLAB]			= `このラベルはスラブでは利用できません。`
+sInfo[TOOL_ROOF]			= `このラベルは屋根では利用できません。`
+sInfo[TOOL_FILL]			= `このラベルは塗りつぶしでは利用できません。`
+sInfo[TOOL_MESH]			= `このラベルはメッシュでは利用できません。`
+sInfo[TOOL_ZONE]			= `このラベルはゾーンでは利用できません。`
+sInfo[TOOL_BEAMPARENT]		= `このラベルは梁では利用できません。`
+sInfo[TOOL_CW]				= `このラベルはカーテンウォールでは利用できません。`
+sInfo[TOOL_CWFRAME]			= `このラベルはカーテンウォールフレームでは利用できません。`
+sInfo[TOOL_CWPANEL]			= `このラベルはカーテンウォールパネルでは利用できません。`
+sInfo[TOOL_CWJUNCT]			= `このラベルはカーテンウォール接続部では利用できません。`
+sInfo[TOOL_CWACC]			= `このラベルはカーテンウォール付属品では利用できません。`
+sInfo[TOOL_SHELL]			= `このラベルはシェルでは利用できません。`
+sInfo[TOOL_SKYLIGHT]		= `このラベルは天窓では利用できません。`
+sInfo[TOOL_MORPH]			= `このラベルはモルフでは利用できません。`
+sInfo[TOOL_STAIR]			= `このラベルは階段では利用できません。`
+sInfo[TOOL_ST_TREAD]		= `このラベルは階段踏面では利用できません。`
+sInfo[TOOL_ST_RISER]		= `このラベルは階段蹴上では利用できません。`
+sInfo[TOOL_ST_STRUCT]		= `このラベルは階段構造では利用できません。`
+sInfo[TOOL_RAILING]			= `このラベルはレールでは利用できません。`
+sInfo[TOOL_OPENING]			= `このラベルは開口部では利用できません。`
+sInfo[TOOL_COLUMNSEGMENT]	= `このラベルは柱セグメントでは利用できません。`
+sInfo[TOOL_BEAMSEGMENT]		= `このラベルは梁セグメントでは利用できません。`
+sInfo[TOOL_UNKNOWN]			= `このラベルはこのタイプの要素では利用できません。`
+
+! -----------------------------------------------------------------------------
+! End of copy from label_placeholder macro!
+! -------------------------------------------------------------------------------
+

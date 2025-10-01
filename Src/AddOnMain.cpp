@@ -96,7 +96,11 @@ GSErrCode RegisterInterface (void)
 #ifdef ServerMainVers_2700
 	return ACAPI_MenuItem_RegisterMenu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
 #else
-	return ACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+	GSErrCode err = ACAPI_Register_ResourceACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+	if (err == NoError)
+		err = ACAPI_AddOnIntegration_RegisterBuiltInLibrary ();
+
+	return err;
 #endif
 }
 
