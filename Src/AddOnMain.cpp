@@ -85,7 +85,7 @@ static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 }
 
 #ifdef ServerMainVers_2700
-bool CCALL ResourceTypesCallback (GSResType resType, GSResModule resModule, void *userData)
+bool CCALL ResourceTypesCallback (GSResType resType, GSResModule /*resModule*/, void *userData)
 {
 	constexpr GSResType libPartType = 'FLDR';
 	if (resType == libPartType) {
