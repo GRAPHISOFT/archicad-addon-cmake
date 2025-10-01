@@ -122,7 +122,7 @@ GSErrCode RegisterInterface (void)
 
 	return err;
 #else
-	return ACAPI_Register_ResourceACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+	return ACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
 #endif
 }
 
