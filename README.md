@@ -8,7 +8,7 @@ This repository contains a CMake template for Archicad Add-On Development.
   - Windows: [Visual Studio](https://visualstudio.microsoft.com/downloads/)
   - MacOS: [Xcode](https://developer.apple.com/xcode/resources/)
 - [CMake](https://cmake.org) (3.19 minimum version is needed).
-- [Python](https://www.python.org) for resource compilation and build script usage (3.8+).
+- [Python](https://www.python.org) for resource compilation and build script usage (3.10+).
 
 ## Quick setup
 
