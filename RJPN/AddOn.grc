@@ -1,0 +1,22 @@
+﻿#include "ResourceIds.hpp"
+
+'STR#' ID_ADDON_INFO "Add-on Name and Description" {
+/* [  1] */		"サンプルアドオン"
+/* [  2] */		"サンプルアドオンの説明..."
+}
+
+'STR#' ID_ADDON_MENU "Strings for the Menu" {
+/* [  1] */		"サンプルアドオンコマンド... ^E3 ^ES ^EE ^EI ^ED ^ET ^10001"
+}
+
+'GDLG' ID_ADDON_DLG Modal | grow   40   40  345  128  "" {
+/* [  1] */ Button				  245   95   90   23	LargePlain  "OK"
+	/* [  2] */ Button				  145   95   90   23	LargePlain  "キャンセル"
+/* [  3] */ Separator			   10   83  325    2
+}
+
+'DLGH' ID_ADDON_DLG DLG_Example {
+1	""		Button_0
+2	""		Button_1
+3	""		Separator_0
+}
