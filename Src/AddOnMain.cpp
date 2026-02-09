@@ -4,6 +4,8 @@
 #include "ResourceIds.hpp"
 #include "DGModule.hpp"
 
+#include <iostream>
+
 static const GSResID AddOnInfoID			= ID_ADDON_INFO;
 	static const Int32 AddOnNameID			= 1;
 	static const Int32 AddOnDescriptionID	= 2;
