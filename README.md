@@ -95,6 +95,7 @@ See the list below for the matching Visual Studio and platform toolset versions 
 
 | Archicad | Visual Studio | Platform toolset |
 |---|---|---|
+| Archicad 29 | Visual Studio 2019 | v143 |
 | Archicad 28 | Visual Studio 2019 | v142 |
 | Archicad 27 | Visual Studio 2019 | v142 |
 | Archicad 26 | Visual Studio 2019 | v142 |
@@ -115,6 +116,7 @@ See the list below for the matching deployment targets for different Archicad ve
 
 | Archicad | Deployment target |
 |---|---|
+| Archicad 29 | 11.0 |
 | Archicad 28 | 11.0 |
 | Archicad 27 | 10.15 |
 | Archicad 26 | 10.15 |
@@ -125,7 +127,7 @@ See the list below for the matching deployment targets for different Archicad ve
 Run this command from the command line to generate the XCode project:
 
 ```
-cmake -B Build -G Xcode -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_VERSION=28
+cmake -B Build -G Xcode -DAC_API_DEVKIT_DIR=<DevKitSupportDir> -DAC_VERSION=29
 ```
 
 #### Visual Studio Code (Platform Independent)
@@ -151,5 +153,5 @@ This template is tested with all Archicad versions starting from Archicad 25.
 To use the Add-On in Archicad, you have to add your compiled .apx or .bundle file in Add-On Manager. The example Add-On registers a new command into the Options menu. Please note that the example Add-On works only in the demo version of Archicad.
 
 You can start Archicad in demo mode by the following command line commands:
-- Windows: `ARCHICAD.exe -DEMO`
-- MacOS: `open ARCHICAD\ 28.app --args -demo`
+- Windows: `Archicad.exe -DEMO`
+- MacOS: `open Archicad\ 29.app --args -demo`
