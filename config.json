@@ -2,13 +2,13 @@
     "addOnName": "ExampleAddOn",
     "defaultLanguage": "INT",
     "languages": [
-        "INT"
+        "INT",
+        "JPN"
     ],
     "version": "0.0.0",
     "copyright": {
         "name": "Graphisoft SE",
         "year": "1984-%Y"
     },
-    "description": "Example Archicad addon",
-    "autoupdate": 0
+    "description": "Example Archicad addon"
 }
