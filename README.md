@@ -35,6 +35,7 @@ The build script reads the config.json file for required build parameters:
 - `version`: version of the Add-On. Must have 1, 2 or 3 numeric components (`123`, `1.23` or `1.2.3` respectively) all of which must be in the `0-65535` range.
 - `copyright`: an object with fields `name` and `year`. These will be used to embed a copyright notice in the Add-On.
 - `additionalCMakeParams` (optional): a list of additional Add-On specific CMake parameters as JSON key-value pairs. The build script will forward it to CMake.
+- `dependencies` (optional): a list of glob patterns specifying additional files or folders from the build output directory to include in the package alongside the Add-On binary. Patterns are resolved relative to the build output folder. If not specified, only the Add-On binary (`.apx` on Windows, `.bundle` on macOS) is packaged. Ex: `["AddOnCore.*", "AddOnData/*"]`. **Note:** On Windows, `.pdb` files are automatically excluded from dependency copying in Release builds.
 
 See the example [config.json](https://github.com/GRAPHISOFT/archicad-addon-cmake/blob/master/config.json).
 
