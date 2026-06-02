@@ -1,0 +1,1327 @@
+﻿dim EMPTYARRAY[]
+dim _bUseValue[19], _stDefinedPropValues[19], _penLine[19], _lineType[19], _bText[19], _stText[19]
+for g = 1 to 19
+	_bUseValue[g] 			= 0
+	_stDefinedPropValues[g] = ""
+	_penLine[g] 			= 1
+	_lineType[g]			= 1
+	_bText[g] 				= 0
+	_stText[g] 				= ""
+next g
+
+_stProperty = 0
+_penDefault = 20
+_defaultLineType = 1
+_bDefaultText = 0
+_stDefaultText = ""
+
+gosub "getMVOValues"
+
+_penDiagnostic = _penDefault % 255 + 1
+
+if not(_isEnabledContent) then
+	_placeHolderText = sInfo[_labeledTool]
+	gosub "drawPlaceholder"
+	end
+endif
+
+if GLOB_ELEM_TYPE = 21 then   ! Stair
+	if haskey(STAIR_BREAKMARK_GEOMETRY.breakMarks) then
+		 allBreakMarks = vardim1(STAIR_BREAKMARK_GEOMETRY.breakMarks)
+	else
+		_placeHolderText = `このラベルは破断線のない階段には利用できません。`
+		gosub "drawPlaceholder"
+		end
+	endif
+endif
+
+! ==============================================================================
+! Functions:
+! - Offered Tools: Wall, Stair
+! ==============================================================================
+! Convert paper size to model size
+! ------------------------------------------------------------------------------
+_paperToModel = GLOB_SCALE
+_endSymbolModel		= endSymbolM 		* _paperToModel
+_startSymbolModel 	= startSymbolM 		* _paperToModel
+_startDistanceModel	= startDistanceM 	* _paperToModel
+_endDistanceModel	= endDistanceM	 	* _paperToModel
+
+
+! ------------------------------------------------------------------------------
+! Get Fire Rating Property Value
+! ------------------------------------------------------------------------------
+_stPropertyValue = ""
+gosub "getPropertyValue"
+
+! ------------------------------------------------------------------------------
+! Choose the right Pen and Text according to the Property Value defined by the User
+! ------------------------------------------------------------------------------
+unID = 1
+hotlineUnID = 100
+
+
+line_type _defaultLineType
+_stTextToWrite	= ""
+_isText 		= 0
+_pen			= _penDefault
+if _bDefaultText then
+	_stTextToWrite = _stDefaultText
+endif
+if _bValidPropValue then
+	for i = 1 to 19
+		if _bUseValue[i] & _stDefinedPropValues[i] = _stPropertyValue then
+			_stTextToWrite = ""
+
+			line_type _lineType[i]
+			_pen = _penLine[i]
+			if _bText[i] then
+				_stTextToWrite 	= _stText[i]
+				_isText 		= 1
+			endif
+		endif
+	next i
+else
+	_isText = _bDefaultText
+endif
+
+! ------------------------------------------------------------------------------
+! Write Text
+! ------------------------------------------------------------------------------
+if GLOB_ELEM_TYPE = 21 or GLOB_ELEM_TYPE = 5 then   ! Stair, Wall
+	if _isText then gosub "writeText"
+endif
+
+
+! ------------------------------------------------------------------------------
+! Transform from label local coordinate system to plan orientation and origin
+! ------------------------------------------------------------------------------
+rotBy = -LABEL_ROTANGLE
+_unused = REQUEST ("View_Rotangle", "", angleViewRot)		
+
+corr = 0
+if AC_bLabelAlwaysReadable & (AC_LabelOrientation = 1 | AC_LabelOrientation = 2 | AC_LabelOrientation = 5) then
+	summarot = (LABEL_ROTANGLE + angleViewRot) % 360
+	if summarot > 90 & summarot <= 270 then corr = 180
+endif
+
+rot2 rotBy + corr
+add2 -LABEL_POSITION [1][1], -LABEL_POSITION [1][2]
+
+! ------------------------------------------------------------------------------
+! Draw Label
+! ------------------------------------------------------------------------------
+dict _polyline
+_angleParentDirection = LABEL_ASSOC_ELEM_ORIENTATION
+
+if GLOB_ELEM_TYPE = 21 then   ! Stair
+
+	for i = 1 to allBreakMarks
+
+		_polyline 			= STAIR_BREAKMARK_GEOMETRY.breakMarks[i].polyLine2D
+		_polyline.isVisible = STAIR_BREAKMARK_GEOMETRY.breakMarks[i].isVisible
+
+		gosub "drawLineGeometry"
+
+	next i
+
+else
+	if GLOB_ELEM_TYPE = 5 then   ! Wall
+
+		_polyline 			= LABEL_ASSOC_ELEM_GEOMETRY.referenceLine2D
+		_polyline.isVisible = 1
+
+		gosub "drawLineGeometry"
+	endif
+endif
+
+del 2
+
+! ==============================================================================
+END	!END	!END	!END	!END	!END	!END	!END	!END	!END	!END
+! ==============================================================================
+
+! ==============================================================================
+"writeText":
+! ==============================================================================
+	
+	pen _pen
+
+	! ------------------------------------------------------------------------------
+	! Text Position
+	! ------------------------------------------------------------------------------
+
+	_nTrans			= 0
+	if not(LABEL_HAS_POINTER) then
+
+		add2 	LABEL_POSITION [2][1]	+	LABEL_POSITION [3][1],
+				LABEL_POSITION [2][2]	+	LABEL_POSITION [3][2]
+
+		_nTrans		= _nTrans + 1
+	endif
+
+	! ------------------------------------------------------------------------------
+	! Define Text Style, Paragraph and TextBlock
+	! ------------------------------------------------------------------------------
+
+	define style{2} "textStyle" AC_TextFont_1, AC_TextSize_1, AC_TextStyle_1
+	
+	_stNamePG = "nameParaGraph"
+	_stNameTB = "nameTextBox"
+	
+	paragraph _stNamePG 2,
+		0, 0, 0,
+		1, 0
+		pen _pen
+		style "textStyle"
+		_stTextToWrite
+	endparagraph
+	
+	textblock _stNameTB 0,
+		5, 0, AC_TextCharWidthFactor_1, AC_TextCharSpaceFactor_1, 1,
+		_stNamePG
+
+	! ------------------------------------------------------------------------------
+	! Get Textblock Size
+	! ------------------------------------------------------------------------------
+
+	n = REQUEST ("TEXTBLOCK_INFO", _stNameTB, _widthTB, _heightTB)
+	_widthTB 	= _widthTB
+	_heightTB	= _heightTB
+
+	! ------------------------------------------------------------------------------
+	! Check readability and transform if it is needed
+	! ------------------------------------------------------------------------------
+
+	totalRotate		= 0
+	angleViewRot	= 0
+	_isPreview 		= (GLOB_CONTEXT = 5)
+
+	if not(_isPreview) and not(LABEL_HAS_POINTER) then
+		rrr = REQUEST ("View_Rotangle", "", angleViewRot)
+	
+		totalRotate = (LABEL_ROTANGLE + angleViewRot) MOD 360
+	endif
+
+	_changeDir = AC_bLabelAlwaysReadable &\
+				(totalRotate > 90 + EPS.LENGTH & totalRotate < 270 + EPS.LENGTH)
+	_changeDir = _changeDir * (- 1) + not(_changeDir)
+
+	add2 0,  _heightTB * GLOB_SCALE/1000 * _changeDir
+	_nTrans = _nTrans + 1
+
+	! ------------------------------------------------------------------------------
+	! Write Text and Draw Background Polygon
+	! ------------------------------------------------------------------------------
+
+	richtext2 0, 0, _stNameTB
+
+
+	_frameCoordX = (_widthTB / 2 	+ AC_LabelFrameOffset) * GLOB_SCALE/1000
+	_frameCoordY = (_heightTB / 2 	+ AC_LabelFrameOffset) * GLOB_SCALE/1000
+
+	fill GLOB_FILL_INDEX_BACKGROUND
+
+	poly2_b 4, AC_bLabelFrame + 2 + 4, _AC_LabelTextBgrPen, _AC_LabelTextBgrPen,
+		- _frameCoordX, 	- _frameCoordY, 	1,
+		  _frameCoordX, 	- _frameCoordY,		1,
+		  _frameCoordX, 	  _frameCoordY, 	1,
+		- _frameCoordX,	  	  _frameCoordY, 	1
+
+	hotspot2 -_frameCoordX, _frameCoordY, unID	: unID = unID + 1
+
+	del _nTrans
+
+return
+
+
+! ==============================================================================
+"getMVOValues":
+! ==============================================================================
+	
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "stProperty", requestValue)
+	if success > 0 then _stProperty = requestValue
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "penDefaultLine", requestValue)
+	if success > 0 then _penDefault = requestValue
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "defaultLineType", requestValue)
+	if success > 0 then _defaultLineType = requestValue
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "bDefaultText", requestValue)
+	if success > 0 then _bDefaultText = requestValue
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "stDefaultText", requestValue)
+	if success > 0 then _stDefaultText = requestValue
+
+
+	dim requestValues[19]
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "bUseValue", requestValues)
+	if success > 0 then	_bUseValue = requestValues
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "stDefinedPropValues", requestValues)
+	if success > 0 then	_stDefinedPropValues = requestValues
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "penLine", requestValues)
+	if success > 0 then	_penLine = requestValues
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "lineType", requestValues)
+	if success > 0 then	_lineType = requestValues
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "bText", requestValues)
+	if success > 0 then	_bText = requestValues
+
+	success = LIBRARYGLOBAL ("FireRatingGraphicalLabel_MVOSettings", "stText", requestValues)
+	if success > 0 then	_stText = requestValues
+
+return
+
+
+! ==============================================================================
+"getPropertyValue":
+! ==============================================================================
+	dim	propertyValues[]
+	m = request ("Property_Value_Of_Parent", _stProperty, _typeValue, dim1, dim2, propertyValues)
+
+	if m > 3 then
+		_bValidPropValue = 1
+		for j = 1 to vardim1(propertyValues)
+			if j > 1 then
+				_stPropertyValue = _stPropertyValue + "; "
+			endif
+
+			if _typeValue = PROPVAL_STRING then
+				_stPropertyValue = _stPropertyValue + propertyValues[j]
+			else
+				_stPropertyValue = "---"	! Undefined Value Type
+			endif
+		next j
+	else
+		_bValidPropValue = 0
+		_stPropertyValue = ""
+	endif
+return
+
+
+! ==============================================================================
+"drawLineGeometry":
+! ------------------------------------------------------------------------------
+	dict _actSegment
+	dict _polyOpPolygon
+	dict _lineToDraw
+
+	dict _hot
+	_hot.lines = EMPTYARRAY
+	_hot.arcs  = EMPTYARRAY
+	_nHotline = 0
+
+	pen _pen
+
+	_bCurved = 0
+	if _polyline.isVisible then
+		_polylineEnd = vardim1(_polyline.contour.edges) - 1
+		! Check if there are any Curved Segments
+		for t = 1 to _polylineEnd
+			_bCurved = _bCurved | (_polyline.contour.edges[t].type = EDGE_CURVED)
+		next t
+
+		if _bCurved then
+			! dict for the final polygon data
+			_polyOpPolygon = _polyline
+			gosub "ProfileConverter"	! returns _hot
+
+			! hotspot on end of hotline
+			_hot.arcs[vardim1(_hot.arcs)].endPoint = _polyline.contour.edges[vardim1(_polyline.contour.edges)].begPoint
+		else
+			for j = 1 to _polylineEnd
+				_actSegment.begPoint 	= _polyline.contour.edges[j].begPoint
+				_actSegment.endPoint 	= _polyline.contour.edges[j + 1].begPoint
+				_actSegment.type 		= EDGE_STRAIGHT
+				_actSegment.arcAngle 	= 0
+
+				_lineToDraw = _actSegment
+				dict _inserted
+				dict _segment
+				if 	j = 1 then
+					gosub "findFirstIntersectPoint"
+
+					if bStartSymbol then
+						gosub "drawStartSymbol"
+					endif
+				endif
+		
+				if j = _polylineEnd then
+					gosub "findLastIntersectPoint"
+
+					if bEndSymbol then
+						gosub "drawEndSymbol"
+					endif
+				endif
+	
+				line2 _lineToDraw.begPoint.x, _lineToDraw.begPoint.y,
+					  _lineToDraw.endPoint.x, _lineToDraw.endPoint.y
+
+  				_nHotline = _nHotline + 1
+				_hot.lines[_nHotline] = _lineToDraw
+			next j
+		endif
+
+		gosub "drawHotlines"
+	endif
+
+return
+
+
+! ==============================================================================
+"drawHotlines":
+! ------------------------------------------------------------------------------
+! draw hotlines / hotarcs
+! input:
+!	.lines[]			see sub "PolyOpDictToProfile"
+!	.arcs[]				see sub "PolyOpDictToProfile"
+!		.endpoint		needed on last arc for hotspot
+!	hotlineUnID
+!	_penDiagnostic
+!	_pen
+! output:
+!	hotlineUnID += variable
+! ==============================================================================
+
+	! draw hotlines / hotarcs
+	if GLOB_DIAGNOSTICS_MODE then pen _penDiagnostic
+	_nArcs = vardim1(_hot.arcs)
+	for _i = 1 to _nArcs
+		! custom hotspots needed to get rid of bounding box hotspots
+		hotspot2 _hot.arcs[_i].begPoint.x, _hot.arcs[_i].begPoint.y, hotlineUnID
+
+		put _hot.arcs[_i].center.x, _hot.arcs[_i].center.y, _hot.arcs[_i].radius,
+			_hot.arcs[_i].startAngle, _hot.arcs[_i].endAngle
+
+		if GLOB_DIAGNOSTICS_MODE then arc2 use(5)
+		hotarc2 get(5), hotlineUnID + 1
+		hotlineUnID = hotlineUnID + 2
+	next _i
+	if _nArcs > 0 then
+		hotspot2 _hot.arcs[_nArcs].endPoint.x, _hot.arcs[_nArcs].endPoint.y, hotlineUnID
+		hotlineUnID = hotlineUnID + 1
+	endif
+	for _i = 1 to vardim1(_hot.lines)
+		put _hot.lines[_i].begPoint.x, _hot.lines[_i].begPoint.y,
+			_hot.lines[_i].endPoint.x, _hot.lines[_i].endPoint.y
+
+		! custom hotspots needed to get rid of bounding box hotspots
+		hotspot2 use(2), hotlineUnID
+
+		if GLOB_DIAGNOSTICS_MODE then line2 use(4)
+		hotline2 get(4), hotlineUnID + 1
+		hotlineUnID = hotlineUnID + 2
+	next _i
+
+	if GLOB_DIAGNOSTICS_MODE then pen _pen
+return
+
+
+! ==============================================================================
+"ProfileConverter":
+! find Hotspot place and draw it
+! ----------------------------------------------------------------
+! Input:
+!	_polyOpPolygon
+!		.begPoint			Segment beginning point
+!		.endPoint			Segment ending point
+! Output:
+! 	Drawing a Polygon
+!	_hot
+!		.lines[]			see sub "PolyOpDictToProfile"
+!		.arcs[]				see sub "PolyOpDictToProfile"
+! ==============================================================================
+
+	dim _outflat[]
+
+	_polyOpPolygon.isClosed = 1	! fix polylines ending as arc: send as closed polygon, disregard closing point of returned polygon
+
+	gosub "polyOperation"
+	! put results
+	nCoords = 3 * _nOut
+	for _i = 1 to _nOut - 2
+		_k = (_i - 1) * 3
+		put _outflat[_k + 1],
+			_outflat[_k + 2]
+
+		! visibility flag
+		if _outflat[_k + 3] # -1 then
+			put _outflat[_k + 3] + 1
+		else
+			put 0
+		endif
+	next _i
+                
+	poly2_b NSP / 3, 1,
+                    0, 1,
+                    get(NSP)
+
+return
+
+
+! ==============================================================================
+"findFirstIntersectPoint":
+! find the Startpoint of the Line after editing it with Hotspot
+! find Hotspot place and draw it
+! ----------------------------------------------------------------
+! Input:
+!	_actSegment
+!		.begPoint			Segment beginning point
+!		.endPoint			Segment ending point
+!	_lineToDraw				= _actSegment
+!	unID
+! Output:
+!	_lineToDraw				
+!		.begPoint			Segment beginning Point after Intersecting!
+!		.endPoint			Segment ending Point
+!	unID += 3
+! ==============================================================================
+	_insertionDist 	= - _startDistanceModel
+	_segment		= _actSegment
+	gosub "insertPointToSegment2D"
+
+	_lineToDraw.begPoint = _inserted.point
+	_lineToDraw.endPoint = _segment.endPoint
+
+	hotspot2 _inserted.point.x, 	_inserted.point.y, 		unID, startDistanceM, 2 + 1024, startDistanceMm		: unID = unID + 1
+	hotspot2 _segment.begPoint.x, 	_segment.begPoint.y, 	unID, startDistanceM, 1 + 1024, startDistanceMm		: unID = unID + 1
+
+	_insertionDist 	= _startDistanceModel
+	! Change Start and End Points
+	_segment.begPoint	= _actSegment.endPoint
+	_segment.endPoint	= _actSegment.begPoint
+	gosub "insertPointToSegment2D"		! Finding the place of the Reference Hotspot
+
+	hotspot2 _inserted.point.x, 		_inserted.point.y, unID , startDistanceM, 3 + 1024, startDistanceMm		: unID = unID + 1
+return
+
+
+! ==============================================================================
+"findLastIntersectPoint":
+! find the Endpoint of the Line after editing it with Hotspot
+! find Hotspot place and draw it
+! ----------------------------------------------------------------
+! Input:
+!	_actSegment
+!		.begPoint			Segment beginning point
+!		.endPoint			Segment ending point
+!	_lineToDraw				
+!		.begPoint			Segment beginning Point after Intersecting!
+!		.endPoint			Segment ending Point
+!	unID
+! Output:
+!	_lineToDraw				
+!		.begPoint			Segment beginning Point after Intersecting!
+!		.endPoint			Segment ending Point after Intersecting!
+!	unID += 3
+! ==============================================================================
+
+	_insertionDist 	= - _endDistanceModel
+	_segment		= _actSegment
+	! Change Start and End Points
+	_segment.begPoint	= _actSegment.endPoint
+	_segment.endPoint	= _actSegment.begPoint
+
+	gosub "insertPointToSegment2D"
+
+	if _polylineEnd > 1 then
+		_lineToDraw.begPoint = _segment.endPoint
+	endif
+	_lineToDraw.endPoint = _inserted.point
+
+	hotspot2 _inserted.point.x, 	_inserted.point.y, 		unID, endDistanceM, 2 + 1024, endDistanceMm		: unID = unID + 1
+	hotspot2 _segment.begPoint.x, 	_segment.begPoint.y, 	unID, endDistanceM, 1 + 1024, endDistanceMm		: unID = unID + 1
+
+	_insertionDist 		= _endDistanceModel
+	! Change Start and End Points
+	_segment.begPoint	= _actSegment.begPoint
+	_segment.endPoint	= _actSegment.endPoint
+	gosub "insertPointToSegment2D"		! Finding the place of the Reference Hotspot
+
+	hotspot2 _inserted.point.x, 		_inserted.point.y, unID , endDistanceM, 3 + 1024, endDistanceMm		: unID = unID + 1
+return
+
+
+! ==============================================================================
+"insertPointToSegment2D":
+! Copy from BasicGeometry macro!
+! ------------------------------------------------------------------------------
+
+	dict	_direction,
+			_vector
+
+	gosub "DIRECTION_SEGMENT_2D"	! sets _segment.begDirection, _segment.endDirection, _segment.arc.center, _segment.arc.radius, _segment.length
+	_segment.chord.direction	= _segment.begDirection
+
+	gosub "INSERT_POINT_TO_SEGMENT_2D"	! returns _inserted.point, _inserted.angle
+
+return
+
+
+! ==============================================================================
+"drawStartSymbol":
+! ------------------------------------------------------------------------------
+! input:
+!	_lineToDraw
+!	_startSymbolModel
+!	_angleParentDirection
+!	unID
+!	hotlineUnID
+!	_penDiagnostic
+!	_pen
+! output:
+!	unID += 9
+!	hotlineUnID += 1
+! ==============================================================================
+	add2 _lineToDraw.begPoint.x, _lineToDraw.begPoint.y
+	rot2 _angleParentDirection
+
+	if iStartSymbol = SYMBOL_LSHAPE then
+		rot2 angleStartSymbol + 90
+
+		hotspot2 0, 											_startSymbolModel/2, 							unID, angleStartSymbol, 5 + 1024		: unID = unID + 1
+		hotspot2 sin(angleStartSymbol)/(_startSymbolModel/2), 	cos(angleStartSymbol)/(_startSymbolModel/2), 	unID, angleStartSymbol, 4 + 128 + 1024	: unID = unID + 1
+		hotspot2 0, 											0, 												unID, angleStartSymbol, 6 + 1024		: unID = unID + 1
+	else
+		unID = unID + 3
+	endif
+
+	hotspot2 0, 	0, 						unID, startSymbolM, 	1 + 1024, startSymbolMm		: unID = unID + 1
+	hotspot2 0, 	_startSymbolModel, 		unID, startSymbolM, 	2 + 1024, startSymbolMm		: unID = unID + 1
+	hotspot2 0, 	- _startSymbolModel, 	unID, startSymbolM, 	3 + 1024, startSymbolMm		: unID = unID + 1
+
+	if iStartSymbol = SYMBOL_TSHAPE then
+		put 0, -_startSymbolModel, 0, _startSymbolModel
+	else
+		put 0, 0, 0, _startSymbolModel
+	endif
+
+	if GLOB_DIAGNOSTICS_MODE then pen _penDiagnostic
+	line2 use(4)
+	hotline2 get(4), hotlineUnID : hotlineUnID = hotlineUnID + 1
+	if GLOB_DIAGNOSTICS_MODE then pen _pen
+
+	if iStartSymbol = SYMBOL_TSHAPE then
+		hotspot2 0, 	0, 						unID, startSymbolM, 1 + 1024, startSymbolMm		: unID = unID + 1
+		hotspot2 0, 	- _startSymbolModel, 	unID, startSymbolM, 2 + 1024, startSymbolMm		: unID = unID + 1
+		hotspot2 0, 	_startSymbolModel, 		unID, startSymbolM, 3 + 1024, startSymbolMm		: unID = unID + 1
+	else			! SYMBOL_LSHAPE 
+		unID = unID + 3
+		del 1
+	endif
+
+	del 2
+return
+
+! ==============================================================================
+"drawEndSymbol":
+! ------------------------------------------------------------------------------
+! input:
+!	_lineToDraw
+!	_endSymbolModel
+!	_angleParentDirection
+!	unID
+!	hotlineUnID
+!	_penDiagnostic
+!	_pen
+! output:
+!	unID += 9
+!	hotlineUnID += 1
+! ==============================================================================
+	add2 _lineToDraw.endPoint.x, _lineToDraw.endPoint.y
+	rot2 _angleParentDirection
+
+	if iEndSymbol = SYMBOL_LSHAPE then
+		rot2 angleEndSymbol - 90
+
+		hotspot2 0, 										_endSymbolModel/2, 							unID, angleEndSymbol, 5 + 1024		: unID = unID + 1
+		hotspot2 sin(angleEndSymbol)/(_endSymbolModel/2), 	cos(angleEndSymbol)/(_endSymbolModel/2), 	unID, angleEndSymbol, 4 + 128 + 1024	: unID = unID + 1
+		hotspot2 0, 										0, 											unID, angleEndSymbol, 6 + 1024		: unID = unID + 1
+	else
+		unID = unID + 3
+	endif
+
+	hotspot2 0, 	0, 					unID, endSymbolM, 1 + 1024, endSymbolMm	: unID = unID + 1
+	hotspot2 0, 	_endSymbolModel, 	unID, endSymbolM, 2 + 1024, endSymbolMm	: unID = unID + 1
+	hotspot2 0, 	- _endSymbolModel, 	unID, endSymbolM, 3 + 1024, endSymbolMm	: unID = unID + 1
+
+	if iEndSymbol = SYMBOL_TSHAPE then
+		put 0, -_endSymbolModel, 0, _endSymbolModel
+	else
+		put 0, 0, 0, _endSymbolModel
+	endif
+
+	if GLOB_DIAGNOSTICS_MODE then pen _penDiagnostic
+	line2 use(4)
+	hotline2 get(4), hotlineUnID : hotlineUnID = hotlineUnID + 1
+	if GLOB_DIAGNOSTICS_MODE then pen _pen
+
+	if iEndSymbol = SYMBOL_TSHAPE then
+		hotspot2 0, 	0, 					unID, endSymbolM, 1 + 1024, endSymbolMm	: unID = unID + 1
+		hotspot2 0, 	- _endSymbolModel, 	unID, endSymbolM, 2 + 1024, endSymbolMm	: unID = unID + 1
+		hotspot2 0, 	_endSymbolModel, 	unID, endSymbolM, 3 + 1024, endSymbolMm	: unID = unID + 1
+	else			! SYMBOL_LSHAPE
+		unID = unID + 3
+		del 1
+	endif
+
+	del 2
+return
+
+
+! ===============================================
+"DIRECTION_SEGMENT_2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! for arced segment the vectors are tangential of arc
+! -----------------------------------------------
+! Input:
+!	_segment
+!		.type
+!		.begPoint:		Segment beginning point
+!		.endPoint:		Segment ending point
+!		.arcAngle:		Angle of arced segment
+! Output:
+!	_segment
+!		.begDirection:		Direction vector in beginning point (inwards)
+!		.endDirection:		Direction vector in ending point (inwards)
+!		.arc
+!			.center			Centerpoint of arced segment
+!			.radius			Radius of arc
+!		.length				Length of segment (on arc when arced)
+! ===============================================
+
+	if _segment.type = EDGE_STRAIGHT then
+
+		_segment.arc.center.x		= 0.0
+		_segment.arc.center.y		= 0.0
+		_segment.arc.radius			= 0.0
+
+		dict _point1, _point2
+		_point1 = _segment.endPoint
+		_point2 = _segment.begPoint
+
+		gosub "DIRECTION_POINTS_2D"	! returns _direction, _distance from _point2 to _point1
+
+		_segment.begDirection		= _direction
+		_segment.length				= _distance
+
+		gosub "reverseDirection2D"
+		_segment.endDirection		= _direction
+
+	endif
+
+return
+
+
+! ===============================================
+"INSERT_POINT_TO_SEGMENT_2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! Input:
+!	EPS						epsylon
+!	_segment				segment to insert to
+!		.type
+!		.begPoint
+!		.endPoint
+!		.arcAngle
+!		.chord.direction	either this (straight segment)
+!		.arc				or these (arc)
+!			.center
+!			.radius
+!	_insertionDist			Insertion distance from _segment.begPoint
+! Output:
+! 	_inserted
+!		.point				Inserted point
+!		.angle				Angle between _segment.begPoint and _inserted.point
+! ===============================================
+
+	if _segment.type = EDGE_STRAIGHT then
+
+		_inserted.point.x	= _segment.begPoint.x + _segment.chord.direction.ux * _insertionDist
+		_inserted.point.y	= _segment.begPoint.y + _segment.chord.direction.uy * _insertionDist
+		_inserted.angle		= 0.0
+	endif
+
+return
+
+
+! ===============================================
+"DIRECTION_POINTS_2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! Input:
+!	EPS:			epsylon
+!	_point1:		Coordinates of the first point
+!	_point2:		Coordinates of the second point
+! Output:
+!	_direction		unit vector from _point2 towards _point1
+!		.ux
+!		.uy
+!	_distance:		Distance between the two points
+! ===============================================
+
+	gosub "vectorFromPoints2D"	! returns _vector: _point1 to _point2
+
+	gosub "normalizeVector2D"	! returns unitvector _direction along _vector
+	_distance = _vector.length
+
+	! _point2 to _point1
+	gosub "reverseDirection2D"	! returns _direction: -_direction
+
+return
+
+
+! ===============================================
+"reverseDirection2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! reverse _direction
+! ===============================================
+
+	_direction.ux = -_direction.ux
+	_direction.uy = -_direction.uy
+
+return
+
+
+! ===============================================
+"vectorFromPoints2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! _vector from _point1 to _point2
+! ===============================================
+
+	dict _vector	! reset
+	_vector.dx = _point2.x - _point1.x
+	_vector.dy = _point2.y - _point1.y
+
+	gosub "vectorLength2D"		! sets _vector.length
+
+return
+
+
+! ===============================================
+"normalizeVector2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! returns unitvector _direction along _vector
+!	or 0 vector if input length < EPS.SQUARE
+! -----------------------------------------------
+! input:
+!	_vector
+!		.dx
+!		.dy
+!		.length
+! output:
+!	_direction
+!		.ux
+!		.uy
+!       .is0   ( = 1) if _vector was 0 length
+! ===============================================
+
+	dict _direction
+
+	if _vector.length > EPS.SQUARE then
+
+		_direction.ux = _vector.dx / _vector.length
+		_direction.uy = _vector.dy / _vector.length
+
+		gosub "limitUnitVector2D"		! _direction to be in range ([-1, 1], [-1, 1]
+
+	else
+
+		_direction.ux	= 0.0
+		_direction.uy	= 0.0
+		_direction.is0	= 1
+
+	endif
+
+return
+
+
+! ===============================================
+"vectorLength2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! length of _vector
+! ===============================================
+
+	_vector.length = SQR(_vector.dx **2 + _vector.dy **2)
+
+return
+
+
+! ===============================================
+"limitUnitVector2D":
+! Copy from BasicGeometry macro!
+! -----------------------------------------------
+! limits coordinates of _direction to be in range [-1, 1], so they can be used in ACS and ASN
+! they can be above 1 due to calculation errors
+! -----------------------------------------------
+! input, output:
+!	_direction
+!		.ux
+!		.uy
+! ===============================================
+
+	_direction.ux = MIN(1, MAX(-1, _direction.ux))
+	_direction.uy = MIN(1, MAX(-1, _direction.uy))
+
+return
+
+
+! ==============================================================================
+"polyOperation":
+! Copy from ProfileConverter macro!
+! -------------------------------------------------------------------------------
+! usage:
+!		!_polyOpPolygon:
+!		!	.useEdgeInfo			bool
+!		!	.isCLosed
+!		!	.contour				closing point auto-detected
+!		!		.edges[]
+!		!			.type			0 straight	1 curved
+!		!			.begPoint
+!		!				.x .y
+!		!			.arcAngle		only for curved edges
+!		!			.edgeInfo
+!		!	.holes[]				closing points auto-detected		
+! ===========================================================================
+
+	_useEdgeInfo = 1
+	if haskey(_polyOpPolygon.useEdgeInfo) then
+		_useEdgeInfo = _polyOpPolygon.useEdgeInfo
+	else	! not set, don't use
+		_useEdgeInfo = 0
+	endif
+
+	dim edgeinfoout[]
+	gosub "PolyOpDictToProfile"
+
+return
+
+
+! ===============================================================================
+! PolyOperations dictionary polygon to status-coded profile
+!
+"PolyOpDictToProfile":
+! Copy from ProfileConverter macro!
+! Added output hotlines/hotarcs
+! -------------------------------------------------------------------------------
+! input:
+!	_useEdgeInfo
+!	_polyOpPolygon
+!		.isClosed
+!		.contour				closing point auto-detected
+!			.edges[]
+!				.type			0 straight	1 curved
+!				.begPoint
+!					.x .y
+!				.arcAngle		only for curved edges
+!				.edgeInfo		used only if _useEdgeInfo = 1, otherwise defaults to 0
+!		.holes[]				closing point auto-detected
+! output:
+!	_nOut						number of points in result polygon, closed
+!	_outflat[]					x, y, status,
+!								x, y, status,
+!								...
+!		status					-1, 0, 900, 4000
+!									others not used
+!	edgeinfoout[]				can be used to pair visibility status codes or materials
+!	_hot						data to be used with hotline2 / hotarc2 commands
+!		.lines[]
+!			.begPoint
+!					.x .y
+!			.endPoint
+!					.x .y
+!		.arcs[]
+!			.center
+!					.x .y
+!			.begPoint
+!					.x .y
+!			.radius
+!			.startAngle
+!			.endAngle
+! ===============================================================================
+
+
+	dim edgeinfoout[]
+	dict _hot
+	_hot.lines = EMPTYARRAY
+	_hot.arcs  = EMPTYARRAY
+
+	_nOut = 1
+	_n_outflat = 1
+	_nHotline = 0
+	_nHotarc = 0
+
+	if haskey(_polyOpPolygon.holes) then
+		nContour = vardim1(_polyOpPolygon.holes)
+	else
+		nContour = 0
+	endif
+
+	for nHole = 0 to nContour
+
+		dict _contour
+		if nHole = 0 then
+			_contour = _polyOpPolygon.contour
+		else
+			_contour = _polyOpPolygon.holes[nHole]
+		endif
+
+		_nEdges = vardim1(_contour.edges)
+		_nHotedges = _nEdges ! without added closing point
+		if _polyOpPolygon.isClosed then	! add closing point if needed
+
+			gosub "hasClosingPoint"	! returns _hasClosingPoint from _contour
+
+			if not(_hasClosingPoint) then
+				_nEdges = _nEdges + 1
+				_contour.edges[_nEdges] = _contour.edges[1]	! assume first point is normal point (status < 100)
+				_contour.edges[_nEdges].type = 0			! straight
+			endif
+
+		endif
+
+		bPrevCurved = 0
+	
+		for nIn = 1 to _nEdges
+
+			dict _edge : _edge = _contour.edges[nIn]
+
+			if not(bPrevCurved) then
+
+				! copy vertex, status 0
+				if _useEdgeInfo then
+					edgeinfoout[_nOut] 	= _edge.edgeinfo
+				else
+					edgeinfoout[_nOut]	= 0
+				endif
+				_outflat[_n_outflat]		= _edge.begPoint.x
+				_outflat[_n_outflat + 1]	= _edge.begPoint.y
+				_outflat[_n_outflat + 2]	= 0					! status
+
+				_nOut = _nOut + 1
+				_n_outflat = _n_outflat + 3
+
+			endif
+
+
+			if _edge.type = 0 then		! straight
+
+				if nIN = _nEdges then
+
+					! close contour
+					if not(bPrevCurved) then					! _n_outflat already incremented
+						_outflat[_n_outflat - 1]	= -1			! status
+					else
+						_outflat[_n_outflat]		= _outflat[1]	! assume first point is normal point (status < 100)
+						_outflat[_n_outflat + 1]	= _outflat[2]
+						_outflat[_n_outflat + 2]	= -1
+						edgeinfoout[_nOut] 		= 0				! invisible vertex
+						_nOut = _nOut + 1
+					endif
+
+				endif
+
+				bPrevCurved = 0
+
+				if nIn < _nHotedges then
+					! add hotline (except at contour end)
+					_nHotline = _nHotline + 1
+					_hot.lines[_nHotline].begPoint = _edge.begPoint
+					_hot.lines[_nHotline].endPoint = _contour.edges[nIn + 1].begPoint
+				endif
+
+			else						! curved
+
+				dict _nextEdge : _nextEdge = _contour.edges[nIn + 1]
+
+				! centerpoint calculation
+				_edgeStartXCoord = _edge.begPoint.x
+				_edgeStartYCoord = _edge.begPoint.y
+				_alpha = _edge.arcAngle
+				_edgeEndXCoord = _nextEdge.begPoint.x
+				_edgeEndYCoord = _nextEdge.begPoint.y
+				gosub "calculateArchCenter"
+
+				! centerpoint, status 900
+				edgeinfoout[_nOut] 		= 0					! invisible vertex
+				_outflat[_n_outflat]		= _centerX			! x
+				_outflat[_n_outflat + 1]	= _centerY			! y
+				_outflat[_n_outflat + 2]	= 900				! status
+
+				_nOut = _nOut + 1
+				_n_outflat = _n_outflat + 3
+
+				! arc, status 4000
+				if _useEdgeInfo then
+					edgeinfoout[_nOut] 	= _nextEdge.edgeinfo ! edgeinfo of end vertex
+				else
+					edgeinfoout[_nOut]	= 0
+				endif
+				_outflat[_n_outflat]		= 0					! 0
+				_outflat[_n_outflat + 1]	= _edge.arcAngle	! angle
+				_outflat[_n_outflat + 2]	= 4000				! status
+
+				_nOut = _nOut + 1
+				_n_outflat = _n_outflat + 3
+
+				bPrevCurved = 1
+
+				! add hotarc
+				_nHotarc = _nHotarc + 1
+				_hot.arcs[_nHotarc].begPoint = _edge.begPoint
+				_hot.arcs[_nHotarc].center.x = _centerX
+				_hot.arcs[_nHotarc].center.y = _centerY
+				_hot.arcs[_nHotarc].radius	 = abs(_radius)
+
+				_dx = (_edge.begPoint.x - _centerX)
+				_dy = (_edge.begPoint.y - _centerY)
+				gosub "atan2_180"	! returns _atan2
+				_hot.arcs[_nHotarc].startAngle	= min(_atan2, _atan2 + _edge.arcAngle)
+				_hot.arcs[_nHotarc].endAngle	= max(_atan2, _atan2 + _edge.arcAngle)
+
+			endif
+
+		next nIn
+
+	next nHole
+
+return
+
+
+! ===============================================================================
+! Is last point of _contour a closing point?
+!
+"hasClosingPoint":
+! Copy from ProfileConverter macro!
+! -------------------------------------------------------------------------------
+! input:
+!	_contour.edges[]
+! output:
+!	_hasClosingPoint
+! ===============================================================================
+
+	dict _firstEdge, _lastEdge
+	_firstEdge	= _contour.edges[1]
+	_lastEdge	= _contour.edges[vardim1(_contour.edges)]
+	_hasClosingPoint = (abs(_lastEdge.begPoint.x - _firstEdge.begPoint.x) < EPS.LENGTH &\
+						abs(_lastEdge.begPoint.y - _firstEdge.begPoint.y) < EPS.LENGTH )
+	if _hasClosingPoint & _lastEdge.type = 1 then	! curved edge
+		! ending curve begPoint is closing point only if arcAngle is small
+		_hasClosingPoint = (abs(_lastEdge.arcAngle) < EPS.ANGLE)
+	endif
+
+return
+
+
+! ==============================================================================
+! calculate arched vector center and radius
+!
+"calculateArchCenter":
+! Copy from ProfileConverter macro!
+! ------------------------------------------------------------------------------
+! Input:
+! 	_alpha				range (0, +-360), +: right, -: left
+!	_edgeStartXCoord
+!	_edgeStartYCoord
+!	_edgeEndXCoord
+!	_edgeEndYCoord
+! Output:
+!	_centerX
+!	_centerY
+!	_radius
+! ==============================================================================
+
+	_halfX = (_edgeStartXCoord + _edgeEndXCoord) / 2
+	_halfY = (_edgeStartYCoord + _edgeEndYCoord) / 2
+	_dx = _edgeEndXCoord - _edgeStartXCoord
+	_dy = _edgeEndYCoord - _edgeStartYCoord
+	gosub "calculateEdgeAngleAndLength"		! returns _dLength, _dAngle
+
+	_radius = (_dLength / 2) / sin(_alpha / 2)
+	_dHalf	= _radius * cos(_alpha / 2)
+	_centerX = _halfX - _dHalf * sin(_dAngle)
+	_centerY = _halfY + _dHalf * cos(_dAngle)
+
+	!print "(", _edgeStartXCoord, _edgeStartYCoord, ")-(", _edgeEndXCoord, _edgeEndXCoord, "): ", _centerX, _centerY
+
+return
+
+
+! ==============================================================================
+! Calculate Vector Angle and Length
+!
+"calculateEdgeAngleAndLength":
+! Copy from ProfileConverter macro!
+! ------------------------------------------------------------------------------
+! input:
+!	_dx
+!	_dy
+! output:
+!	_dLength
+!	_dAngle		0: right
+! ==============================================================================
+
+	_dLength = sqr(_dx **2 + _dy **2)
+	gosub "atan2_180"
+	_dAngle = _atan2
+
+return
+
+
+! ===============================================================================
+! rotation of (_x, _y) around (0, 0), starting from x axis, counterclockwise +
+!
+"atan2_180":
+! Copy from ProfileConverter macro!
+! -------------------------------------------------------------------------------
+! input:
+!	_dx
+!	_dy
+! output:
+!	_atan2		degrees, range (-180...180]
+! ===============================================================================
+
+	if abs(_dx) > 0 then
+		_atan2 = atn(_dy / _dx) + 90 * (1 - sgn(_dx)) * (1 - 2 * (sgn(_dy) < 0))
+	else
+		_atan2 = sgn(_dy * (abs(_dy) > 0)) * 90
+	endif
+
+return
+
+
+! ===============================================================================
+"drawPlaceholder":
+! -----------------------------------------------------------------------------
+! install_label_position
+! -------------------------------------------------------------------------------
+
+	if not(LABEL_HAS_POINTER) then
+	
+		add2 	LABEL_POSITION [2][1]	+	LABEL_POSITION [3][1],
+				LABEL_POSITION [2][2]	+	LABEL_POSITION [3][2]
+	
+	endif
+
+! -----------------------------------------------------------------------------
+! Place placeholder
+! Copy from label_placeholder macro!
+! -------------------------------------------------------------------------------
+
+_iReferencePoint = 1
+totalRotate = 0
+
+define style{2} "nameStyle"  AC_TextFont_1, AC_TextSize_1 * GLOB_SCALE/1000, 1
+define style{2} "infoStyle"  AC_TextFont_1, AC_TextSize_1 * GLOB_SCALE/1000, 0
+
+dim _sStyleBody[]
+dim _contentData[]
+_sStyleBody[1] =  "nameStyle" 
+_sStyleBody[2] =  "infoStyle" 
+
+_contentData[1] = _labelname
+_contentData[2] = _placeHolderText
+
+_xPosTB = 0 : _yPosTB = 0
+! ==============================================================================
+! "usePharagraph" :
+! ------------------------------------------------------------------------------
+! input for paragraph:
+!		AC_TextPen_1				- pen of the text
+!		AC_TextAlignment_1			- text alignment
+!										- 1 - left aligned, 2 - center aligned, 3 - right aligned, 4 - full justified
+!		AC_TextLeading_1 			- line spacing factor
+!		AC_TextCharWidthFactor_1 		- width factor
+!		AC_TextCharSpaceFactor_1	- spacing factor!
+! input for textblock:
+!		_widthTextBlock				! textblock width in mm or m in model space, if 0 it is calculated automatically
+!		_iReferencePoint				! code of the position point in the text 1-9
+!		widthFactorTextBlock		! width_factor: Character widths defined by the actual style will be multiplied by this number		
+!		charspaceFactorTextBlock	! charspace_factor: The horizontal distance between two characters will be multiplied by this number! output:
+!		iFixedHeightTextBlock		! fixed_height: Possible values: 	1: the placed TEXTBLOCK will be scale-independent and all specified length type parameters will mean millimeters, !
+!		 																0: the placed TEXTBLOCK will be scale-dependent and all specified length type parameters will mean meters in model space
+!		_drawRichText				! use richtext (1) or just calculate textblock sizes (0)
+! output:
+!		texbox sizes - _widthTB, _heightTB
+! ==============================================================================
+
+	_stNamePG 			= "nameParaGraph"
+	_iAlignPG 			= AC_TextAlignment_1		! 1: left aligned, 2: center aligned, 3: right aligned, 4: full justified
+	_xFirstIndentPG	 	= 0						! meaning millimeters or meters depends on the fixed_height parameter of the TEXTBLOCK definition
+	_xLeftIndentPG 		= 0						! meaning millimeters or meters depends on the fixed_height parameter of the TEXTBLOCK definition
+	_xRightIndentPG 	= 0						! meaning millimeters or meters depends on the fixed_height parameter of the TEXTBLOCK definition
+	_ratioLineSpacePG	= AC_TextLeading_1	! (character size + distance to the next line) defined by the actual style will be multiplied by this number
+	_xTabPosPG	 		= 0						! consecutive tabulator positions (each relative to the beginning of the paragraph). Default values (0) are used (12.7 mm). Works only with '\t' special character.
+	_penIndex			= AC_TextPen_1
+
+	doSplit = '\n'
+
+	paragraph _stNamePG _iAlignPG,
+		_xFirstIndentPG, _xLeftIndentPG, _xRightIndentPG,
+		_ratioLineSpacePG, _xTabPosPG
+			pen _penIndex
+			style _sStyleBody[1]
+			_contentData[1]
+		doSplit
+			style _sStyleBody[2]
+			_contentData[2]
+	endparagraph
+
+
+	_stNameTB			= "nameTextBlock"
+	_widthTB			= 0 ! widthText TODO
+	_angleTB			= 180 * (totalRotate > 90+EPS.ANGLE & totalRotate < 270+EPS.ANGLE)	* AC_bLabelAlwaysReadable
+	if _angleTB < 180-EPS.ANGLE then
+		_iAnchorTB	= _iReferencePoint
+	else
+		_iAnchorTB  = 5
+		if _iReferencePoint	= 1 then _iAnchorTB = 9
+		if _iReferencePoint	= 2 then _iAnchorTB = 8
+		if _iReferencePoint	= 3 then _iAnchorTB = 7
+		if _iReferencePoint	= 4 then _iAnchorTB = 6
+		if _iReferencePoint	= 6 then _iAnchorTB = 4
+		if _iReferencePoint	= 7 then _iAnchorTB = 3
+		if _iReferencePoint	= 8 then _iAnchorTB = 2
+		if _iReferencePoint	= 9 then _iAnchorTB = 1
+	endif
+	_ratioWidthTB		= AC_TextCharWidthFactor_1			! width_factor: Character widths defined by the actual style will be multiplied by this number
+	_ratioCharspaceTB	= AC_TextCharSpaceFactor_1		! charspace_factor: The horizontal distance between two characters will be multiplied by this number
+	_iScale 			= 0 ! model						! fixed_height: Possible values: 1: the placed TEXTBLOCK will be scale-independent and all specified length type parameters will mean millimeters, 
+														! 								0: the placed TEXTBLOCK will be scale-dependent and all specified length type parameters will mean meters in model space.
+
+	textblock _stNameTB _widthTB,
+		_iAnchorTB, _angleTB, _ratioWidthTB, _ratioCharspaceTB, _iScale,
+		_stNamePG
+
+	rrr = REQUEST ("TEXTBLOCK_INFO", _stNameTB, _widthTB, _heightTB)
+
+	pen AC_LabelPointerPen
+	fill GLOB_FILL_INDEX_BACKGROUND
+
+	if AC_bLabelOpaqueFill then
+		_AC_LabelTextBgrPen = AC_LabelTextBgrPen
+	else
+		_AC_LabelTextBgrPen = 0		! Transparent
+	endif
+
+	poly2_b 4, AC_bLabelFrame + 2 + 4, _AC_LabelTextBgrPen, _AC_LabelTextBgrPen,
+		0, 			0, 						1,
+		_widthTB, 	0,					 	1,
+		_widthTB,	-_heightTB, 			1,
+		0,  		-_heightTB, 			1
+
+	richtext2 _xPosTB, _yPosTB, _stNameTB
+
+	if not(LABEL_HAS_POINTER) then
+		del 1	
+	endif
+return

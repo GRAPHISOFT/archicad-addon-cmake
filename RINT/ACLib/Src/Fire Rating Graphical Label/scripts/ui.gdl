@@ -1,0 +1,94 @@
+﻿! =============================================================================
+! Tabpage IDs, Titles and Icons
+! =============================================================================
+TABID_ROOT				= -1
+_idxTab = 1
+TABID_STARTENDSYMBOL	= _idxTab  : _idxTab = _idxTab + 1
+
+ui_current_page gs_ui_current_page
+
+! ==============================================================================
+! Tabpages
+! ==============================================================================
+
+ui_page TABID_STARTENDSYMBOL, TABID_ROOT, `ラベル - 終了シンボルオプション`, ""
+	gosub "StartEndSymbolPage"
+
+! ==============================================================================
+end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! end ! en
+! ==============================================================================
+
+
+! ==============================================================================
+"StartEndSymbolPage":
+! ------------------------------------------------------------------------------
+	_totalWidth 	= 444
+	_totalHeight	= 266
+	_yPageStart 	= 0
+	_yCurr 			= _yPageStart
+	_dy				= 24
+	_xSep			= _totalWidth / 2
+	_x1 			= 0
+	_x2 			= _xSep - 90 - 10
+	_x3 			= _xSep + 10
+	_x4 			= _totalWidth - 90 - 10
+	
+	_inFldHeight	= 19
+	_outFldHeight	= 15
+
+	ui_style 0, 1
+	
+	ui_infield{3}	"bStartSymbol", _x1, _yCurr, _xSep - 10, _inFldHeight,
+		7, "", 0, 0,
+		0, 0, 0, 0,
+		0, `開始シンボル`, 0,
+		0, `開始シンボル`, 1
+
+	ui_infield{3}	"bEndSymbol", _x3, _yCurr, _xSep - 10, _inFldHeight,
+		7, "", 0, 0,
+		0, 0, 0, 0,
+		0, `終了シンボル`, 0,
+		0, `終了シンボル`, 1
+
+	ui_style 0, 0
+
+	_yCurr = _yCurr + _dy
+
+	ui_infield{3}	"iStartSymbol",	_x1,	_yCurr,	_xSep - _x1 - 10,	_inFldHeight + 11,
+		2, 1, 2, 2,			! startSymbol_hl(1)
+		30, 30, 30, 30,
+		1,	`L字型`,	SYMBOL_LSHAPE,
+		2,	`T形`,	SYMBOL_TSHAPE
+
+
+	ui_infield{3}	"iEndSymbol",	_x3,	_yCurr,	_totalWidth - _x3 - 10,	_inFldHeight + 11,
+		2, 2, 2, 2,			! endSymbol_hl(1)
+		30, 30, 30, 30,
+		1,	`L字型`,	SYMBOL_LSHAPE,
+		2,	`T形`,	SYMBOL_TSHAPE
+
+	_yCurr = _yCurr + _dy + 11
+
+	_flag = not(bStartSymbol) * 4
+	ui_outfield `サイズ`, 		_x1,	_yCurr + 4, _x2 - 2, 	_outFldHeight, _flag
+	ui_infield "startSymbolMm",	_x2, 	_yCurr, 	90,			_inFldHeight
+
+	_flag = not(bEndSymbol) * 4
+	ui_outfield `サイズ`, 		_x3,	_yCurr + 4, _x4 - _x3 - 2,	_outFldHeight, _flag
+	ui_infield "endSymbolMm",	_x4, 	_yCurr, 	90,				_inFldHeight
+
+	_yCurr = _yCurr + _dy
+
+	_flag = (not(bEndSymbol) | (iStartSymbol = SYMBOL_TSHAPE)) * 4
+	ui_outfield `角度`, 			_x1,	_yCurr + 4, _x2 - 2, 		_outFldHeight, _flag
+	ui_infield "angleStartSymbol",	_x2, 	_yCurr, 	90,			_inFldHeight
+
+	_flag = (not(bEndSymbol) | (iStartSymbol = SYMBOL_TSHAPE)) * 4
+	ui_outfield `角度`, 			_x3,	_yCurr + 4, _x4 - _x3 - 2, 	_outFldHeight, _flag
+	ui_infield "angleEndSymbol",	_x4, 	_yCurr, 	90,				_inFldHeight
+
+	_yCurr = _yCurr + _dy
+
+	ui_separator	_xSep, _yPageStart, _xSep, _yCurr
+
+return

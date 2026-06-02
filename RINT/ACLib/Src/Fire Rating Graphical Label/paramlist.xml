@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ParamSection>
+	<ParamSectHeader>
+		<AutoHotspots>false</AutoHotspots>
+		<StatBits>
+			<STBit_UIDefault/>
+			<STBit_FixSize/>
+			<STBit_UIUseHierarchicalPages/>
+			<STBit_EnableHideFixNamedParams/>
+		</StatBits>
+		<WDLeftFrame>0</WDLeftFrame>
+		<WDRightFrame>0</WDRightFrame>
+		<WDTopFrame>0</WDTopFrame>
+		<WDBotFrame>0</WDBotFrame>
+		<LayFlags>65535</LayFlags>
+		<WDMirrorThickness>0</WDMirrorThickness>
+		<WDWallInset>0</WDWallInset>
+	</ParamSectHeader>
+	<Parameters SectVersion="27" SectionFlags="0" SubIdent="0">
+		<Length Name="A">
+			<Description><![CDATA["寸法 1"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Length>
+		<Length Name="B">
+			<Description><![CDATA["寸法 2"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Length>
+		<Boolean Name="ac_bCustomPointerConnection">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>1</Value>
+		</Boolean>
+		<Integer Name="AC_DisableLabelOrientationVal">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>14</Value>
+		</Integer>
+		<Boolean Name="AC_CustomReadability">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Boolean>
+		<Integer Name="AC_LabelOrientation">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Integer>
+		<String Name="AC_TextFont_1">
+			<Description><![CDATA["マーカーテキスト1タイプ(デフォルト)"]]></Description>
+			<Fix/>
+			<Value><![CDATA["Arial"]]></Value>
+		</String>
+		<RealNum Name="AC_TextSize_1">
+			<Description><![CDATA["マーカーテキスト1サイズ(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>3</Value>
+		</RealNum>
+		<Integer Name="AC_TextStyle_1">
+			<Description><![CDATA["マーカーテキスト1スタイル(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Integer>
+		<Integer Name="AC_TextAlignment_1">
+			<Description><![CDATA["マーカーテキスト1 整列(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</Integer>
+		<RealNum Name="AC_TextLeading_1">
+			<Description><![CDATA["マーカーテキスト1 改行幅(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</RealNum>
+		<RealNum Name="AC_TextCharWidthFactor_1">
+			<Description><![CDATA["マーカーテキスト1 文字幅(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</RealNum>
+		<RealNum Name="AC_TextCharSpaceFactor_1">
+			<Description><![CDATA["マーカーテキスト1 テキスト文字間隔(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</RealNum>
+		<PenColor Name="AC_TextPen_1">
+			<Description><![CDATA["マーカーテキスト1ペン(デフォルト)"]]></Description>
+			<Fix/>
+			<Value>46</Value>
+		</PenColor>
+		<Boolean Name="AC_bLabelAlwaysReadable">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="AC_bLabelTextWrap">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Boolean>
+		<Boolean Name="AC_bLabelOpaqueFill">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Boolean>
+		<PenColor Name="AC_LabelTextBgrPen">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>-1</Value>
+		</PenColor>
+		<Boolean Name="AC_bLabelFrame">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Boolean>
+		<Length Name="AC_LabelFrameOffset">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Length>
+		<PenColor Name="AC_LabelPointerPen">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>85</Value>
+		</PenColor>
+		<LineType Name="AC_LabelPointerLineType">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>1</Value>
+		</LineType>
+		<Integer Name="AC_LabelPointerConnection">
+			<Description><![CDATA[""]]></Description>
+			<Fix/>
+			<Value>0</Value>
+		</Integer>
+		<RealNum Name="startDistanceM">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<RealNum Name="startDistanceMm">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<RealNum Name="endDistanceM">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+		<RealNum Name="endDistanceMm">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0</Value>
+		</RealNum>
+
+		<!-- bStartSymbol: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Boolean Name="bStartSymbol">
+			<Description><![CDATA["開始シンボル"]]></Description>
+			<Flags>
+				<ParFlg_BoldName/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Integer Name="iStartSymbol">
+			<Description><![CDATA["開始シンボルスタイル"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Integer>
+		<Angle Name="angleStartSymbol">
+			<Description><![CDATA["開始シンボル角"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>90</Value>
+		</Angle>
+		<RealNum Name="startSymbolMm">
+			<Description><![CDATA["開始シンボル長さ"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>5</Value>
+		</RealNum>
+		<RealNum Name="startSymbolM">
+			<Description><![CDATA["開始シンボル長さ(モデルサイズ)"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0.005</Value>
+		</RealNum>
+
+		<!-- bEndSymbol: PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK ===== PARAMETER BLOCK -->
+
+		<Boolean Name="bEndSymbol">
+			<Description><![CDATA["終了シンボル"]]></Description>
+			<Flags>
+				<ParFlg_BoldName/>
+			</Flags>
+			<Value>0</Value>
+		</Boolean>
+		<Integer Name="iEndSymbol">
+			<Description><![CDATA["終了シンボルスタイル"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>1</Value>
+		</Integer>
+		<Angle Name="angleEndSymbol">
+			<Description><![CDATA["終了シンボル角"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>90</Value>
+		</Angle>
+		<RealNum Name="endSymbolMm">
+			<Description><![CDATA["終了シンボル長さ"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+			</Flags>
+			<Value>5</Value>
+		</RealNum>
+		<RealNum Name="endSymbolM">
+			<Description><![CDATA["終了シンボル長さ(モデルサイズ)"]]></Description>
+			<Flags>
+				<ParFlg_Child/>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>0.005</Value>
+		</RealNum>
+		<Integer Name="gs_ui_current_page">
+			<Description><![CDATA[""]]></Description>
+			<Flags>
+				<ParFlg_Hidden/>
+			</Flags>
+			<Value>1</Value>
+		</Integer>
+	</Parameters>
+</ParamSection>
