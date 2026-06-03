@@ -88,7 +88,7 @@ static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 }
 
 #ifdef ServerMainVers_2700
-#if defined(Macintosh)
+#if defined(macintosh)
 
 bool CCALL ResourceTypesCallback (GSResType resType, GSResModule /*resModule*/, void *userData)
 {
@@ -99,14 +99,6 @@ bool CCALL ResourceTypesCallback (GSResType resType, GSResModule /*resModule*/, 
 		return false; // stop enumeration
 	}
 	return true; // continue enumeration
-}
-
-static bool HasBuiltInLibPart ()
-{
-	bool hasLibPart = false;
-	RSEnumResourceTypes (ResourceTypesCallback, &hasLibPart, ACAPI_GetOwnResModule ());
-
-	return hasLibPart;
 }
 
 #else
@@ -121,6 +113,7 @@ bool CCALL ResourceTypesCallback (const WCHAR* resType, GSResModule /*resModule*
 	}
 	return true; // continue enumeration
 }
+#endif
 
 static bool HasBuiltInLibPart ()
 {
@@ -129,7 +122,7 @@ static bool HasBuiltInLibPart ()
 
 	return hasLibPart;
 }
-#endif
+
 #endif
 
 API_AddonType CheckEnvironment (API_EnvirParams* envir)
