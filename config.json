@@ -3,6 +3,7 @@
     "defaultLanguage": "INT",
     "languages": [
         "INT",
+        "GER",
         "JPN"
     ],
     "version": "0.0.0",
