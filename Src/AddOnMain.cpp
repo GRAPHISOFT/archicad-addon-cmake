@@ -2,7 +2,9 @@
 #include "ACAPinc.h"
 
 #include "ResourceIds.hpp"
+#include "RS.hpp"
 #include "DGModule.hpp"
+#include "UniString.hpp"
 
 #include <iostream>
 
@@ -85,6 +87,44 @@ static GSErrCode MenuCommandHandler (const API_MenuParams *menuParams)
 	return NoError;
 }
 
+#ifdef ServerMainVers_2700
+#if defined(macintosh)
+
+bool CCALL ResourceTypesCallback (GSResType resType, GSResModule /*resModule*/, void *userData)
+{
+	constexpr GSResType libPartType = 'FLDR';
+	if (resType == libPartType) {
+		bool* hasLibPart = static_cast<bool*> (userData);
+		*hasLibPart = true;
+		return false; // stop enumeration
+	}
+	return true; // continue enumeration
+}
+
+#else
+
+bool CCALL ResourceTypesCallback (const WCHAR* resType, GSResModule /*resModule*/, void *userData)
+{
+	constexpr auto libPartType = "FLDR";
+	if (GS::UniString (resType) == libPartType) {
+		bool* hasLibPart = static_cast<bool*> (userData);
+		*hasLibPart = true;
+		return false; // stop enumeration
+	}
+	return true; // continue enumeration
+}
+#endif
+
+static bool HasBuiltInLibPart ()
+{
+	bool hasLibPart = false;
+	RSEnumResourceTypes (ResourceTypesCallback, &hasLibPart, ACAPI_GetOwnResModule ());
+
+	return hasLibPart;
+}
+
+#endif
+
 API_AddonType CheckEnvironment (API_EnvirParams* envir)
 {
 	RSGetIndString (&envir->addOnInfo.name, AddOnInfoID, AddOnNameID, ACAPI_GetOwnResModule ());
@@ -96,7 +136,11 @@ API_AddonType CheckEnvironment (API_EnvirParams* envir)
 GSErrCode RegisterInterface (void)
 {
 #ifdef ServerMainVers_2700
-	return ACAPI_MenuItem_RegisterMenu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+	GSErrCode err = ACAPI_MenuItem_RegisterMenu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
+	if (err == NoError && HasBuiltInLibPart ())
+		err = ACAPI_AddOnIntegration_RegisterBuiltInLibrary ();
+
+	return err;
 #else
 	return ACAPI_Register_Menu (AddOnMenuID, 0, MenuCode_Tools, MenuFlag_Default);
 #endif
